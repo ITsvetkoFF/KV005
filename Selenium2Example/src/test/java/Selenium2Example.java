@@ -14,7 +14,7 @@ public class Selenium2Example {
     public static void main(String[] args){
         // Download it => http://chromedriver.storage.googleapis.com/index.html?path=2.10/
         //Unzip it. Copy and past path next line
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\vmoroztc\\chromedriver_win32\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", ".\\chromedriver_win32\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.get("http://www.google.com");
         WebElement element = driver.findElement(By.name("q"));
