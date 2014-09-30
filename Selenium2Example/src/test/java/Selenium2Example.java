@@ -22,7 +22,6 @@ public class Selenium2Example {
         element.submit();
         System.out.println("Page title is: " + driver.getTitle());
         (new WebDriverWait(driver,10)).until(new ExpectedCondition<Boolean>() {
-            @Override
             public Boolean apply(WebDriver webDriver) {
                 return webDriver.getTitle().toLowerCase().startsWith("cheese!");
             }

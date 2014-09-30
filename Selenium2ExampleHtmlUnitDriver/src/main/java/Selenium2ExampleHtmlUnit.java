@@ -14,6 +14,7 @@ public class Selenium2ExampleHtmlUnit {
     }
     public static String getTitle(String searchString){
         WebDriver driver = new HtmlUnitDriver();
+        String result;
         driver.get("http://www.google.com");
         WebElement element = driver.findElement(By.name("q"));
         element.sendKeys(searchString);
@@ -27,7 +28,8 @@ public class Selenium2ExampleHtmlUnit {
         });
 
         System.out.println("Page title is: " + driver.getTitle());
+        result = driver.getTitle().split(" ")[0];
         driver.quit();
-        return driver.getTitle().split(" ")[0];
+        return result;
     }
 }

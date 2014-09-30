@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite hostname="KVCLASS08" tests="1" failures="0" timestamp="30 Sep 2014 10:20:32 GMT" time="13.492" errors="0">
+  <testcase name="testGetTitle" time="13.467" classname="Selenimu2ExampleChromeTest"/>
+</testsuite>

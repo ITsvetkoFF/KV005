@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Selenimu2ExampleChromeTest" duration-ms="13492" started-at="2014-09-30T13:20:18Z" finished-at="2014-09-30T13:20:32Z">
+    <groups>
+    </groups>
+    <test name="Command line test" duration-ms="13492" started-at="2014-09-30T13:20:18Z" finished-at="2014-09-30T13:20:32Z">
+      <class name="Selenimu2ExampleChromeTest">
+        <test-method status="PASS" signature="testGetTitle()" name="testGetTitle" duration-ms="13467" started-at="2014-09-30T13:20:18Z" finished-at="2014-09-30T13:20:32Z">
+        </test-method>
+      </class>
+    </test>
+  </suite>
+</testng-results>
