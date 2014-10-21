@@ -28,7 +28,14 @@ public class AnyPage implements IAnyPage {
             return linkText;
         }
 
-
-
+        @Override
+        public void login(String email, String password) {
+        driver.findElement(By.linkText("\u0412\u0425\u0406\u0414")).click();
+        driver.findElement(By.name("email")).clear();
+        driver.findElement(By.name("email")).sendKeys(email);
+        driver.findElement(By.name("password")).clear();
+        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.id("login-button")).click();
+    }
 }
 
