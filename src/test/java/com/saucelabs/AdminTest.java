@@ -52,11 +52,14 @@ public class AdminTest {
             adminPage.login("admin@.com", "admin");
             //count = adminPage.getProblemForModerationCount();
             //problemNames = adminPage.getProblemForModerationNames();
+            /*
             problems = adminPage.getProblems();
             for (WebElement problem: problems) {
                 problem.click();
                 Assert.assertTrue(problem.getText().equals(adminPage.getH1()));
             }
+            */
+            adminPage.logout();
             //System.out.println(count);
             //System.out.println(problems);
             //Assert.assertTrue(1 + 1 == 2);
