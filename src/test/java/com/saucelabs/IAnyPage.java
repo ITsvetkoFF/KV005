@@ -3,6 +3,6 @@ package com.saucelabs;
 public interface IAnyPage {
     String getFirstResourceTitleFromMenu();
     String getFirstResourceTitleFromOpenedResource();
-    void login(String email, String password);
-    void logout();
+    void logIn(String email, String password);
+    void logOut();
 }

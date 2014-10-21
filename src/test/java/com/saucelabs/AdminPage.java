@@ -39,7 +39,31 @@ public class AdminPage extends AnyPage implements IAdminPage {
         return results;
     }
 
-    public String getH1() {
-        return driver.findElement(By.tagName("h1")).getText();
+    public String getProblemTitle() {
+        return driver.findElement(By.xpath("//editproblemtitle/span")).getText();
+    }
+
+    public void clickProblemCheck(WebElement problem) {
+        problem.findElement(By.xpath("..//ul/li")).click();
+        return;
+    }
+
+    public void approveProblem(String problemName) {
+        List<WebElement> problems = driver.findElements(By.className("b-new-items__item"));
+        for (WebElement problem: problems) {
+            if (problemName.equals(problem.getText())) {
+                clickProblemCheck(problem);
+            }
+        }
+    }
+
+    public boolean checkProblemIsUnderModeration(String problemName) {
+        List<WebElement> problems = driver.findElements(By.className("b-new-items__item"));
+        for (WebElement problem: problems) {
+            if (problemName.equals(problem.getText())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

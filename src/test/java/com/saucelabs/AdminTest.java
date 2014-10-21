@@ -28,7 +28,7 @@ public class AdminTest {
             ;
             js.executeScript("navigator.geolocation.getCurrentPosition = function(success) { success({coords: {latitude: 50.649460, longitude: 30.731506}}); }");
             AdminPage adminPage = new AdminPage(driver);
-            adminPage.login("admin@.com", "admin");
+            adminPage.logIn("admin@.com", "admin");
 
             Assert.assertTrue(1 + 1 == 2);
             driver.quit();
@@ -49,20 +49,15 @@ public class AdminTest {
             ;
             js.executeScript("navigator.geolocation.getCurrentPosition = function(success) { success({coords: {latitude: 50.649460, longitude: 30.731506}}); }");
             AdminPage adminPage = new AdminPage(driver);
-            adminPage.login("admin@.com", "admin");
-            //count = adminPage.getProblemForModerationCount();
-            //problemNames = adminPage.getProblemForModerationNames();
-            /*
+            adminPage.logIn("admin@.com", "admin");
             problems = adminPage.getProblems();
             for (WebElement problem: problems) {
                 problem.click();
-                Assert.assertTrue(problem.getText().equals(adminPage.getH1()));
+                Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problem.getText()));
+                Assert.assertTrue(problem.getText().equals(adminPage.getProblemTitle()));
+                adminPage.approveProblem(problem.getText());
             }
-            */
-            adminPage.logout();
-            //System.out.println(count);
-            //System.out.println(problems);
-            //Assert.assertTrue(1 + 1 == 2);
+            adminPage.logOut();
             driver.quit();
         }
     }
