@@ -29,7 +29,7 @@ public class AnyPage implements IAnyPage {
         }
 
         @Override
-        public void login(String email, String password) {
+        public void logIn(String email, String password) {
             driver.findElement(By.linkText("\u0412\u0425\u0406\u0414")).click();
             driver.findElement(By.name("email")).clear();
             driver.findElement(By.name("email")).sendKeys(email);
@@ -39,7 +39,7 @@ public class AnyPage implements IAnyPage {
         }
 
         @Override
-        public void logout() {
+        public void logOut() {
             driver.findElement(By.className("fa-user")).click();
             driver.findElement(By.linkText("\u0412\u0418\u0419\u0422\u0418")).click();
     }
