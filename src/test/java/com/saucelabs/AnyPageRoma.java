@@ -6,6 +6,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 
 public class AnyPageRoma implements IAnyPageRoma {
 
@@ -59,18 +60,26 @@ public class AnyPageRoma implements IAnyPageRoma {
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
-//
-//        WebElement upload = driver.findElement(By.xpath(".//*[@id='my-awesome-dropzone']/div[1]"));
-//        upload.sendKeys("D:\\QA\\TestFiles\\тест1.jpeg");
-//
+        driver.findElement(By.id("my-awesome-dropzone")).click();
+
+//        try {
 //        StringSelection selection = new StringSelection("D:\\QA\\TestFiles\\тест1.jpeg");
 //        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+//
+//            Robot robot = new Robot();
+//            robot.keyPress(KeyEvent.VK_ENTER);
+//            robot.keyRelease(KeyEvent.VK_ENTER);
+//            robot.keyPress(KeyEvent.VK_CONTROL);
+//            robot.keyPress(KeyEvent.VK_V);
+//            robot.keyRelease(KeyEvent.VK_V);
+//            robot.keyRelease(KeyEvent.VK_CONTROL);
+//            robot.keyPress(KeyEvent.VK_ENTER);
+//            robot.keyRelease(KeyEvent.VK_ENTER);
+//        } catch (Exception e) {
+//        }
+
 
         driver.findElement(By.id("btn-submit")).click();
-    }
-
-    public void close() {
-        driver.findElement(By.cssSelector(".close")).click();
     }
 }
 
