@@ -7,6 +7,4 @@ public interface IAnyPageRoma {
     void logIn(String email, String password);
     void logOut();
     void clickAddProblem ();
-    void clickAtPagesCenter();
-    void setView(double latitude, double longitude, int zoom);
 }

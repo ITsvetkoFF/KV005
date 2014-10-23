@@ -7,14 +7,14 @@ import org.openqa.selenium.interactions.Actions;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 
-public class AnyPageRoma implements IAnyPage {
+public class AnyPageRoma implements IAnyPageRoma {
 
     private WebDriver driver;
     public String problemName = "addProblemTest";
     public String problemDescription = "addProblemTest";
     public String problemPropose = "addProblemTest";
 
-    public AnyPage(WebDriver driver) {
+    public AnyPageRoma(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -52,54 +52,6 @@ public class AnyPageRoma implements IAnyPage {
         driver.findElement(By.xpath("//a[@class='navbar-brand b-menu__button']")).click();
     }
 
-    public void clickAtPagesCenter() {
-        int x;
-        int y;
-
-        WebElement container = driver.findElement(By.id("map-content"));
-        Dimension point = container.getSize();
-        x = point.getWidth() / 2;
-        y = point.getHeight() / 2;
-        Actions builder = new Actions(driver);
-        builder.moveToElement(container, x, y).click().build().perform();
-    }
-
-    public void setView(double latitude, double longitude, int zoom) {
-        JavascriptExecutor script = null;
-        if (driver instanceof JavascriptExecutor)
-            script = (JavascriptExecutor) driver;
-        script.executeScript("var map = document.getElementById(\"map-content\");" +
-                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
-                + latitude + "," + longitude + "]" + "," + zoom + ");");
-    }
-
-    public void clickAtProblemByCoordinate(double latitude, double longitude) {
-        JavascriptExecutor script = null;
-        if (driver instanceof JavascriptExecutor)
-            script = (JavascriptExecutor) driver;
-        script.executeScript("var map = document.getElementById(\"map-content\");" +
-                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
-                + latitude + "," + longitude + "]" + "," + 10 + ");");
-        int x;
-        int y;
-
-        WebElement container = driver.findElement(By.id("map-content"));
-        Dimension point = container.getSize();
-        x = point.getWidth() / 2;
-        y = point.getHeight() / 2;
-        Actions builder = new Actions(driver);
-        builder.moveToElement(container, x, y - 10).click().build().perform();
-    }
-
-    public void setPosition() {
-        JavascriptExecutor js = null;
-        if (driver instanceof JavascriptExecutor) {
-            js = (JavascriptExecutor) driver;
-        }
-        js.executeScript("navigator.geolocation.getCurrentPosition = function(success) {" +
-                "success({coords: {latitude: 50.649460, longitude: 30.731506}}); }");
-    }
-
     public void selectAndAddProblem() {
         driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
         driver.findElement(By.id("problemName")).sendKeys(problemName);
@@ -107,7 +59,7 @@ public class AnyPageRoma implements IAnyPage {
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
-
+//
 //        WebElement upload = driver.findElement(By.xpath(".//*[@id='my-awesome-dropzone']/div[1]"));
 //        upload.sendKeys("D:\\QA\\TestFiles\\тест1.jpeg");
 //
