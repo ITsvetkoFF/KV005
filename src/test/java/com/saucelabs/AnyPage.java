@@ -48,23 +48,22 @@ public class AnyPage implements IAnyPage {
     public void register(String first_name, String last_name, String email, String password) {
         driver.findElement(By.linkText("\u0412\u0425\u0406\u0414")).click();
         driver.findElement(By.xpath("//button[@id='register-button']")).click();
+        driver.findElement(By.id("email")).sendKeys(email);
+        driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.name("first_name")).clear();
         driver.findElement(By.name("first_name")).sendKeys(first_name);
         driver.findElement(By.name("last_name")).clear();
         driver.findElement(By.name("last_name")).sendKeys(last_name);
-        driver.findElement(By.name("email")).clear();
-        driver.findElement(By.name("email")).sendKeys(email);
-        driver.findElement(By.name("password")).clear();
-        driver.findElement(By.name("password")).sendKeys(password);
         driver.findElement(By.name("password_second")).clear();
         driver.findElement(By.name("password_second")).sendKeys(password);
         driver.findElement(By.className("b-form__button")).click();
+        driver.findElement(By.className("close")).click();
     }
 
     @Override
     public String getLoggedInUserName() {
         String result;
-        result = driver.findElement(By.xpath("(//a[contains(@class, 'b-menu__button')])[6]")).getText();
+        result = driver.findElement(By.xpath("(//a[contains(@class, 'b-menu__button')])[4]")).getText();
         return result;
     }
 }
