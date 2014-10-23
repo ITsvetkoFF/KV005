@@ -1,6 +1,5 @@
 package com.saucelabs;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
@@ -16,37 +15,48 @@ public class AddProblemTest {
     public void addProblemTest() {
 
         WebDriver driver = new FirefoxDriver();
-        AnyPage anyPage = new AnyPage(driver);
+        AnyPageRoma anyPageRoma = new AnyPageRoma(driver);
+        MapPage mapPage = new MapPage(driver);
 
+        //open page by url in browser
+        driver.get("http://176.36.11.25/#/map");
 
-//        driver.get("http://176.36.11.25/#/map");
-        driver.get("http://localhost:8090/#/map");
-
+        //set maximum size of browser window
         driver.manage().window().maximize();
 
-        anyPage.logIn("admin@.com", "admin");
+        //login as admin
+        anyPageRoma.logIn("admin@.com", "admin");
 
-        anyPage.setView(anyPage.latitude, anyPage.longitude, 9);
+        //set position in the map with typed zoom
+        mapPage.setView(50, 30, 9);
 
-        anyPage.clickAddProblem();
+        //click at addProblem button
+        anyPageRoma.clickAddProblem();
 
-        anyPage.clickAtPagesCenter();
+        //click at page center on the map
+        mapPage.clickAtPagesCenter();
 
-        anyPage.selectAndAddProblem();
+        //typed required fields and select problem type
+        anyPageRoma.selectAndAddProblem();
 
+        //3 seconds pause
         driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 
+        //refresh page
         driver.navigate().refresh();
 
+        //3 seconds pause
         driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 
-        anyPage.setView(anyPage.latitude, anyPage.longitude, 12);
+        //set position in the map with typed zoom
+        mapPage.setView(50, 30, 12);
 
-        anyPage.clickAtProblemByCoordinate(anyPage.latitude, anyPage.longitude);
-
-        //anyPage.clickAtPagesCenter();
+        //click at problem by coordinate
+        mapPage.clickAtProblemByCoordinate(50, 30);
 
         Assert.assertTrue(true);
+
+        //close browser
         driver.quit();
     }
 }

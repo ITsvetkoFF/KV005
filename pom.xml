@@ -36,6 +36,11 @@
             <version>[1.0.0,)</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.sikuli</groupId>
+            <artifactId>sikuli-webdriver</artifactId>
+            <version>1.0.1</version>
+        </dependency>
 
     </dependencies>
 
