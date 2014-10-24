@@ -50,7 +50,7 @@ public class AnyPageRoma implements IAnyPageRoma {
     }
 
     public void clickAddProblem() {
-        driver.findElement(By.xpath("//a[@class='navbar-brand b-menu__button']")).click();
+        driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
     }
 
     public void selectAndAddProblem() {
@@ -60,24 +60,27 @@ public class AnyPageRoma implements IAnyPageRoma {
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
-        driver.findElement(By.id("my-awesome-dropzone")).click();
+        driver.findElement(By.className("fa-file-photo-o")).click();
+        WebElement dropzone = driver.findElement(By.id("my-awesome-dropzone"));
+        Actions builder = new Actions(driver);
+        builder.moveToElement(dropzone).clickAndHold().release().perform();
 
-//        try {
-//        StringSelection selection = new StringSelection("D:\\QA\\TestFiles\\тест1.jpeg");
-//        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-//
-//            Robot robot = new Robot();
-//            robot.keyPress(KeyEvent.VK_ENTER);
-//            robot.keyRelease(KeyEvent.VK_ENTER);
-//            robot.keyPress(KeyEvent.VK_CONTROL);
-//            robot.keyPress(KeyEvent.VK_V);
-//            robot.keyRelease(KeyEvent.VK_V);
-//            robot.keyRelease(KeyEvent.VK_CONTROL);
-//            robot.keyPress(KeyEvent.VK_ENTER);
-//            robot.keyRelease(KeyEvent.VK_ENTER);
-//        } catch (Exception e) {
-//        }
+        try {
+        StringSelection selection = new StringSelection("C:\\Users\\Yermek\\KV005\\resources\\82.jpg");
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
 
+            Robot robot = new Robot();
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            Thread.sleep(1000);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+        } catch (Exception e) {
+        }
 
         driver.findElement(By.id("btn-submit")).click();
     }
