@@ -4,9 +4,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 /**
- * Created by Tanya on 23.10.2014.
+ * Created by Roma on 23.10.2014.
  */
-public class MapPage {
+public class MapPage implements IMapPage {
 
     private WebDriver driver;
 
@@ -14,6 +14,8 @@ public class MapPage {
         this.driver = driver;
     }
 
+
+    @Override
     public void setPosition() {
         JavascriptExecutor js = null;
         if (driver instanceof JavascriptExecutor) {
@@ -23,6 +25,17 @@ public class MapPage {
                 "success({coords: {latitude: 50.649460, longitude: 30.731506}}); }");
     }   // not use
 
+    @Override
+    public void setView(double latitude, double longitude, int zoom) {
+        JavascriptExecutor script = null;
+        if (driver instanceof JavascriptExecutor)
+            script = (JavascriptExecutor) driver;
+        script.executeScript("var map = document.getElementById(\"map-content\");" +
+                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
+                + latitude + "," + longitude + "]" + "," + zoom + ");");
+    }
+
+    @Override
     public void clickAtPagesCenter() {
         int x;
         int y;
@@ -35,15 +48,7 @@ public class MapPage {
         builder.moveToElement(container, x, y).click().build().perform();
     }
 
-    public void setView(double latitude, double longitude, int zoom) {
-        JavascriptExecutor script = null;
-        if (driver instanceof JavascriptExecutor)
-            script = (JavascriptExecutor) driver;
-        script.executeScript("var map = document.getElementById(\"map-content\");" +
-                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
-                + latitude + "," + longitude + "]" + "," + zoom + ");");
-    }
-
+    @Override
     public void clickAtProblemByCoordinate(double latitude, double longitude) {
         JavascriptExecutor script = null;
         if (driver instanceof JavascriptExecutor)

@@ -2,14 +2,14 @@ package com.saucelabs;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.testng.Assert;
-
 import java.util.concurrent.TimeUnit;
 
-public class AnyPage implements IAnyPage {
+public class AnyPage extends MapPage implements IAnyPage {
+
     private WebDriver driver;
+
     public AnyPage(WebDriver driver) {
+        super(driver);
         this.driver = driver;
     }
 
@@ -70,59 +70,57 @@ public class AnyPage implements IAnyPage {
         return result;
     }
 
+    @Override
     public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose) {
 
-        MapPage mapPage = new MapPage(driver);
+        setView(latitude, longitude, 9);
 
-        //focus on map by coordinate with zoom 9
-        mapPage.setView(latitude, longitude, 9);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        //click addProblem button, open window
-        driver.findElement(By.xpath("//a[@class='navbar-brand b-menu__button']")).click();
+        driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
 
-        //click at center of focused map, add marker on map
-        mapPage.clickAtPagesCenter();
+        clickAtPagesCenter();
 
-        //click at describe tab, open tab
         driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
 
-        //type problemName into problemName field
         driver.findElement(By.id("problemName")).sendKeys(problemName);
 
-        //select problem type 5
         driver.findElement(By.cssSelector("#select-field option:nth-child(6)")).click();
 
-        //type problemDescription into problemDescription field
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
 
-        //type problemPropose into problemPropose field
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
 
-        //click at photo tab, open tab
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
-        //upload file
+        //upload file********************************************************************
 
+//        try {
+//        StringSelection selection = new StringSelection("D:\\QA\\TestFiles\\тест1.jpeg");
+//        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+//
+//            Robot robot = new Robot();
+//            robot.keyPress(KeyEvent.VK_ENTER);
+//            robot.keyRelease(KeyEvent.VK_ENTER);
+//            robot.keyPress(KeyEvent.VK_CONTROL);
+//            robot.keyPress(KeyEvent.VK_V);
+//            robot.keyRelease(KeyEvent.VK_V);
+//            robot.keyRelease(KeyEvent.VK_CONTROL);
+//            robot.keyPress(KeyEvent.VK_ENTER);
+//            robot.keyRelease(KeyEvent.VK_ENTER);
+//        } catch (Exception e) {
+//        }
 
-
-        //click at submit button, add problem to database
         driver.findElement(By.id("btn-submit")).click();
 
-        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
-
-        //refresh current page
         driver.navigate().refresh();
 
-        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        //focus on map by coordinate with zoom 12
-        mapPage.setView(latitude, longitude, 12);
+        setView(latitude, longitude, 12);
 
-        //click at added problem
-        mapPage.clickAtProblemByCoordinate(latitude, longitude);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        Assert.assertTrue(true);
-        driver.quit();
+        clickAtProblemByCoordinate(latitude, longitude);
     }
 }
-
