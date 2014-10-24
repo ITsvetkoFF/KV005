@@ -99,26 +99,8 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
-//        WebElement dropzone = driver.findElement(By.id("my-awesome-dropzone"));
-//        Actions builder = new Actions(driver);
-//        builder.moveToElement(dropzone).clickAndHold().release().build().perform();
-//
-//        try {
-//            StringSelection selection = new StringSelection("D:\\QA\\TestsFiles\\test1.jpeg");
-//            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-//
-//            Robot robot = new Robot();
-//            robot.keyPress(KeyEvent.VK_ENTER);
-//            robot.keyRelease(KeyEvent.VK_ENTER);
-//            robot.keyPress(KeyEvent.VK_CONTROL);
-//            robot.keyPress(KeyEvent.VK_V);
-//            robot.keyRelease(KeyEvent.VK_V);
-//            robot.keyRelease(KeyEvent.VK_CONTROL);
-//            Thread.sleep(1000);
-//            robot.keyPress(KeyEvent.VK_ENTER);
-//            robot.keyRelease(KeyEvent.VK_ENTER);
-//        } catch (Exception e) {
-//        }
+        new FileChooserThread("C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg").start();
+        driver.findElement(By.id("my-awesome-dropzone")).click();
 
         driver.findElement(By.id("btn-submit")).click();
 
