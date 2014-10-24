@@ -1,7 +1,7 @@
 package com.saucelabs;
 
 /**
- * Created by Tanya on 23.10.2014.
+ * Created by Roma on 23.10.2014.
  */
 public interface IMapPage {
 

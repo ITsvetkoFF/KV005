@@ -18,6 +18,7 @@ public class AnyPage extends MapPage implements IAnyPage {
         this.driver = driver;
     }
 
+
     @Override
     public String getFirstResourceTitleFromMenu() {
 
@@ -78,9 +79,9 @@ public class AnyPage extends MapPage implements IAnyPage {
     @Override
     public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose) {
 
-        setView(latitude, longitude, 9);
-
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        setView(latitude, longitude, 9);
 
         driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
 
@@ -98,36 +99,32 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
-        WebElement dropzone = driver.findElement(By.id("my-awesome-dropzone"));
-        Actions builder = new Actions(driver);
-        builder.moveToElement(dropzone).clickAndHold().release().build().perform();
-
-        try {
-            StringSelection selection = new StringSelection("D:\\QA\\TestsFiles\\test1.jpeg");
-            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-
-            Robot robot = new Robot();
-            robot.keyPress(KeyEvent.VK_ENTER);
-            robot.keyRelease(KeyEvent.VK_ENTER);
-            robot.keyPress(KeyEvent.VK_CONTROL);
-            robot.keyPress(KeyEvent.VK_V);
-            robot.keyRelease(KeyEvent.VK_V);
-            robot.keyRelease(KeyEvent.VK_CONTROL);
-            Thread.sleep(1000);
-            robot.keyPress(KeyEvent.VK_ENTER);
-            robot.keyRelease(KeyEvent.VK_ENTER);
-        } catch (Exception e) {
-        }
+//        WebElement dropzone = driver.findElement(By.id("my-awesome-dropzone"));
+//        Actions builder = new Actions(driver);
+//        builder.moveToElement(dropzone).clickAndHold().release().build().perform();
+//
+//        try {
+//            StringSelection selection = new StringSelection("D:\\QA\\TestsFiles\\test1.jpeg");
+//            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+//
+//            Robot robot = new Robot();
+//            robot.keyPress(KeyEvent.VK_ENTER);
+//            robot.keyRelease(KeyEvent.VK_ENTER);
+//            robot.keyPress(KeyEvent.VK_CONTROL);
+//            robot.keyPress(KeyEvent.VK_V);
+//            robot.keyRelease(KeyEvent.VK_V);
+//            robot.keyRelease(KeyEvent.VK_CONTROL);
+//            Thread.sleep(1000);
+//            robot.keyPress(KeyEvent.VK_ENTER);
+//            robot.keyRelease(KeyEvent.VK_ENTER);
+//        } catch (Exception e) {
+//        }
 
         driver.findElement(By.id("btn-submit")).click();
 
         driver.navigate().refresh();
 
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
         setView(latitude, longitude, 12);
-
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         clickAtProblemByCoordinate(latitude, longitude);
     }
