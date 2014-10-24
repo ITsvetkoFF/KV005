@@ -24,6 +24,11 @@ public class AddProblemTest {
 
         anyPage.logIn("admin@.com", "admin");
 
+        try {
+            Thread.sleep(1000);
+        } catch (Exception sleep) {
+        }
+
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         anyPage.addProblem(50.1, 30.1, "problemNameTest", "problemTypeTest", "problemDescriptionTest", "problemProposeTest");

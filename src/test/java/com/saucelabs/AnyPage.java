@@ -2,6 +2,11 @@ package com.saucelabs;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.util.concurrent.TimeUnit;
 
 public class AnyPage extends MapPage implements IAnyPage {
@@ -66,7 +71,7 @@ public class AnyPage extends MapPage implements IAnyPage {
     @Override
     public String getLoggedInUserName() {
         String result;
-        result = driver.findElement(By.xpath("(//a[contains(@class, 'b-menu__button')])[4]")).getText();
+        result = driver.findElement(By.xpath("(//a[contains(@class, 'b-menu__button')])[3]")).getText();
         return result;
     }
 
@@ -93,23 +98,26 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
-        //upload file********************************************************************
+        WebElement dropzone = driver.findElement(By.id("my-awesome-dropzone"));
+        Actions builder = new Actions(driver);
+        builder.moveToElement(dropzone).clickAndHold().release().build().perform();
 
-//        try {
-//        StringSelection selection = new StringSelection("D:\\QA\\TestFiles\\тест1.jpeg");
-//        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-//
-//            Robot robot = new Robot();
-//            robot.keyPress(KeyEvent.VK_ENTER);
-//            robot.keyRelease(KeyEvent.VK_ENTER);
-//            robot.keyPress(KeyEvent.VK_CONTROL);
-//            robot.keyPress(KeyEvent.VK_V);
-//            robot.keyRelease(KeyEvent.VK_V);
-//            robot.keyRelease(KeyEvent.VK_CONTROL);
-//            robot.keyPress(KeyEvent.VK_ENTER);
-//            robot.keyRelease(KeyEvent.VK_ENTER);
-//        } catch (Exception e) {
-//        }
+        try {
+            StringSelection selection = new StringSelection("D:\\QA\\TestsFiles\\test1.jpeg");
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+
+            Robot robot = new Robot();
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            Thread.sleep(1000);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+        } catch (Exception e) {
+        }
 
         driver.findElement(By.id("btn-submit")).click();
 

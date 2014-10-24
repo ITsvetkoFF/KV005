@@ -45,7 +45,7 @@ public class MapPage implements IMapPage {
         x = point.getWidth() / 2;
         y = point.getHeight() / 2;
         Actions builder = new Actions(driver);
-        builder.moveToElement(container, x, y).click().build().perform();
+        builder.moveToElement(container, x, y).clickAndHold().release().build().perform();
     }
 
     @Override
