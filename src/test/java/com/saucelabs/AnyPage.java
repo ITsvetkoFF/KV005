@@ -3,15 +3,21 @@ package com.saucelabs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.Assert;
-
+import org.openqa.selenium.interactions.Actions;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.util.concurrent.TimeUnit;
 
-public class AnyPage implements IAnyPage {
+public class AnyPage extends MapPage implements IAnyPage {
+
     private WebDriver driver;
+
     public AnyPage(WebDriver driver) {
+        super(driver);
         this.driver = driver;
     }
+
 
     @Override
     public String getFirstResourceTitleFromMenu() {
@@ -66,63 +72,42 @@ public class AnyPage implements IAnyPage {
     @Override
     public String getLoggedInUserName() {
         String result;
-        result = driver.findElement(By.xpath("(//a[contains(@class, 'b-menu__button')])[4]")).getText();
+        result = driver.findElement(By.xpath("(//a[contains(@class, 'b-menu__button')])[3]")).getText();
         return result;
     }
 
+    @Override
     public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose) {
 
-        MapPage mapPage = new MapPage(driver);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
-        //focus on map by coordinate with zoom 9
-        mapPage.setView(latitude, longitude, 9);
+        setView(latitude, longitude, 9);
 
-        //click addProblem button, open window
-        driver.findElement(By.xpath("//a[@class='navbar-brand b-menu__button']")).click();
+        driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
 
-        //click at center of focused map, add marker on map
-        mapPage.clickAtPagesCenter();
+        clickAtPagesCenter();
 
-        //click at describe tab, open tab
         driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
 
-        //type problemName into problemName field
         driver.findElement(By.id("problemName")).sendKeys(problemName);
 
-        //select problem type 5
         driver.findElement(By.cssSelector("#select-field option:nth-child(6)")).click();
 
-        //type problemDescription into problemDescription field
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
 
-        //type problemPropose into problemPropose field
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
 
-        //click at photo tab, open tab
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
-        //upload file
+        new FileChooserThread("C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg").start();
+        driver.findElement(By.id("my-awesome-dropzone")).click();
 
-
-
-        //click at submit button, add problem to database
         driver.findElement(By.id("btn-submit")).click();
 
-        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
-
-        //refresh current page
         driver.navigate().refresh();
 
-        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        setView(latitude, longitude, 12);
 
-        //focus on map by coordinate with zoom 12
-        mapPage.setView(latitude, longitude, 12);
-
-        //click at added problem
-        mapPage.clickAtProblemByCoordinate(latitude, longitude);
-
-        Assert.assertTrue(true);
-        driver.quit();
+        clickAtProblemByCoordinate(latitude, longitude);
     }
 }
-

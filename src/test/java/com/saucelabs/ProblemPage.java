@@ -6,10 +6,10 @@ import org.openqa.selenium.WebDriver;
 /**
  * Created by onikistc on 21.10.2014.
  */
-public class ProblemInfoPage {
+public class ProblemPage {
 
     private WebDriver driver;
-    public ProblemInfoPage(WebDriver driver) {
+    public ProblemPage(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -23,6 +23,8 @@ public class ProblemInfoPage {
         return problemDescription;
     };
 
-
-
+    public String getProblemPropose() {
+        String problemPropose = driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemproposal/span")).getAttribute("textContent");
+        return problemPropose;
+    };
 }
