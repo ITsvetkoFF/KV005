@@ -1,5 +1,4 @@
 package com.saucelabs;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
@@ -16,14 +15,14 @@ public class MapPage implements IMapPage {
 
 
     @Override
-    public void setPosition() {
+    public void setPosition() {    // not use
         JavascriptExecutor js = null;
         if (driver instanceof JavascriptExecutor) {
             js = (JavascriptExecutor) driver;
         }
         js.executeScript("navigator.geolocation.getCurrentPosition = function(success) {" +
                 "success({coords: {latitude: 50.649460, longitude: 30.731506}}); }");
-    }   // not use
+    }
 
     @Override
     public void setView(double latitude, double longitude, int zoom) {
@@ -40,12 +39,12 @@ public class MapPage implements IMapPage {
         int x;
         int y;
 
-        WebElement container = driver.findElement(By.id("map-content"));
-        Dimension point = container.getSize();
+        WebElement map = driver.findElement(By.id("map-content"));
+        Dimension point = map.getSize();
         x = point.getWidth() / 2;
         y = point.getHeight() / 2;
         Actions builder = new Actions(driver);
-        builder.moveToElement(container, x, y).clickAndHold().release().build().perform();
+        builder.moveToElement(map, x, y).clickAndHold().release().build().perform();
     }
 
     @Override

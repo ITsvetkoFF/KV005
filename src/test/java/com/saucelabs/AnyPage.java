@@ -3,11 +3,8 @@ package com.saucelabs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 public class AnyPage extends MapPage implements IAnyPage {
 
@@ -77,10 +74,9 @@ public class AnyPage extends MapPage implements IAnyPage {
     }
 
     @Override
-    public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose) {
+    public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose, String filePath, String imageComment) {
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
         setView(latitude, longitude, 9);
 
         driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
@@ -88,26 +84,22 @@ public class AnyPage extends MapPage implements IAnyPage {
         clickAtPagesCenter();
 
         driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
-
         driver.findElement(By.id("problemName")).sendKeys(problemName);
+        List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
 
-        driver.findElement(By.cssSelector("#select-field option:nth-child(6)")).click();
+        for (WebElement element: elements) {
+            if (problemType.equals(element.getText()))
+            element.click();
+        }
 
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
-
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
-
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
-        new FileChooserThread("C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg").start();
+        new FileChooserThread(filePath).start();
+
         driver.findElement(By.id("my-awesome-dropzone")).click();
-
+        driver.findElement(By.cssSelector("textarea.comment_field")).sendKeys(imageComment);
         driver.findElement(By.id("btn-submit")).click();
-
-        driver.navigate().refresh();
-
-        setView(latitude, longitude, 12);
-
-        clickAtProblemByCoordinate(latitude, longitude);
     }
 }
