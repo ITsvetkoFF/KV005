@@ -30,7 +30,6 @@ public class ProblemCommentsTest {
 
         mapPage.clickAtProblemByCoordinate(addProblemTest.latitude, addProblemTest.longitude);
 //        driver.get("http://176.36.11.25/#/problem/showProblem/205");
-//        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
         int commentsCountBeforeAdding = 0;
         int commentsCountAfterAdding = 0;
