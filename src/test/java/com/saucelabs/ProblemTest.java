@@ -18,12 +18,13 @@ public class ProblemTest {
 
         ProblemPage problemPage = new ProblemPage(driver);
         MapPage mapPage = new MapPage(driver);
+        AddProblemTest addProblemTest = new AddProblemTest();
 
-        mapPage.clickAtProblemByCoordinate(AddProblemTest.latitude, AddProblemTest.longitude);
+        mapPage.clickAtProblemByCoordinate(addProblemTest.latitude, addProblemTest.longitude);
 
-        Assert.assertTrue(problemPage.getProblemTitle().equals(AddProblemTest.problemNameTest));
-        Assert.assertTrue(problemPage.getProblemDescription().equals(AddProblemTest.problemDescriptionTest));
-        Assert.assertTrue(problemPage.getProblemPropose().equals(AddProblemTest.problemProposeTest));
+        Assert.assertTrue(problemPage.getProblemTitle().equals(addProblemTest.problemNameTest));
+        Assert.assertTrue(problemPage.getProblemDescription().equals(addProblemTest.problemDescriptionTest));
+        Assert.assertTrue(problemPage.getProblemPropose().equals(addProblemTest.problemProposeTest));
 
         Assert.assertTrue(true);
         driver.quit();

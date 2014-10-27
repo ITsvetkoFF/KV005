@@ -9,12 +9,12 @@ import org.testng.annotations.Test;
  * Created by Roma on 21.10.2014.
  */
 public class AddProblemTest {
-    public static double latitude = 50.1;
-    public static double longitude = 30.1;
-    public static String problemNameTest = "problemNameTest";
-    public static String problemTypeTest = "problemTypeTest";
-    public static String problemDescriptionTest = "problemDescriptionTest";
-    public static String problemProposeTest = "problemProposeTest";
+    public  double latitude = 50.1;
+    public  double longitude = 30.1;
+    public  String problemNameTest = "problemNameTest";
+    public  String problemTypeTest = "problemTypeTest";
+    public  String problemDescriptionTest = "problemDescriptionTest";
+    public  String problemProposeTest = "problemProposeTest";
 
 
     @Test
@@ -25,6 +25,7 @@ public class AddProblemTest {
         AnyPage anyPage = new AnyPage(driver);
 
         driver.get("http://176.36.11.25/#/map");
+//        driver.get("http://localhost:8090/#/map");
 
         driver.manage().window().maximize();
 
