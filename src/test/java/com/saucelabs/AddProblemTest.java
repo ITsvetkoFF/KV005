@@ -38,7 +38,6 @@ public class AddProblemTest {
         anyPage.addProblem(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, filePath, imageComment );
 
         driver.navigate().refresh();
-        anyPage.setView(latitude, longitude, 9);
         anyPage.clickAtProblemByCoordinate(latitude, longitude);
 
         Assert.assertTrue(true);
