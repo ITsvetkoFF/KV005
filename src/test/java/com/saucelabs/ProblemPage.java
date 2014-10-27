@@ -15,19 +15,16 @@ public class ProblemPage {
     }
 
     public String getProblemTitle() {
-        String problemTitle = driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-title__text']/editproblemtitle")).getText();
-        return problemTitle;
-    };
+        return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-title__text']/editproblemtitle")).getText();
+    }
 
     public String getProblemDescription() {
-        String problemDescription = driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemcontent/span")).getAttribute("textContent");
-        return problemDescription;
-    };
+        return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemcontent/span")).getAttribute("textContent");
+    }
 
     public String getProblemPropose() {
-        String problemPropose = driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemproposal/span")).getAttribute("textContent");
-        return problemPropose;
-    };
+        return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemproposal/span")).getAttribute("textContent");
+    }
 
     public void addComment() {
         driver.findElement(By.xpath("//div[@class='b-problem-tab ng-isolate-scope']/ul/li[2]/a")).click();
