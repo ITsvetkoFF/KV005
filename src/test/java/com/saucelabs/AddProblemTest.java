@@ -16,6 +16,7 @@ public class AddProblemTest {
     public String problemDescriptionTest = "problemDescriptionTest";
     public String problemProposeTest = "problemProposeTest";
     public String filePath = "C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg";
+    public String filePath2 = "http://i.imgur.com/HHXCVbs.jpg";
     public String imageComment = "bla-bla-bla";
 
 
@@ -36,10 +37,9 @@ public class AddProblemTest {
         } catch (Exception e) {
         }
 
-        anyPage.addProblem(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, filePath, imageComment );
+        anyPage.addProblem(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, filePath2, imageComment );
 
         driver.navigate().refresh();
-        anyPage.setView(latitude, longitude, 9);
         anyPage.clickAtProblemByCoordinate(latitude, longitude);
 
         Assert.assertTrue(true);

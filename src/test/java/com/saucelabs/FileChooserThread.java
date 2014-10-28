@@ -33,6 +33,9 @@ class FileRunner implements Runnable {
                     else if (c == '\\') {
                         robot.keyPress(KeyEvent.VK_BACK_SLASH);
                     }
+                    else if (c == '/') {
+                        robot.keyPress(KeyEvent.VK_SLASH);
+                    }
                     else if (c == '.') {
                         robot.keyPress(KeyEvent.VK_PERIOD);
                     }
