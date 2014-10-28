@@ -10,24 +10,17 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 /**
- * Created by Volodja on 10/26/14.
+ * Created by Olya on 10/26/14.
  */
-public class ResourcesPage {
+public class ResourcesPage extends AnyPage implements IResourcesPage{
+    private WebDriver driver;
 
-    /*public static void login(String email, String password){
+    public ResourcesPage(WebDriver driver) {
+        super(driver);
+        this.driver = driver;
+    }
 
-        private WebDriver driver;
-        public ResourcePage(WebDriver driver) {
-            this.driver = driver;
-        }
-        driver.findElement(By.linkText("ВХІД")).click();
-        driver.findElement(By.name("email")).sendKeys(email);
-        driver.findElement(By.name("password")).sendKeys(password);
-        driver.findElement(By.id("login-button")).click();
-
-    }*/
-
-    public static void Execute(WebDriver driver) throws Exception{
+    public void CreateResource() throws Exception{
 
         int i = 1;
         while(!ExcelUtils.getCellData(i,3).isEmpty()) {
@@ -48,7 +41,7 @@ public class ResourcesPage {
         }
     }
 
-    public static void editResourceHeader(WebDriver driver) throws Exception{
+    public void editResourceHeader() throws Exception{
 
         //List<WebElement> resources = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
         int i = 1;
@@ -70,7 +63,7 @@ public class ResourcesPage {
         }
     }
 
-    public static void editResourceList(WebDriver driver) throws  Exception{
+    public void editResourceList() throws  Exception{
 
         int i = 1;
         while(!ExcelUtils.getCellData(i,3).isEmpty()) {
@@ -92,7 +85,7 @@ public class ResourcesPage {
         }
     }
 
-    public static void deleteResourceFromHeader(WebDriver driver) throws Exception{
+    public void deleteResourceFromHeader() throws Exception{
 
         int i = 1;
         while(!ExcelUtils.getCellData(i,3).isEmpty()) {
@@ -113,7 +106,7 @@ public class ResourcesPage {
         }
     }
 
-    public static void deleteResourceFromList(WebDriver driver) throws Exception{
+    public void deleteResourceFromList() throws Exception{
 
         int i = 1;
         while(!ExcelUtils.getCellData(i,3).isEmpty()) {
