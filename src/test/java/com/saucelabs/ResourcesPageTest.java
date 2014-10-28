@@ -15,8 +15,7 @@ import utility.ExcelUtils;
  */
 
 public class ResourcesPageTest {
-    private  static WebDriver driver = null;
-
+    //private  static WebDriver driver = null;
 
     @Test
     public void test() throws Exception{
