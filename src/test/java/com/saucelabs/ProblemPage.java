@@ -14,6 +14,40 @@ public class ProblemPage {
         this.driver = driver;
     }
 
+    public String getProblemType() {
+        String problemIconSRC = null;
+        try {
+            problemIconSRC = driver.findElement(By.xpath("//img[@class='b-problem-deatiled-info-title__icon']")).getAttribute("ng-src");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String problemType = null;
+        switch(problemIconSRC) {
+            case "images/markers/1.png":
+                problemType = "Проблеми лісів";
+                break;
+            case "images/markers/2.png":
+                problemType = "Сміттєзвалища";
+                break;
+            case "images/markers/3.png":
+                problemType = "Незаконна забудова";
+                break;
+            case "images/markers/4.png":
+                problemType = "Проблеми водойм";
+                break;
+            case "images/markers/5.png":
+                problemType = "Загрози біорізноманіттю";
+                break;
+            case "images/markers/6.png":
+                problemType = "Браконьєрство";
+                break;
+            case "images/markers/7.png":
+                problemType = "Інші проблеми";
+                break;
+        }
+        return problemType;
+    }
+
     public String getProblemTitle() {
         return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-title__text']/editproblemtitle")).getText();
     }
@@ -24,6 +58,10 @@ public class ProblemPage {
 
     public String getProblemPropose() {
         return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemproposal/span")).getAttribute("textContent");
+    }
+
+    public String getImageComment() {
+        return  driver.findElement(By.className("")).getText();
     }
 
     public void addComment() {

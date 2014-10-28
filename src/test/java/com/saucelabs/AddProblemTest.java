@@ -25,6 +25,7 @@ public class AddProblemTest {
         WebDriver driver = new FirefoxDriver();
         AnyPage anyPage = new AnyPage(driver);
 
+//        driver.get("http://localhost:8090/#/map");
         driver.get("http://176.36.11.25/#/map");
         driver.manage().window().maximize();
 
