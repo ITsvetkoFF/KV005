@@ -10,89 +10,93 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 /**
- * Created by Volodja on 10/26/14.
+ * Created by Olya on 10/26/14.
  */
-public class ResourcesPage {
+public class ResourcesPage extends AnyPage implements IResourcesPage{
+    private WebDriver driver;
 
-    /*public static void login(String email, String password){
-
-        private WebDriver driver;
-        public ResourcePage(WebDriver driver) {
-            this.driver = driver;
-        }
-        driver.findElement(By.linkText("ВХІД")).click();
-        driver.findElement(By.name("email")).sendKeys(email);
-        driver.findElement(By.name("password")).sendKeys(password);
-        driver.findElement(By.id("login-button")).click();
-
-    }*/
-
-    public static void Execute(WebDriver driver) throws Exception{
-
-        int i = 1;
-        while(!ExcelUtils.getCellData(i,3).isEmpty()) {
-            String sTitle = ExcelUtils.getCellData(i, 3);
-            String sAlias = ExcelUtils.getCellData(i, 4);
-            String sBody = ExcelUtils.getCellData(i, 5);
-            String sPlaceToSave = ExcelUtils.getCellData(i, 6);
-            driver.findElement(By.linkText("РЕСУРСИ")).click();
-            driver.findElement(By.linkText("ДОДАТИ НОВИЙ РЕСУРС")).click();
-            driver.findElement(By.name("Title")).sendKeys(sTitle);
-            driver.findElement(By.name("Alias")).sendKeys(sAlias);
-            driver.findElement(By.cssSelector("div[id^='taTextElement']")).sendKeys(sBody);
-            org.openqa.selenium.support.ui.Select select = new org.openqa.selenium.support.ui.Select(driver.findElement(By.name("IsResource")));
-            select.selectByVisibleText(sPlaceToSave);
-            driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
-            driver.findElement(By.className("b-header__logo")).click();
-            i++;
-        }
+    public ResourcesPage(WebDriver driver) {
+        super(driver);
+        this.driver = driver;
     }
 
-    public static void editResourceHeader(WebDriver driver) throws Exception{
+    public void createResource(String sTitle, String sAlias, String sBody, String sPlaceToSave) throws Exception{
 
-        //List<WebElement> resources = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
-        int i = 1;
-        while(!ExcelUtils.getCellData(i,3).isEmpty()) {
-            String sTitle = ExcelUtils.getCellData(i, 3);
-            String sTextToAdd = ExcelUtils.getCellData(i, 7);
-            List<WebElement> resources = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
-            for (WebElement listElement : resources){
-                String searchText = listElement.getText();
-                if (searchText.equals(sTitle.toUpperCase())){
-                    listElement.findElement(By.cssSelector(".fa.fa-pencil.fa-xs.ng-scope")).click();
-                    driver.findElement(By.name("Title")).sendKeys(sTextToAdd);
-                    driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
-                    break;
-                }
+        driver.findElement(By.linkText("РЕСУРСИ")).click();
+        driver.findElement(By.linkText("ДОДАТИ НОВИЙ РЕСУРС")).click();
+        driver.findElement(By.name("Title")).sendKeys(sTitle);
+        driver.findElement(By.name("Alias")).sendKeys(sAlias);
+        driver.findElement(By.cssSelector("div[id^='taTextElement']")).sendKeys(sBody);
+        org.openqa.selenium.support.ui.Select select = new org.openqa.selenium.support.ui.Select(driver.findElement(By.name("IsResource")));
+        select.selectByVisibleText(sPlaceToSave);
+        driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
+        driver.findElement(By.className("b-header__logo")).click();
+
+    }
+
+    public String existResource(String resource) throws  Exception{
+        String value = null;
+        driver.findElement(By.className("b-header__logo")).click();
+        List<WebElement> resources1 = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
+        for (WebElement listElement : resources1){
+            String searchText = listElement.getText();
+            if (searchText.equals(resource.toUpperCase())){
+                value = "У верхньому меню";
             }
-            driver.findElement(By.className("b-header__logo")).click();
-            i++;
         }
-    }
-
-    public static void editResourceList(WebDriver driver) throws  Exception{
-
-        int i = 1;
-        while(!ExcelUtils.getCellData(i,3).isEmpty()) {
-            String sTitle = ExcelUtils.getCellData(i, 3);
-            String sTextToAdd = ExcelUtils.getCellData(i, 7);
-            driver.findElement(By.linkText("РЕСУРСИ")).click();
-            List<WebElement> resources = driver.findElements(By.cssSelector("#b-header__resources li"));
-            for (WebElement listElement : resources){
-                //System.out.println(listElement.getText());
-                if (listElement.getText().equals(sTitle)){
-                    listElement.findElement(By.cssSelector(".fa.fa-pencil.ng-scope")).click();
-                    driver.findElement(By.name("Title")).sendKeys(sTextToAdd);
-                    driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
-                    break;
-                }
+        driver.findElement(By.linkText("РЕСУРСИ")).click();
+        List<WebElement> resources2 = driver.findElements(By.cssSelector("#b-header__resources li"));
+        for (WebElement listElement : resources2){
+            //System.out.println(listElement.getText());
+            if (listElement.getText().equals(resource)){
+                value = "В розділі \"Ресурси\"";
             }
-            driver.findElement(By.className("b-header__logo")).click();
-            i++;
+        }
+        driver.findElement(By.className("b-header__logo")).click();
+        return value;
+    }
+
+    public void editResourceHeader(String sTitle, String sTextToAdd) throws Exception{
+
+        List<WebElement> resources = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
+        for (WebElement listElement : resources){
+            String searchText = listElement.getText();
+            if (searchText.equals(sTitle.toUpperCase())){
+                listElement.findElement(By.cssSelector(".fa.fa-pencil.fa-xs.ng-scope")).click();
+                driver.findElement(By.name("Title")).sendKeys(sTextToAdd);
+                driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
+                break;
+            }
+        }
+        driver.findElement(By.className("b-header__logo")).click();
+    }
+
+    public void editResourceList(String sTitle, String sTextToAdd) throws  Exception{
+
+        driver.findElement(By.linkText("РЕСУРСИ")).click();
+        List<WebElement> resources = driver.findElements(By.cssSelector("#b-header__resources li"));
+        for (WebElement listElement : resources){
+            if (listElement.getText().equals(sTitle)){
+                listElement.findElement(By.cssSelector(".fa.fa-pencil.ng-scope")).click();
+                driver.findElement(By.name("Title")).sendKeys(sTextToAdd);
+                driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
+                break;
+            }
+        }
+        driver.findElement(By.className("b-header__logo")).click();
+    }
+
+    public void editResource(String sTitle, String sTextToAdd) throws  Exception{
+        String place = existResource(sTitle);
+        if (place.equals("В розділі \"Ресурси\"")){
+            editResourceList(sTitle, sTextToAdd);
+        }
+        else if (place.equals("У верхньому меню")){
+            editResourceHeader(sTitle, sTextToAdd);
         }
     }
 
-    public static void deleteResourceFromHeader(WebDriver driver) throws Exception{
+    /*public void deleteResourceFromHeader() throws Exception{
 
         int i = 1;
         while(!ExcelUtils.getCellData(i,3).isEmpty()) {
@@ -111,9 +115,25 @@ public class ResourcesPage {
             driver.findElement(By.className("b-header__logo")).click();
             i++;
         }
+    }*/
+
+    public void deleteResourceFromHeader(String deleteTitle) throws Exception{
+
+        driver.findElement(By.className("b-header__logo")).click();
+        List<WebElement> resources = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
+        for (WebElement listElement : resources){
+            String searchText = listElement.getText();
+            if (searchText.equals(deleteTitle.toUpperCase())){
+                listElement.findElement(By.cssSelector(".fa.fa-trash.fa-xs.ng-scope")).click();
+                driver.findElement(By.partialLinkText("Видалити ресурс"));
+                break;
+            }
+        }
+        driver.findElement(By.className("b-header__logo")).click();
+
     }
 
-    public static void deleteResourceFromList(WebDriver driver) throws Exception{
+    /*public void deleteResourceFromList() throws Exception{
 
         int i = 1;
         while(!ExcelUtils.getCellData(i,3).isEmpty()) {
@@ -130,6 +150,30 @@ public class ResourcesPage {
                 }
             }
             i++;
+        }
+    }*/
+
+    public void deleteResourceFromList(String deleteTitle) throws Exception{
+
+        driver.findElement(By.className("b-header__logo")).click();
+        driver.findElement(By.linkText("РЕСУРСИ")).click();
+        List<WebElement> resources = driver.findElements(By.cssSelector("#b-header__resources li"));
+        for (WebElement listElement : resources){
+            if (listElement.getText().equals(deleteTitle)){
+                listElement.findElement(By.cssSelector(".fa.fa-trash.ng-scope")).click();
+                driver.findElement(By.partialLinkText("Видалити ресурс"));
+                break;
+            }
+        }
+    }
+
+    public void deleteResource(String deleteTitle) throws  Exception{
+        String place = existResource(deleteTitle);
+        if (place.equals("В розділі \"Ресурси\"")){
+            deleteResourceFromList(deleteTitle);
+        }
+        else if (place.equals("У верхньому меню")){
+            deleteResourceFromHeader(deleteTitle);
         }
     }
 

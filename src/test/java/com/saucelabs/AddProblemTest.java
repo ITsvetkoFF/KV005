@@ -4,6 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * Created by Roma on 21.10.2014.
@@ -15,9 +18,8 @@ public class AddProblemTest {
     public String problemTypeTest = "Загрози біорізноманіттю";
     public String problemDescriptionTest = "problemDescriptionTest";
     public String problemProposeTest = "problemProposeTest";
-    public String filePath = "C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg";
-    public String filePath2 = "http://i.imgur.com/HHXCVbs.jpg";
-    public String imageComment = "bla-bla-bla";
+    public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg", "http://i.imgur.com/1K6AdCH.jpg");
+    public List<String> imageComments = Arrays.asList("comment1", "comment2");
 
 
     @Test
@@ -26,7 +28,7 @@ public class AddProblemTest {
         WebDriver driver = new FirefoxDriver();
         AnyPage anyPage = new AnyPage(driver);
 
-//        driver.get("http://localhost:8090/#/map");
+        //driver.get("http://localhost:8090/#/map");
         driver.get("http://176.36.11.25/#/map");
         driver.manage().window().maximize();
 
@@ -37,7 +39,7 @@ public class AddProblemTest {
         } catch (Exception e) {
         }
 
-        anyPage.addProblem(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, filePath2, imageComment );
+        anyPage.addProblem(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, imageUrls, imageComments);
 
         driver.navigate().refresh();
         anyPage.clickAtProblemByCoordinate(latitude, longitude);
