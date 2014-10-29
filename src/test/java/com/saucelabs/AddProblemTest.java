@@ -18,7 +18,7 @@ public class AddProblemTest {
     public String problemTypeTest = "Загрози біорізноманіттю";
     public String problemDescriptionTest = "problemDescriptionTest";
     public String problemProposeTest = "problemProposeTest";
-    public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg", "http://i.imgur.com/gYx3HoD.png");
+    public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg", "http://i.imgur.com/1K6AdCH.jpg");
     public List<String> imageComments = Arrays.asList("comment1", "comment2");
 
 
@@ -28,7 +28,7 @@ public class AddProblemTest {
         WebDriver driver = new FirefoxDriver();
         AnyPage anyPage = new AnyPage(driver);
 
-//        driver.get("http://localhost:8090/#/map");
+        //driver.get("http://localhost:8090/#/map");
         driver.get("http://176.36.11.25/#/map");
         driver.manage().window().maximize();
 

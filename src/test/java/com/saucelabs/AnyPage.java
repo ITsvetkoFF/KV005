@@ -97,15 +97,30 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
         for (String url: imageUrls) {
-            new FileChooserThread(url).start();
-            driver.findElement(By.id("my-awesome-dropzone")).click();
+            Thread clicker = new FileChooserThread(url);
+            clicker.start();
+            driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+            }
+            clicker.interrupt();
         }
 
         List<WebElement> commentElements = driver.findElements(By.cssSelector("textarea.comment_field"));
+        int i = 0;
         for (WebElement element: commentElements) {
-            for (String comment: imageComments)
-                element.sendKeys(comment);
+            element.sendKeys(imageComments.get(i));
+            i++;
         }
+
+        Thread closeAlert = new AlertCloserThread();
+        closeAlert.start();
         driver.findElement(By.id("btn-submit")).click();
+        try {
+            Thread.sleep(4000);
+        } catch (Exception e) {
+        }
+        closeAlert.interrupt();
     }
 }
