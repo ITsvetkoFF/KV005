@@ -3,6 +3,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by Roma on 23.10.2014.
@@ -150,14 +151,48 @@ public class MapPage implements IMapPage {
             WebElement closeButton = datePickers.findElement(By.cssSelector("button.btn-danger"));
             closeButton.click();
 
+            }
+
+    }
+
+    @Override
+    public void selectDate(WebElement datePicker, String year, String month, String day) {
+
+        StringBuilder yearXPath = new StringBuilder("");
+        yearXPath.append(".//td/button/span[(text()='");
+        yearXPath.append(year);
+        yearXPath.append("')]");
+
+        StringBuilder monthXPath = new StringBuilder("");
+        monthXPath.append(".//td/button/span[(text()='");
+        monthXPath.append(month);
+        monthXPath.append("')]");
+
+        StringBuilder dayXPath = new StringBuilder("");
+        dayXPath.append(".//td/button/span[(text()='");
+        dayXPath.append(day);
+        dayXPath.append("')]");
+
+        datePicker.findElement(By.xpath(yearXPath.toString())).click();
+        datePicker.findElement(By.xpath(monthXPath.toString())).click();
+        datePicker.findElement(By.xpath(dayXPath.toString())).click();
+    }
+
+    @Override
+    public void selectOneDayPeriod(String fullDate) {
+        String[] splitDate;
+        splitDate = fullDate.split("\\s+");
+
+        List<WebElement> datePickers = driver.findElements(By.cssSelector(".datepicker"));
+
+        for (WebElement datePicker : datePickers) {
+            WebElement buttonElement = datePicker.findElement(By.cssSelector(".fa-calendar"));
+
             buttonElement.click();
-            datePickers.findElement(By.className("ng-binding")).click();
-            datePickers.findElement(By.className("ng-binding")).click();
+            datePicker.findElement(By.className("ng-binding")).click();
+            datePicker.findElement(By.className("ng-binding")).click();
 
-            datePickers.findElement(By.xpath(".//td/button/span[(text()='14')]")).click();
-            datePickers.findElement(By.xpath(".//td/button/span[(text()='трав.')]")).click();
-            datePickers.findElement(By.xpath(".//td/button/span[(text()='10')]")).click();
+            selectDate(datePicker, splitDate[0], splitDate[1], splitDate[2]);
         }
-
     }
 }

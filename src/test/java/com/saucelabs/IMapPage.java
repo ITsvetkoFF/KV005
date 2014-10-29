@@ -1,5 +1,7 @@
 package com.saucelabs;
 
+import org.openqa.selenium.WebElement;
+
 /**
  * Created by Roma on 23.10.2014.
  */
@@ -21,4 +23,8 @@ public interface IMapPage {
     void selectOnlyOneFilter(int typeNumber);
 
     void datePickers();
+
+    void selectDate(WebElement datePicker, String year, String month, String day);
+
+    void selectOneDayPeriod(String fullDate);
 }
