@@ -3,20 +3,23 @@ package com.saucelabs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.Test;
-
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import static org.openqa.selenium.WebElement.*;
+/**
+ * Created by nklimotc on 21.10.2014.
+ */
 
 public class Filters {
-    private WebDriver driver;
 
     public Filters(WebDriver driver) {
         this.driver = driver;
     }
+
+    private WebDriver driver;
+
+    AnyPage anyPage = new AnyPage(driver);
+    public double latitude;
+    public double longitude;
 
     public String getFilterTitle() {
 
@@ -27,15 +30,17 @@ public class Filters {
             //System.out.println(labelElement.isEnabled());
             System.out.println(String.format("Title " + labelElement.getAttribute("textContent") + " has id " + labelElement.getAttribute("for")));
         }
-        return getFilterTitle();
+        return null;
     }
 
-    public void clickFilter() {
-        WebElement zoomOut = driver.findElement(By.xpath("//a[@title='Zoom out']"));
+    public void clickZoomOut() {
+    WebElement zoomOut = driver.findElement(By.xpath("//a[@title='Zoom out']"));
 
         do {
             zoomOut.click();
         } while (!zoomOut.getAttribute("class").contains("disabled"));
+}
+    public void clickFilter() {
 
         driver.findElement(By.xpath("//div[@class='b-left-side__pointer']")).click();
 
@@ -43,6 +48,11 @@ public class Filters {
 
         for (int i = 0; i < filters.size(); i++) {
             filters.get(i).click();
+            }
+
+        for (int i = 0; i < filters.size(); i++) {
+            filters.get(i).click();
+            anyPage.clickAtProblemByCoordinate(latitude, longitude);
         }
     }
 
@@ -69,9 +79,9 @@ public class Filters {
             datePickers.findElement(By.className("ng-binding")).click();
             datePickers.findElement(By.className("ng-binding")).click();
 
-            datePickers.findElement(By.xpath("//td/button/span[(text()='14')]/..")).click();
-            datePickers.findElement(By.xpath("//td/button/span[(text()='трав.')]")).click();
-            datePickers.findElement(By.xpath("//td/button/span[(text()='10')]")).click();
+            datePickers.findElement(By.xpath(".//td/button/span[(text()='14')]")).click();
+            datePickers.findElement(By.xpath(".//td/button/span[(text()='трав.')]")).click();
+            datePickers.findElement(By.xpath(".//td/button/span[(text()='10')]")).click();
         }
 
 //        List<WebElement> calendarGrid = datePickers.findElements(By.xpath("//div/ul/li/div[@class='ng-isolate-scope']"));

@@ -13,20 +13,23 @@ public class ProblemTest {
     public void checkProblemInfo() {
         WebDriver driver = new FirefoxDriver();
 
-//        driver.get("http://localhost:8090/#/map");
-        driver.get("http://176.36.11.25/#/map");
+        driver.get("http://localhost:8090/#/map");
+//        driver.get("http://176.36.11.25/#/map");
+        driver.manage().window().maximize();
 
         ProblemPage problemPage = new ProblemPage(driver);
-        MapPage mapPage = new MapPage(driver);
+        AnyPage anyPage = new AnyPage(driver);
         AddProblemTest addProblemTest = new AddProblemTest();
 
-        mapPage.clickAtProblemByCoordinate(addProblemTest.latitude, addProblemTest.longitude);
+        anyPage.clickAtProblemByCoordinate(addProblemTest.latitude, addProblemTest.longitude);
 
         Assert.assertTrue(problemPage.getProblemTitle().equals(addProblemTest.problemNameTest));
         Assert.assertTrue(problemPage.getProblemDescription().equals(addProblemTest.problemDescriptionTest));
         Assert.assertTrue(problemPage.getProblemPropose().equals(addProblemTest.problemProposeTest));
+        Assert.assertTrue(problemPage.getProblemType().equals(addProblemTest.problemTypeTest));
 
-        Assert.assertTrue(true);
+        System.out.println(problemPage.getProblemType() + "\n" + problemPage.getProblemTitle() + "\n" +
+                problemPage.getProblemDescription() + "\n" + problemPage.getProblemPropose());
         driver.quit();
     }
 
