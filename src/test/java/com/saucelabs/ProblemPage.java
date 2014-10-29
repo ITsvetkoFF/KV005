@@ -3,7 +3,8 @@ package com.saucelabs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by onikistc on 21.10.2014.
@@ -59,13 +60,28 @@ public class ProblemPage extends AnyPage{
         return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemproposal/span")).getAttribute("textContent");
     }
 
-    public String getImageComment() {
-        driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div/img")).click();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        return  driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li/div")).getAttribute("textContent");
+    public List<String> getImageURLs(){
+        ProblemTest problemTest = new ProblemTest();
+        int imagesAmount = problemTest.imageUrls.size();
+        List<String> imageUrls = new ArrayList<>();
+        for(int i = 1; i <= imagesAmount; i++) {
+            imageUrls.add("http://localhost:8090/" + driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[" + i + "]/img")).getAttribute("ng-src"));
+        }
+        return imageUrls;
     }
-    public String getImageURL(){
-        return ("http://localhost:8090/" + driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li")).getAttribute("style").split("\"")[1]);
+
+    public List<String> getImagesComments() {
+        driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[1]/img")).click();
+        ProblemTest problemTest = new ProblemTest();
+        int commentsAmount = problemTest.imageComments.size();
+        List<String> comments = new ArrayList<>();
+        for(int i = 1; i <= commentsAmount; i++){
+            comments.add(driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li[" + i + "]/div")).getAttribute("textContent"));
+            if (i < commentsAmount) {
+                driver.findElement(By.xpath("//div[@class='rn-carousel-controls ng-isolate-scope']/span[@ng-click='next()']")).click();
+            }
+        }
+        return comments;
     }
 
     public void addComment() {

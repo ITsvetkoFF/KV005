@@ -9,6 +9,8 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by onikistc on 21.10.2014.
@@ -20,12 +22,11 @@ public class ProblemTest {
     public String problemTypeTest = "Загрози біорізноманіттю";
     public String problemDescriptionTest = "problemDescriptionTest";
     public String problemProposeTest = "problemProposeTest";
-    public String filePath = "C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg";
-    public String filePath2 = "http://i.imgur.com/HHXCVbs.jpg";
-    public String imageComment = "bla-bla-bla";
+    public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg", "http://i.imgur.com/1K6AdCH.jpg", "http://i.imgur.com/1K6AdCH.jpg", "http://i.imgur.com/1K6AdCH.jpg");
+    public List<String> imageComments = Arrays.asList("comment1", "comment2", "\"http://i.imgur.com/1K6AdCH.jpg\"", "\"http://i.imgur.com/1K6AdCH.jpg\"");
 
-     WebDriver driver;
-     ProblemPage problemPage;
+    WebDriver driver;
+    ProblemPage problemPage;
 
     @BeforeSuite
     public  void setUp() {
@@ -38,7 +39,7 @@ public class ProblemTest {
 
 //        problemPage.logIn("admin@.com", "admin");
 //        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//        problemPage.addProblem(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, filePath2, imageComment);
+//        problemPage.addProblem(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, imageUrls, imageComments);
 //        driver.navigate().refresh();
 //        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         problemPage.clickAtProblemByCoordinate(latitude, longitude);
@@ -66,12 +67,18 @@ public class ProblemTest {
         Assert.assertTrue(problemPage.getProblemPropose().equals(problemProposeTest));
     }
     @Test(dependsOnMethods = {"problemCheckPropose"})
-    public void problemCheckImage() {
-        Assert.assertTrue(problemPage.getImageComment().equals(imageComment));
+    public void problemCheckImage() throws IOException {
+        List<String> gettedUrls = problemPage.getImageURLs();
+        for(int i = 0; i < gettedUrls.size(); i++) {
+            Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(gettedUrls.get(i), imageUrls.get(i)));
+        }
     }
+
     @Test(dependsOnMethods = {"problemCheckImage"})
-    public void problemCheckImageComment() throws IOException {
-        String url = problemPage.getImageURL();
-        Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(url, filePath2));
+    public void problemCheckImageComment() {
+        List<String> gettedComments = problemPage.getImagesComments();
+        for(int i = 0; i < gettedComments.size(); i++){
+            Assert.assertTrue(gettedComments.get(i).equals(imageComments.get(i)));
+        }
     }
 }
