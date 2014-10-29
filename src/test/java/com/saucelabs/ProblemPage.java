@@ -3,24 +3,23 @@ package com.saucelabs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by onikistc on 21.10.2014.
  */
-public class ProblemPage {
+public class ProblemPage extends AnyPage{
     public String comment = "New comment";
 
     private WebDriver driver;
     public ProblemPage(WebDriver driver) {
+        super(driver);
         this.driver = driver;
     }
 
     public String getProblemType() {
-        String problemIconSRC = null;
-        try {
+        String problemIconSRC;
             problemIconSRC = driver.findElement(By.xpath("//img[@class='b-problem-deatiled-info-title__icon']")).getAttribute("ng-src");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         String problemType = null;
         switch(problemIconSRC) {
             case "images/markers/1.png":
@@ -61,7 +60,12 @@ public class ProblemPage {
     }
 
     public String getImageComment() {
-        return  driver.findElement(By.className("")).getText();
+        driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div/img")).click();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        return  driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li/div")).getAttribute("textContent");
+    }
+    public String getImageURL(){
+        return ("http://localhost:8090/" + driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li")).getAttribute("style").split("\"")[1]);
     }
 
     public void addComment() {
