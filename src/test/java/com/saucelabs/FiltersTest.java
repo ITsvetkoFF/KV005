@@ -4,11 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,15 +12,15 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class FiltersTest{
-    public double latitude;
-    public double longitude;
 
     @Test
     public void checkFilters () throws Exception {
 
         WebDriver driver = new FirefoxDriver();
-        Filters filters = new Filters (driver);
         AnyPage anyPage = new AnyPage(driver);
+        MapPage mapPage = new MapPage(driver);
+        ProblemPage problemPage = new ProblemPage(driver);
+
 
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 
@@ -32,42 +28,66 @@ public class FiltersTest{
 
         driver.manage().window().maximize();
 
-//        String year = "//td/button/span[(text()='14')]";
-//        String month = "//td/button/span[(text()='трав.')]";
-//        String day = "//td/button/span[(text()='10')]";
+        //new AlertCloserThread().start();
+        //anyPage.addProblem(50.2, 30.2, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment1");
 
-        filters.getFilterTitle();
-        filters.clickZoomOut();
+        mapPage.clickZoomOut();
+        mapPage.openFiltersBoard();
 
-        new AlertCloserThread().start();
-        anyPage.addProblem(50.2, 30.2, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment1");
-
-        new AlertCloserThread().start();
-        anyPage.addProblem(50.3, 30.3, "ProblemFor Сміттєзвалища", "Сміттєзвалища", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment2");
-
-//        driver.switchTo().alert().accept();
-//        driver.navigate().refresh();
+//        mapPage.selectAllExceptOneFilter(1);
+//
 //        try {
-//            Thread.sleep(1000);
+//        mapPage.clickAtProblemByCoordinate(50.2, 30.2);
 //        } catch (Exception e) {
+//            e.getStackTrace();
 //        }
+//
+//        Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(1)));
+
+//        anyPage.addProblem(50.3, 30.3, "ProblemFor Сміттєзвалища", "Сміттєзвалища", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment2");
+
+//        mapPage.selectAllExceptOneFilter(2);
+//        mapPage.clickAtProblemByCoordinate(50.3, 30.3);
+//
+//        Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(2)));
+
+        mapPage.selectOnlyOneFilter(2);
+        mapPage.clickAtProblemByCoordinate(50.3, 30.3);
+
+        Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(2)));
+//
+//        mapPage.selectOnlyOneFilter(2);
+//        mapPage.clickAtProblemByCoordinate(50.3, 30.3);
+//
+//        Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(2)));
+
+
+//        new AlertCloserThread().start();
+//        anyPage.addProblem(50.3, 30.3, "ProblemFor Сміттєзвалища", "Сміттєзвалища", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment2");
+//
+//        new AlertCloserThread().start();
 //        anyPage.addProblem(50.4, 30.4, "ProblemFor Незаконна забудова", "Незаконна забудова", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment3");
-//        driver.navigate().refresh();
+//
+//        new AlertCloserThread().start();
 //        anyPage.addProblem(50.5, 30.5, "ProblemFor Проблеми водойм", "Проблеми водойм", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment4");
-//        driver.navigate().refresh();
+//
+//        new AlertCloserThread().start();
 //        anyPage.addProblem(50.6, 30.6, "ProblemFor Загрози біорізноманіттю", "Загрози біорізноманіттю", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment5");
-//        driver.navigate().refresh();
+//
+//        new AlertCloserThread().start();
 //        anyPage.addProblem(50.7, 30.7, "ProblemFor Браконьєрство", "Браконьєрство", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment6");
-//        driver.navigate().refresh();
+//
+//        new AlertCloserThread().start();
 //        anyPage.addProblem(50.8, 30.8, "ProblemFor Інші проблеми", "Інші проблеми", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment7");
-//        driver.navigate().refresh();
+//
+//        filters.selectAllExceptOneFilter();
+//        filters.selectOnlyOneFilter();
+//
+//        Assert.assertTrue(problemPage.getProblemType().equals(filters.getFilterTitle()));
 
-        filters.clickFilter();
+        //Assert.assertTrue(driver.findElement(By.cssSelector(".form-control.ng-isolate-scope.ng-valid-date")).());
 
-        Assert.assertTrue(true);
 
-        filters.datePickers();
-
-                    //driver.quit();
+        //driver.quit();
     }
 }
