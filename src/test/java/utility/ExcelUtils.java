@@ -33,8 +33,9 @@ public class ExcelUtils {
         }
     }
 
-    /*public static Object[][] getTableArray(String Path, String SheetName) throws Exception {
-        String[][] tabArray = null;
+    //test data provider
+    public static Object[][] getTableArray(String Path, String SheetName) throws Exception {
+        Object[][] tabArray = null;
         try {
             FileInputStream ExcelFile = new FileInputStream(Path);
             // Access the required test data sheet
@@ -55,7 +56,7 @@ public class ExcelUtils {
                     System.out.println(tabArray[ci][cj]);
                 }
             }
-            return tabArray
+            return tabArray;
         }
         catch (FileNotFoundException e){
             System.out.println("Could not read the Excel sheet");
@@ -66,7 +67,7 @@ public class ExcelUtils {
             e.printStackTrace();
         }
         return(tabArray);
-    }*/
+    }
 
     //This method is to read the test data from the Excel cell, in this we are passing parameters as Row num and Col num
     public static String getCellData(int RowNum, int ColNum) throws Exception{
