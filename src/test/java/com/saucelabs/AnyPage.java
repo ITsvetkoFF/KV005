@@ -74,7 +74,7 @@ public class AnyPage extends MapPage implements IAnyPage {
     }
 
     @Override
-    public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose, String filePath, String imageComment) {
+    public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose, List<String> imageUrls, List<String> imageComments) {
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         setView(latitude, longitude, 9);
@@ -85,8 +85,8 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
         driver.findElement(By.id("problemName")).sendKeys(problemName);
-        List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
 
+        List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
         for (WebElement element: elements) {
             if (problemType.equals(element.getText()))
             element.click();
@@ -96,10 +96,16 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
-        new FileChooserThread(filePath).start();
+        for (String url: imageUrls) {
+            new FileChooserThread(url).start();
+            driver.findElement(By.id("my-awesome-dropzone")).click();
+        }
 
-        driver.findElement(By.id("my-awesome-dropzone")).click();
-        driver.findElement(By.cssSelector("textarea.comment_field")).sendKeys(imageComment);
+        List<WebElement> commentElements = driver.findElements(By.cssSelector("textarea.comment_field"));
+        for (WebElement element: commentElements) {
+            for (String comment: imageComments)
+                element.sendKeys(comment);
+        }
         driver.findElement(By.id("btn-submit")).click();
     }
 }
