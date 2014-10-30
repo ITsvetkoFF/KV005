@@ -14,17 +14,23 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class FiltersTest {
-    public static int typeNumber;
+
     WebDriver driver;
     AnyPage anyPage;
-    MapPage mapPage;
+    MapPage2 mapPage;
     ProblemPage problemPage;
+
+    public String afterDate;
+    public String beforeDate;
+    public static int typeNumber;
+    public static double latitude;
+    public static double longitude;
 
     @BeforeSuite
     public void setUp() {
         this.driver = new FirefoxDriver();
         this.anyPage = new AnyPage(driver);
-        this.mapPage = new MapPage(driver);
+        this.mapPage = new MapPage2(driver);
         this.problemPage = new ProblemPage(driver);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.get("http://127.0.0.1:8090/#/map");
@@ -36,11 +42,14 @@ public class FiltersTest {
         this.driver.quit();
     }
 
-    @Test
-    public void checkFiltersNegative() throws Exception {
+   @Test
+   public void checkFiltersNegative() throws Exception {
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
-        mapPage.selectAllExceptOneFilter(typeNumber);
+        mapPage.setAfterDate(afterDate);
+        mapPage.setBeforeDate(beforeDate);
+        mapPage.selectOnlyOneFilter(typeNumber);
+        mapPage.clickAtProblemByCoordinate(latitude, longitude);
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
     }
 
@@ -48,10 +57,18 @@ public class FiltersTest {
     public void checkFiltersPositive() throws Exception {
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
-        mapPage.selectAllExceptOneFilter(typeNumber);
+        mapPage.setAfterDate(afterDate);
+        mapPage.setBeforeDate(beforeDate);
+        mapPage.selectOnlyOneFilter(typeNumber);
+        mapPage.clickAtProblemByCoordinate(latitude, longitude);
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
     }
-}
+
+    @Test
+    public void datePickersButtons(){
+
+    }
+ }
 //        for dataProvider
 
 //        anyPage.addProblem(50.2, 30.2, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment1");
