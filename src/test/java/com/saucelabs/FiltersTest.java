@@ -42,6 +42,7 @@ public class FiltersTest {
         this.driver.quit();
     }
 
+
    @Test
    public void checkFiltersNegative() throws Exception {
         mapPage.clickZoomOut();
