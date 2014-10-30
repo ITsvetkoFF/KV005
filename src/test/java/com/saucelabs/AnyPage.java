@@ -1,8 +1,12 @@
 package com.saucelabs;
 
+import com.google.gson.annotations.Until;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -76,6 +80,7 @@ public class AnyPage extends MapPage implements IAnyPage {
     @Override
     public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose, List<String> imageUrls, List<String> imageComments) {
 
+        driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         setView(latitude, longitude, 9);
 
@@ -114,13 +119,17 @@ public class AnyPage extends MapPage implements IAnyPage {
             i++;
         }
 
-        Thread closeAlert = new AlertCloserThread();
-        closeAlert.start();
         driver.findElement(By.id("btn-submit")).click();
-        try {
-            Thread.sleep(4000);
-        } catch (Exception e) {
-        }
-        closeAlert.interrupt();
+        List<WebElement> dropdown = driver.findElements(By.xpath("//li[@class='dropdown']/a"));
+        int count = dropdown.size();
+            if (count > 2) {
+                WebElement close = (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
+                    @Override
+                    public WebElement apply(WebDriver driver) {
+                        return driver.findElement(By.cssSelector(".close"));
+                    }
+                });
+                close.click();
+            }
     }
 }
