@@ -3,6 +3,8 @@ package com.saucelabs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import utility.Constant;
 import utility.ExcelUtils;
 
@@ -37,13 +39,21 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
     public String existResource(String resource) throws  Exception{
         String value = null;
         driver.findElement(By.className("b-header__logo")).click();
-        List<WebElement> resources1 = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
-        for (WebElement listElement : resources1){
-            String searchText = listElement.getText();
-            if (searchText.equals(resource.toUpperCase())){
-                value = "У верхньому меню";
+
+        //try {
+        //WebDriverWait wait = new WebDriverWait(driver, 3);
+        //WebElement elements = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".b-menu__button.ng-scope")));
+            List<WebElement> resources1 = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
+            for (WebElement listElement : resources1){
+                String searchText = listElement.getText();
+                if (searchText.equals(resource.toUpperCase())){
+                    value = "У верхньому меню";
+                }
             }
-        }
+        //}
+        //catch (Exception e) {};
+
+
         driver.findElement(By.linkText("РЕСУРСИ")).click();
         List<WebElement> resources2 = driver.findElements(By.cssSelector("#b-header__resources li"));
         for (WebElement listElement : resources2){
@@ -96,27 +106,6 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
         }
     }
 
-    /*public void deleteResourceFromHeader() throws Exception{
-
-        int i = 1;
-        while(!ExcelUtils.getCellData(i,3).isEmpty()) {
-            String sTitle = ExcelUtils.getCellData(i, 3);
-            String sTextToAdd = ExcelUtils.getCellData(i, 7);
-            String sDeleteTitle = sTitle+sTextToAdd;
-            driver.findElement(By.className("b-header__logo")).click();
-            List<WebElement> resources = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
-            for (WebElement listElement : resources){
-                String searchText = listElement.getText();
-                if (searchText.equals(sDeleteTitle.toUpperCase())){
-                    listElement.findElement(By.cssSelector(".fa.fa-trash.fa-xs.ng-scope")).click();
-                    break;
-                }
-            }
-            driver.findElement(By.className("b-header__logo")).click();
-            i++;
-        }
-    }*/
-
     public void deleteResourceFromHeader(String deleteTitle) throws Exception{
 
         driver.findElement(By.className("b-header__logo")).click();
@@ -125,33 +114,14 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
             String searchText = listElement.getText();
             if (searchText.equals(deleteTitle.toUpperCase())){
                 listElement.findElement(By.cssSelector(".fa.fa-trash.fa-xs.ng-scope")).click();
-                driver.findElement(By.partialLinkText("Видалити ресурс"));
+                //driver.findElement(By.partialLinkText("Видалити ресурс")).click();
+                driver.findElement(By.cssSelector(".btn.btn-warning.ng-binding")).click();
                 break;
             }
         }
         driver.findElement(By.className("b-header__logo")).click();
 
     }
-
-    /*public void deleteResourceFromList() throws Exception{
-
-        int i = 1;
-        while(!ExcelUtils.getCellData(i,3).isEmpty()) {
-            String sTitle = ExcelUtils.getCellData(i, 3);
-            String sTextToAdd = ExcelUtils.getCellData(i, 7);
-            String sDeleteTitle = sTitle+sTextToAdd;
-            driver.findElement(By.className("b-header__logo")).click();
-            driver.findElement(By.linkText("РЕСУРСИ")).click();
-            List<WebElement> resources = driver.findElements(By.cssSelector("#b-header__resources li"));
-            for (WebElement listElement : resources){
-                if (listElement.getText().equals(sDeleteTitle)){
-                    listElement.findElement(By.cssSelector(".fa.fa-trash.ng-scope")).click();
-                    break;
-                }
-            }
-            i++;
-        }
-    }*/
 
     public void deleteResourceFromList(String deleteTitle) throws Exception{
 
@@ -161,7 +131,8 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
         for (WebElement listElement : resources){
             if (listElement.getText().equals(deleteTitle)){
                 listElement.findElement(By.cssSelector(".fa.fa-trash.ng-scope")).click();
-                driver.findElement(By.partialLinkText("Видалити ресурс"));
+                //driver.findElement(By.partialLinkText("Видалити ресурс")).click();
+                driver.findElement(By.cssSelector(".btn.btn-warning.ng-binding")).click();
                 break;
             }
         }
