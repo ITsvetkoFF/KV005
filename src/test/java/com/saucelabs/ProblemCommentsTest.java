@@ -7,48 +7,43 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by onikistc on 23.10.2014.
  */
 public class ProblemCommentsTest {
+    public static double latitude = 50.111573;
+    public static double longitude = 29.967512;
+    public List<String> comments = Arrays.asList("Comment 1", "Comment 2", "Comment 3");
+
     @Test
     public void addComment() throws InterruptedException, IOException {
         WebDriver driver = new FirefoxDriver();
 
         ProblemPage problemPage = new ProblemPage(driver);
         AnyPage anyPage = new AnyPage(driver);
-        MapPage mapPage = new MapPage(driver);
-        AddProblemTest addProblemTest = new AddProblemTest();
 
         driver.get("http://localhost:8090/#/map");
-//        driver.get("http://176.36.11.25/#/map");
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         anyPage.logIn("admin@.com", "admin");
 
-        mapPage.clickAtProblemByCoordinate(addProblemTest.latitude, addProblemTest.longitude);
-//        driver.get("http://176.36.11.25/#/problem/showProblem/205");
+        problemPage.addComments(latitude, longitude, comments);
+        int commentsAmountAfterAdding = driver.findElements(By.className("b-activity__comments-item-content")).size() - 1;
+        List<String> foundComments = problemPage.getComments();
+        for(String comment : comments) {
+            Assert.assertTrue(comment.trim().equals(foundComments.remove(0).trim()));
+        }
 
-        int commentsCountBeforeAdding = 0;
-        int commentsCountAfterAdding = 0;
-        int commentsCountAfterDeleting = 0;
+        problemPage.deleteComments(latitude, longitude);
 
-        commentsCountBeforeAdding = driver.findElements(By.className("b-activity__comments-item-content")).size();
+//        driver.navigate().refresh();
+        int commentsAmountAfterDeleting = driver.findElements(By.className("b-activity__comments-item-content")).size() - 1;
+        Assert.assertTrue(commentsAmountAfterDeleting == commentsAmountAfterAdding - comments.size());
 
-        problemPage.addComment();
-        driver.navigate().refresh();
-        commentsCountAfterAdding = driver.findElements(By.className("b-activity__comments-item-content")).size();
-
-        problemPage.deleteComment();
-        driver.navigate().refresh();
-        commentsCountAfterDeleting = driver.findElements(By.className("b-activity__comments-item-content")).size();
-
-        Assert.assertTrue(commentsCountAfterAdding == commentsCountBeforeAdding + 1);
-        Assert.assertTrue(commentsCountAfterDeleting == commentsCountAfterAdding - 1);
-
-//        Runtime.getRuntime().exec("taskkill /F /IM plugin-container.exe");
         driver.quit();
     }
 }

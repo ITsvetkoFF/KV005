@@ -22,7 +22,7 @@ class FileRunner implements Runnable {
 
         public void run() {
             try {
-                Thread.sleep(2500);
+                Thread.sleep(3000);
                 Robot robot = new Robot(); // input simulation class
                 for (char c : filePath.toCharArray()){
                     if (c == ':') {
@@ -61,6 +61,7 @@ class FileRunner implements Runnable {
                 }
                 Thread.sleep(1000);
                 robot.keyPress(KeyEvent.VK_ENTER);
+                robot.keyRelease(KeyEvent.VK_ENTER);
             }
             catch (Exception e) {
                 throw new RuntimeException(e);
