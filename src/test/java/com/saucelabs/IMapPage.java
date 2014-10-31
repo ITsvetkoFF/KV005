@@ -12,19 +12,19 @@ public interface IMapPage {
     void clickAtPagesCenter();
     void clickAtProblemByCoordinate(double latitude, double longitude);
 
+// for filters
     String getFilterTitle(int typeNumber);
-
     void clickZoomOut();
-
     void openFiltersBoard();
-
     void selectAllExceptOneFilter(int typeNumber) throws Exception;
-
     void selectOnlyOneFilter(int typeNumber);
+    void setAfterDate(String afterDate);
+    void setBeforeDate(String beforeDate);
+    void datePickersButtons();
 
-    void datePickers();
-
+    //not use
     void selectDate(WebElement datePicker, String year, String month, String day);
 
+    //not use
     void selectOneDayPeriod(String fullDate);
 }
