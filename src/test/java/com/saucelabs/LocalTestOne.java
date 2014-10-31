@@ -19,14 +19,14 @@ public class LocalTestOne {
     public static Object[][] testDataExample() {
         return new Object[][]{
                 new Object[]{
-                        "51.7",
-                        "31.7",
+                        "51.94",
+                        "31.94",
                         "problemTitle",
                         "Загрози біорізноманіттю",
                         "problemDescription",
                         "problemSolution",
-                        "http://i.imgur.com/HHXCVbs.jpg" + "\n" + "http://i.imgur.com/1K6AdCH.jpg",
-                        "imageComment1" + "\n" + "imageComment2",
+                        "", //http://i.imgur.com/HHXCVbs.jpg" + "\n" + "http://i.imgur.com/1K6AdCH.jpg",
+                        "", //imageComment1" + "\n" + "imageComment2",
                         "admin@.com",
                         "admin",
                         "testFirstName",
@@ -55,7 +55,8 @@ public class LocalTestOne {
         List<String>    receivedComments;
 
         WebDriver driver = new FirefoxDriver();
-        driver.get("http://localhost:8090");
+        //driver.get("http://localhost:8090");
+        driver.get("http://176.36.11.25");
         driver.manage().window().maximize();
 
         AnyPage     anyPage     = new AnyPage(driver);

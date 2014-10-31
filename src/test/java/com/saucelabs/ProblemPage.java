@@ -65,20 +65,26 @@ public class ProblemPage extends AnyPage{
     }
 
     public List<String> getImageURLs(){
-        ProblemTest problemTest = new ProblemTest();
-        int imagesAmount = problemTest.imageUrls.size();
+        //ProblemTest problemTest = new ProblemTest();
+        //int imagesAmount = problemTest.imageUrls.size();
+        int imagesAmount = driver.findElements(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[contains(@class,'show_photo')]")).size();
         List<String> imageUrls = new ArrayList<>();
         for(int i = 1; i <= imagesAmount; i++) {
-            imageUrls.add("http://localhost:8090/" + driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[" + i + "]/img")).getAttribute("ng-src"));
+            imageUrls.add("http://" + driver.getCurrentUrl().split("/")[2] + "/"
+            + driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[" + i + "]/img")).getAttribute("ng-src"));
         }
         return imageUrls;
     }
 
     public List<String> getImagesComments() {
-        driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[1]/img")).click();
-        ProblemTest problemTest = new ProblemTest();
-        int commentsAmount = problemTest.imageComments.size();
+        //ProblemTest problemTest = new ProblemTest();
+        //int commentsAmount = problemTest.imageComments.size();
         List<String> comments = new ArrayList<>();
+        int commentsAmount = driver.findElements(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[contains(@class,'show_photo')]")).size();
+        if (commentsAmount == 0) {
+            return comments;
+        }
+        driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[1]/img")).click();
         for(int i = 1; i <= commentsAmount; i++){
             comments.add(driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li[" + i + "]/div")).getAttribute("textContent"));
             if (i < commentsAmount) {
