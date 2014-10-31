@@ -10,4 +10,8 @@ public class Constant {
     public static final String Password = "admin";
     public static final String Path_TestData = "C:\\Documents and Settings\\Volodja\\Desktop\\";
     public static final String File_TestData = "TestData_2.xlsx";
+    public static final String Path_LocalTestData = ".\\resources\\";
+    public static final String File_LocalTestData = "LocalTestData.xlsx";
+    public static final String Path_RemoteTestData = ".\\resources\\";
+    public static final String File_RemoteTestData = "RemoteTestData.xlsx";
 }
