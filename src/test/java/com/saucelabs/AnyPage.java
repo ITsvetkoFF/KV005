@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
-public class AnyPage extends MapPage implements IAnyPage {
+public class AnyPage extends MapPage2 implements IAnyPage {
 
     private WebDriver driver;
 
