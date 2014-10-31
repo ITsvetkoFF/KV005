@@ -39,6 +39,7 @@ public class LocalTestTwo {
 
         WebDriver driver = new FirefoxDriver();
         driver.get("http://localhost:8090");
+        //driver.get("http://176.36.11.25");
         driver.manage().window().maximize();
 
         AnyPage     anyPage     = new AnyPage(driver);
