@@ -130,7 +130,7 @@ public class MapPage implements IMapPage {
         }
     }
 
-    @Override
+    //@Override
     public void setAfterDate(String afterDate) {
         List<WebElement> dateFields = driver.findElements(By.cssSelector(".datepicker .form-control"));
         WebElement dateField = dateFields.get(0);
@@ -138,7 +138,7 @@ public class MapPage implements IMapPage {
         dateField.sendKeys(afterDate);
     }
 
-    @Override
+    //@Override
     public void setBeforeDate(String beforeDate) {
         List<WebElement> dateFields = driver.findElements(By.cssSelector(".datepicker .form-control"));
         WebElement dateField = dateFields.get(1);
@@ -146,7 +146,7 @@ public class MapPage implements IMapPage {
         dateField.sendKeys(beforeDate);
     }
 
-    @Override
+    //@Override
     public void datePickersButtons() {
 
         List<WebElement> datePickerButtons = driver.findElements(By.cssSelector(".datepicker"));

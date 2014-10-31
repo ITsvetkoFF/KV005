@@ -47,11 +47,11 @@ public class ExcelUtils {
             int totalRows = ExcelWSheet.getLastRowNum();
             // you can write a function as well to get Column count
             int totalCols = getColumnsNumber();
-            tabArray=new String[totalRows + 1][totalCols];
+            tabArray=new String[totalRows][totalCols - 1];
             ci=0;
             for (int i=startRow;i<=totalRows;i++, ci++) {
                 cj=0;
-                for (int j=startCol;j<=totalCols;j++, cj++){
+                for (int j=startCol;j<totalCols;j++, cj++){
                     tabArray[ci][cj]=getCellData(i,j);
                     System.out.println(tabArray[ci][cj]);
                 }
@@ -105,6 +105,6 @@ public class ExcelUtils {
         while (getCellData(0, ci).length() != 0) {
             ci++;
         }
-        return ci;
+        return ci--;
     }
 }

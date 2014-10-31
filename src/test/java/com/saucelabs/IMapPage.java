@@ -22,7 +22,7 @@ public interface IMapPage {
 
     void selectOnlyOneFilter(int typeNumber);
 
-    void datePickers();
+    //void datePickers();
 
     void selectDate(WebElement datePicker, String year, String month, String day);
 

@@ -52,7 +52,7 @@ public class ResourcesPageTest implements SauceOnDemandSessionIdProvider, SauceO
         resourcesPage.logIn("admin@.com", "admin");
     }*/
 
-    @DataProvider(name = "testData", parallel = false)
+    @DataProvider(name = "testData", parallel = true)
     public static Object[][] data() throws Exception{
         return ExcelUtils.getTableArray(Constant.Path_TestData + Constant.File_TestData, "Sheet1");
     }
