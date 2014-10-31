@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
@@ -67,6 +68,10 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(By.name("password_second")).clear();
         driver.findElement(By.name("password_second")).sendKeys(password);
         driver.findElement(By.className("b-form__button")).click();
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+        }
         driver.findElement(By.className("close")).click();
     }
 
@@ -82,7 +87,7 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        setView(latitude, longitude, 9);
+        setView(latitude, longitude, 18);
 
         driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
 
@@ -99,6 +104,7 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
+        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
         for (String url: imageUrls) {
@@ -123,13 +129,16 @@ public class AnyPage extends MapPage implements IAnyPage {
         List<WebElement> dropdown = driver.findElements(By.xpath("//li[@class='dropdown']/a"));
         int count = dropdown.size();
             if (count > 2) {
-                WebElement close = (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
-                    @Override
-                    public WebElement apply(WebDriver driver) {
-                        return driver.findElement(By.cssSelector(".close"));
-                    }
-                });
-                close.click();
+                WebElement alert = (new WebDriverWait(driver, 10))
+                        .until(ExpectedConditions.presenceOfElementLocated(By.className("alert")));
+//                WebElement close = (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
+//                    @Override
+//                    public WebElement apply(WebDriver driver) {
+//                        return driver.findElement(By.cssSelector(".close"));
+//                    }
+//                });
+//                close.click();
+                alert.findElement(By.className("close")).click();
             }
     }
 }

@@ -50,15 +50,18 @@ public class ProblemPage extends AnyPage{
     }
 
     public String getProblemTitle() {
-        return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-title__text']/editproblemtitle")).getText();
+        //return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-title__text']/editproblemtitle")).getText();
+        return driver.findElement(By.xpath("//h1")).getText();
     }
 
     public String getProblemDescription() {
-        return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemcontent/span")).getAttribute("textContent");
+        //return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemcontent/span")).getAttribute("textContent");
+        return driver.findElement(By.xpath("//div[contains(@class,'b-problem-deatiled-info-description__content')]/editproblemcontent/span")).getAttribute("textContent");
     }
 
     public String getProblemPropose() {
-        return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemproposal/span")).getAttribute("textContent");
+        //return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemproposal/span")).getAttribute("textContent");
+        return driver.findElements(By.xpath("//div[contains(@class,'b-problem-deatiled-info-description__content')]/editproblemcontent/span")).get(1).getAttribute("textContent");
     }
 
     public List<String> getImageURLs(){
@@ -82,6 +85,7 @@ public class ProblemPage extends AnyPage{
                 driver.findElement(By.xpath("//div[@class='rn-carousel-controls ng-isolate-scope']/span[@ng-click='next()']")).click();
             }
         }
+        driver.findElement(By.className("close")).click();
         return comments;
     }
 
@@ -89,8 +93,10 @@ public class ProblemPage extends AnyPage{
         clickAtProblemByCoordinate(latitude, longitude);
         driver.findElement(By.xpath("//div[@class='b-problem-tab ng-isolate-scope']/ul/li[2]/a")).click();
         for(String comment : comments) {
-            driver.findElement(By.xpath("//div[@class='b-activity__input-field']/textarea")).sendKeys(comment);
-            driver.findElement(By.xpath("//button[@class='b-activity-comment__btn']")).click();
+            //driver.findElement(By.xpath("//div[@class='b-activity__input-field']/textarea")).sendKeys(comment);
+            driver.findElement(By.xpath("//div[@class='form-group']/textarea")).sendKeys(comment);
+            //driver.findElement(By.xpath("//button[@class='b-activity-comment__btn']")).click();
+            driver.findElement(By.xpath("//div[@class='form-group']/a[contains(@class,'btn')]")).click();
             driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         }
     }

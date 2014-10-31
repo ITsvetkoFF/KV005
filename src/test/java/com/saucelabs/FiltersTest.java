@@ -17,7 +17,7 @@ public class FiltersTest {
 
     WebDriver driver;
     AnyPage anyPage;
-    MapPage2 mapPage;
+    MapPage mapPage;
     ProblemPage problemPage;
 
     public String afterDate;
@@ -30,7 +30,7 @@ public class FiltersTest {
     public void setUp() {
         this.driver = new FirefoxDriver();
         this.anyPage = new AnyPage(driver);
-        this.mapPage = new MapPage2(driver);
+        this.mapPage = new MapPage(driver);
         this.problemPage = new ProblemPage(driver);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.get("http://127.0.0.1:8090/#/map");
@@ -47,8 +47,8 @@ public class FiltersTest {
    public void checkFiltersNegative() throws Exception {
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
-        mapPage.setAfterDate(afterDate);
-        mapPage.setBeforeDate(beforeDate);
+        //mapPage.setAfterDate(afterDate);
+        //mapPage.setBeforeDate(beforeDate);
         mapPage.selectOnlyOneFilter(typeNumber);
         mapPage.clickAtProblemByCoordinate(latitude, longitude);
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
@@ -58,8 +58,8 @@ public class FiltersTest {
     public void checkFiltersPositive() throws Exception {
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
-        mapPage.setAfterDate(afterDate);
-        mapPage.setBeforeDate(beforeDate);
+        //mapPage.setAfterDate(afterDate);
+        //mapPage.setBeforeDate(beforeDate);
         mapPage.selectOnlyOneFilter(typeNumber);
         mapPage.clickAtProblemByCoordinate(latitude, longitude);
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
