@@ -31,11 +31,14 @@ public class LocalTestTwo {
                           String userCommentsString) throws IOException {
         double          latitude        = Double.parseDouble(latitudeString);
         double          longitude       = Double.parseDouble(longitudeString);
-        List<String> imageURLs       = Arrays.asList(imageURLsString.split("\n"));
+        List<String>    imageURLs       = Arrays.asList(imageURLsString.split("\n"));
         List<String>    imageComments   = Arrays.asList(imageCommentsString.split("\n"));
         List<String>    userComments    = Arrays.asList(userCommentsString.split("\n"));
         List<String>    receivedURLs;
         List<String>    receivedComments;
+        String          afterDate       = "31 жовт. 2014";
+        String          beforeDate      = "01 лист. 2014";
+
 
         WebDriver driver = new FirefoxDriver();
         driver.get("http://localhost:8090");
@@ -60,6 +63,12 @@ public class LocalTestTwo {
         } catch (Exception e) {
         }
         adminPage.logOut();
+
+        anyPage.clickZoomOut();
+        anyPage.openFiltersBoard();
+        anyPage.setAfterDate(afterDate);
+        anyPage.setBeforeDate(beforeDate);
+        anyPage.selectOnlyOneFilter(problemType);
 
         try {
             Thread.sleep(1000);

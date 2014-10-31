@@ -129,7 +129,21 @@ public class MapPage implements IMapPage {
             }
         }
     }
+    @Override
+    public void selectOnlyOneFilter(String typeName) {
 
+        List<WebElement> filtersNames = driver.findElements(By.cssSelector(".problem label[for^='type']"));
+        List<WebElement> filtersChecks = driver.findElements(By.xpath("//input[starts-with(@id, 'type')]"));
+        String typeId = "";
+        for (int i = 0; i < filtersChecks.size(); i++) {
+            typeId = filtersChecks.get(i).getAttribute("id");
+            if (!typeName.equals(filtersNames.get(i).getText())) {
+                if ("true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
+            } else {
+                if (!"true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
+            }
+        }
+    }
     //@Override
     public void setAfterDate(String afterDate) {
         List<WebElement> dateFields = driver.findElements(By.cssSelector(".datepicker .form-control"));

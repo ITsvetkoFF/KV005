@@ -18,6 +18,7 @@ public interface IMapPage {
     void openFiltersBoard();
     void selectAllExceptOneFilter(int typeNumber) throws Exception;
     void selectOnlyOneFilter(int typeNumber);
+    void selectOnlyOneFilter(String typeName);
     void setAfterDate(String afterDate);
     void setBeforeDate(String beforeDate);
     void datePickersButtons();
