@@ -58,7 +58,9 @@ public class LocalTestTwo {
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
-        }        adminPage.logOut();
+        }
+        adminPage.logOut();
+
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
