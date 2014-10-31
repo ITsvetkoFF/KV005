@@ -5,9 +5,7 @@ import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.testng.SauceOnDemandAuthenticationProvider;
 import com.saucelabs.testng.SauceOnDemandTestListener;
 import com.saucelabs.utils.ImageDistanceCalculator;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -35,7 +33,8 @@ public class RemoteTestOne implements SauceOnDemandSessionIdProvider, SauceOnDem
          * Constructs a {@link com.saucelabs.common.SauceOnDemandAuthentication} instance using the supplied user name/access key.  To use the authentication
          * supplied by environment variables or from an external file, use the no-arg {@link com.saucelabs.common.SauceOnDemandAuthentication} constructor.
          */
-        public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication("yermek", "c81a6afe-bb87-40f6-85a2-38a817066afd");
+        //public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication("yermek", "156a52e4-c0c6-4605-98b0-f55e8f87b574");
+        public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication("atqc", "f8581664-c7c0-485b-82af-d388c860d03b");
 
         /**
          * ThreadLocal variable which contains the  {@link org.openqa.selenium.WebDriver} instance which is used to perform browser interactions with.
@@ -78,7 +77,7 @@ public class RemoteTestOne implements SauceOnDemandSessionIdProvider, SauceOnDem
                 capabilities.setCapability(CapabilityType.VERSION, version);
             }
             capabilities.setCapability(CapabilityType.PLATFORM, os);
-            capabilities.setCapability("name", "Sauce Sample Test");
+            capabilities.setCapability("name", "Ecomap Sample Test");
             webDriver.set(new RemoteWebDriver(
                     new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub"),
                     capabilities));
