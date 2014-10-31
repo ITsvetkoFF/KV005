@@ -39,17 +39,16 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
     public String existResource(String resource) throws  Exception{
         String value = null;
         driver.findElement(By.className("b-header__logo")).click();
-
         //try {
         //WebDriverWait wait = new WebDriverWait(driver, 3);
         //WebElement elements = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".b-menu__button.ng-scope")));
-            List<WebElement> resources1 = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
-            for (WebElement listElement : resources1){
-                String searchText = listElement.getText();
-                if (searchText.equals(resource.toUpperCase())){
-                    value = "У верхньому меню";
-                }
+        List<WebElement> resources1 = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
+        for (WebElement listElement : resources1){
+            String searchText = listElement.getText();
+            if (searchText.equals(resource.toUpperCase())){
+                value = "У верхньому меню";
             }
+        }
         //}
         //catch (Exception e) {};
 
