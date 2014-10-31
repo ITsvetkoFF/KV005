@@ -74,7 +74,7 @@ public class MapPage implements IMapPage {
 
         List<WebElement> names = driver.findElements(By.cssSelector(".problem label"));
 
-        return names.get(typeNumber - 1).getAttribute("textContent");
+        return names.get(typeNumber).getAttribute("textContent");
     }
 
     @Override
