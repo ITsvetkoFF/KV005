@@ -124,15 +124,30 @@ public class MapPage implements IMapPage {
             typeId = filtersChecks.get(i).getAttribute("id");
             if (i != typeNumber - 1) {
                 if ("true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
-            }
-            else {
+            } else {
                 if (!"true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
             }
         }
     }
 
     @Override
-    public void datePickers() {
+    public void setAfterDate(String afterDate) {
+        List<WebElement> dateFields = driver.findElements(By.cssSelector(".datepicker .form-control"));
+        WebElement dateField = dateFields.get(0);
+        dateField.clear();
+        dateField.sendKeys(afterDate);
+    }
+
+    @Override
+    public void setBeforeDate(String beforeDate) {
+        List<WebElement> dateFields = driver.findElements(By.cssSelector(".datepicker .form-control"));
+        WebElement dateField = dateFields.get(1);
+        dateField.clear();
+        dateField.sendKeys(beforeDate);
+    }
+
+    @Override
+    public void datePickersButtons() {
 
         List<WebElement> datePickerButtons = driver.findElements(By.cssSelector(".datepicker"));
 
@@ -150,12 +165,10 @@ public class MapPage implements IMapPage {
             buttonElement.click();
             WebElement closeButton = datePickers.findElement(By.cssSelector("button.btn-danger"));
             closeButton.click();
-
-            }
-
+        }
     }
 
-    @Override
+    @Override //not use
     public void selectDate(WebElement datePicker, String year, String month, String day) {
 
         StringBuilder yearXPath = new StringBuilder("");
@@ -171,14 +184,14 @@ public class MapPage implements IMapPage {
         StringBuilder dayXPath = new StringBuilder("");
         dayXPath.append(".//td/button/span[(text()='");
         dayXPath.append(day);
-        dayXPath.append("')]");
+        dayXPath.append("')]/..");
 
         datePicker.findElement(By.xpath(yearXPath.toString())).click();
         datePicker.findElement(By.xpath(monthXPath.toString())).click();
         datePicker.findElement(By.xpath(dayXPath.toString())).click();
     }
 
-    @Override
+    @Override //not use
     public void selectOneDayPeriod(String fullDate) {
         String[] splitDate;
         splitDate = fullDate.split("\\s+");
@@ -196,3 +209,40 @@ public class MapPage implements IMapPage {
         }
     }
 }
+//    @Override //not use
+//    public void selectTodayButton(WebElement datePicker) {
+//        List<WebElement> datePickerButtons = driver.findElements(By.cssSelector(".datepicker"));
+//        List<WebElement> inputField = driver.findElements(By.cssSelector(".form-control"));
+//        for (WebElement datePickers : datePickerButtons) {
+//            WebElement buttonElement = datePickers.findElement(By.cssSelector(".fa-calendar"));
+//            buttonElement.click();
+//            WebElement todayButton = datePicker.findElement(By.cssSelector("span.btn-group>button.btn-info"));
+//            todayButton.click();
+//        }
+//    }
+//
+//    @Override //not use
+//    public void selectClearButton(WebElement datePicker) {
+//        List<WebElement> datePickerButtons = driver.findElements(By.cssSelector(".datepicker"));
+//        List<WebElement> inputField = driver.findElements(By.cssSelector(".form-control"));
+//        for (WebElement datePickers : datePickerButtons) {
+//            WebElement buttonElement = datePickers.findElement(By.cssSelector(".fa-calendar"));
+//            buttonElement.click();
+//            WebElement selectClearButton = datePicker.findElement(By.cssSelector("span.btn-group>button.btn-info"));
+//            selectClearButton.click();
+//        }
+//    }
+//
+//    @Override //not use
+//    public void closeDatepicker(WebElement datePicker) {
+//        List<WebElement> datePickerButtons = driver.findElements(By.cssSelector(".datepicker"));
+//        List<WebElement> inputField = driver.findElements(By.cssSelector(".form-control"));
+//
+//        for (WebElement datePickers : datePickerButtons) {
+//            WebElement buttonElement = datePickers.findElement(By.cssSelector(".fa-calendar"));
+//            buttonElement.click();
+//            WebElement closeDatepicker = datePicker.findElement(By.cssSelector("span.btn-group>button.btn-info"));
+//            closeDatepicker.click();
+//        }
+//    }
+

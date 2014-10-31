@@ -47,8 +47,8 @@ public class FiltersTest {
    public void checkFiltersNegative() throws Exception {
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
-        //mapPage.setAfterDate(afterDate);
-        //mapPage.setBeforeDate(beforeDate);
+        mapPage.setAfterDate(afterDate);
+        mapPage.setBeforeDate(beforeDate);
         mapPage.selectOnlyOneFilter(typeNumber);
         mapPage.clickAtProblemByCoordinate(latitude, longitude);
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
@@ -58,8 +58,8 @@ public class FiltersTest {
     public void checkFiltersPositive() throws Exception {
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
-        //mapPage.setAfterDate(afterDate);
-        //mapPage.setBeforeDate(beforeDate);
+        mapPage.setAfterDate(afterDate);
+        mapPage.setBeforeDate(beforeDate);
         mapPage.selectOnlyOneFilter(typeNumber);
         mapPage.clickAtProblemByCoordinate(latitude, longitude);
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
