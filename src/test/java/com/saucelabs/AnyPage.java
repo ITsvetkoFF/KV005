@@ -108,6 +108,9 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
 
         for (String url: imageUrls) {
+            if (url.length() == 0) {
+                continue;
+            }
             Thread clicker = new FileChooserThread(url);
             clicker.start();
             driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
