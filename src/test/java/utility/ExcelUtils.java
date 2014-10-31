@@ -46,8 +46,8 @@ public class ExcelUtils {
             int ci,cj;
             int totalRows = ExcelWSheet.getLastRowNum();
             // you can write a function as well to get Column count
-            int totalCols = 7;
-            tabArray=new String[totalRows][totalCols];
+            int totalCols = getColumnsNumber();
+            tabArray=new String[totalRows + 1][totalCols];
             ci=0;
             for (int i=startRow;i<=totalRows;i++, ci++) {
                 cj=0;
@@ -100,5 +100,11 @@ public class ExcelUtils {
             throw (e);
         }
     }
-
+    public static int getColumnsNumber() throws Exception {
+        int ci = 0;
+        while (getCellData(0, ci).length() != 0) {
+            ci++;
+        }
+        return ci;
+    }
 }
