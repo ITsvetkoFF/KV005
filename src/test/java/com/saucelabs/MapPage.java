@@ -57,7 +57,7 @@ public class MapPage implements IMapPage {
             script = (JavascriptExecutor) driver;
         script.executeScript("var map = document.getElementById(\"map-content\");" +
                 "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
-                + latitude + "," + longitude + "]" + "," + 18 + ");");
+                + latitude + "," + longitude + "]" + "," + 17 + ");");
         int x;
         int y;
 
@@ -74,7 +74,7 @@ public class MapPage implements IMapPage {
 
         List<WebElement> names = driver.findElements(By.cssSelector(".problem label"));
 
-        return names.get(typeNumber - 1).getAttribute("textContent");
+        return names.get(typeNumber).getAttribute("textContent");
     }
 
     @Override

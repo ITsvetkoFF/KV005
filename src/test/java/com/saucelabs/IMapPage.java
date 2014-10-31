@@ -12,7 +12,6 @@ public interface IMapPage {
     void clickAtPagesCenter();
     void clickAtProblemByCoordinate(double latitude, double longitude);
 
-
 // for filters
     String getFilterTitle(int typeNumber);
     void clickZoomOut();

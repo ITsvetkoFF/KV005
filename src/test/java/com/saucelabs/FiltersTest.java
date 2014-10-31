@@ -7,6 +7,7 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,14 +21,15 @@ public class FiltersTest {
     MapPage mapPage;
     ProblemPage problemPage;
 
-    public String afterDate;
-    public String beforeDate;
-    public static int typeNumber;
-    public static double latitude;
-    public static double longitude;
+    public String afterDate = "31 жовт. 2014";
+    public String beforeDate = "01 лист. 2014";
+    public static int typeNumber = 1;
+    public static double latitude = 50.255;
+    public static double longitude = 30.255;
 
     @BeforeSuite
     public void setUp() {
+
         this.driver = new FirefoxDriver();
         this.anyPage = new AnyPage(driver);
         this.mapPage = new MapPage(driver);
@@ -56,6 +58,11 @@ public class FiltersTest {
 
     @Test
     public void checkFiltersPositive() throws Exception {
+        String imageURLsString = "";
+        String imageCommentsString = "";
+        anyPage.logIn("admin@.com","admin");
+        anyPage.addProblem(50.255, 30.255, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", Arrays.asList(imageURLsString.split("\n")), Arrays.asList(imageCommentsString.split("\n")));
+        anyPage.logOut();
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
         mapPage.setAfterDate(afterDate);
