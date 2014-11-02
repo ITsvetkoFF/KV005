@@ -219,7 +219,7 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
         setVisibleView(latitude, longitude, 18);
-        clickAtVisibleMapCenter();
+        clickAtVisibleMapCenter(0);
 
         driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
         driver.findElement(By.id("problemName")).sendKeys(problemName);

@@ -96,7 +96,7 @@ public class ProblemPage extends AnyPage{
     }
 
     public void addComments(double latitude, double longitude, List<String> comments) {
-        clickAtProblemByCoordinate(latitude, longitude);
+        clickAtProblemByCoordinateVisible(latitude, longitude);
         driver.findElement(By.xpath("//div[@class='b-problem-tab ng-isolate-scope']/ul/li[2]/a")).click();
         for(String comment : comments) {
             //driver.findElement(By.xpath("//div[@class='b-activity__input-field']/textarea")).sendKeys(comment);
@@ -108,7 +108,7 @@ public class ProblemPage extends AnyPage{
     }
 
     public void deleteComments(double latitude, double longitude) {
-        clickAtProblemByCoordinate(latitude, longitude);
+        clickAtProblemByCoordinateVisible(latitude, longitude);
         driver.findElement(By.xpath("//div[@class='b-problem-tab ng-isolate-scope']/ul/li[2]/a")).click();
 
         List<WebElement> foundActivities = driver.findElements(By.className("b-activity__comments-item"));

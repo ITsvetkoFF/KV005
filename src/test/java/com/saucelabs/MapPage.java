@@ -101,7 +101,8 @@ public class MapPage implements IMapPage {
         builder.moveToElement(map, x, y).clickAndHold().release().build().perform();
     }
 
-    public void clickAtVisibleMapCenter() {
+    @Override
+    public void clickAtVisibleMapCenter(int offset) {
         int x;
         int y;
         int mapWidth;
@@ -127,7 +128,7 @@ public class MapPage implements IMapPage {
             y = navBarHeight + 1 + addProblemHeight + 1 + (mapHeight - navBarHeight - addProblemHeight - 2) / 2;
         }
         Actions builder = new Actions(driver);
-        builder.moveToElement(map, x, y).clickAndHold().release().build().perform();
+        builder.moveToElement(map, x, y + offset).clickAndHold().release().build().perform();
     }
 
     @Override
@@ -147,7 +148,14 @@ public class MapPage implements IMapPage {
         Actions builder = new Actions(driver);
         builder.moveToElement(container, x, y - 10).click().build().perform();
     }
-	
+
+    @Override
+    public void clickAtProblemByCoordinateVisible (double latitude, double longitude) {
+
+        setVisibleView(latitude, longitude, 18);
+        clickAtVisibleMapCenter(-10);
+    }
+
 	public int clickOffsetOfMapCenter(double latitude, double longitude) {
 		
 		JavascriptExecutor script = null;
