@@ -52,21 +52,58 @@ public class MapPage implements IMapPage {
 
     @Override
     public void clickAtProblemByCoordinate (double latitude, double longitude) {
+
         JavascriptExecutor script = null;
         if (driver instanceof JavascriptExecutor)
             script = (JavascriptExecutor) driver;
         script.executeScript("var map = document.getElementById(\"map-content\");" +
                 "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
-                + latitude + "," + longitude + "]" + "," + 18 + ");");
-        int x;
-        int y;
+                + latitude + "," + longitude + "]" + "," + 14 + ");");
 
         WebElement container = driver.findElement(By.id("map-content"));
         Dimension point = container.getSize();
-        x = point.getWidth() / 2;
-        y = point.getHeight() / 2;
+        int x = point.getWidth() / 2;
+        int y = point.getHeight() / 2;
         Actions builder = new Actions(driver);
         builder.moveToElement(container, x, y - 10).click().build().perform();
+    }
+	
+	public int clickOffsetOfMapCenter(double latitude, double longitude) {
+		
+		JavascriptExecutor script = null;
+		if (driver instanceof JavascriptExecutor)
+			script = (JavascriptExecutor) driver;
+		script.executeScript("var map = document.getElementById(\"map-content\");" +
+                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
+                + latitude + "," + longitude + "]" + "," + 14 + ");");
+				
+		WebElement map = driver.findElement(By.id("map-content"));
+        Dimension mapSize = map.getSize();
+        int x = mapSize.getWidth() / 2;
+        int y = mapSize.getHeight() / 2;
+        WebElement problemFrame = driver.findElement(By.xpath("//div[@class='b-addProblem ng-scope']"));
+        Dimension problemFrameSize = problemFrame.getSize();
+        int problemWidth = problemFrameSize.getWidth();
+        Actions point = new Actions(driver);
+        point.moveToElement(map, x - (problemWidth / 2), y).click().build().perform();
+        return problemWidth / 2;
+	}
+
+    public void clickAtProblemOffsetMapCenter(double latitude, double longitude, int offset) {
+
+        JavascriptExecutor script = null;
+        if (driver instanceof JavascriptExecutor)
+            script = (JavascriptExecutor) driver;
+        script.executeScript("var map = document.getElementById(\"map-content\");" +
+                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
+                + latitude + "," + longitude + "]" + "," + 14 + ");");
+
+        WebElement map = driver.findElement(By.id("map-content"));
+        Dimension mapSize = map.getSize();
+        int x = mapSize.getWidth() / 2;
+        int y = mapSize.getHeight() / 2;
+        Actions builder = new Actions(driver);
+        builder.moveToElement(map, x - offset, y - 10).click().build().perform();
     }
 
     @Override

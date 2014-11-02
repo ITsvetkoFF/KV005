@@ -83,11 +83,13 @@ public class AnyPage extends MapPage implements IAnyPage {
     }
 
     @Override
-    public void addProblem(double latitude, double longitude, String problemName, String problemType, String problemDescription, String problemPropose, List<String> imageUrls, List<String> imageComments) {
+    public void addProblem(double latitude, double longitude,
+                           String problemName, String problemType,
+                           String problemDescription, String problemPropose,
+                           List<String> imageUrls, List<String> imageComments) {
 
-        driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        setView(latitude, longitude, 18);
+        driver.manage().window().maximize();
 
         driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
 
@@ -97,9 +99,9 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(By.id("problemName")).sendKeys(problemName);
 
         List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
-        for (WebElement element: elements) {
+        for (WebElement element : elements) {
             if (problemType.equals(element.getText()))
-            element.click();
+                element.click();
         }
 
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
@@ -115,12 +117,11 @@ public class AnyPage extends MapPage implements IAnyPage {
             clicker.start();
             driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
             try {
-                Thread.sleep(4000);
+                Thread.sleep(3000);
             } catch (Exception e) {
             }
             clicker.interrupt();
         }
-
         List<WebElement> commentElements = driver.findElements(By.cssSelector("textarea.comment_field"));
         int i = 0;
         for (WebElement element: commentElements) {
@@ -131,9 +132,9 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(By.id("btn-submit")).click();
         List<WebElement> dropdown = driver.findElements(By.xpath("//li[@class='dropdown']/a"));
         int count = dropdown.size();
-            if (count > 2) {
-                WebElement alert = (new WebDriverWait(driver, 10))
-                        .until(ExpectedConditions.presenceOfElementLocated(By.className("alert")));
+        if (count > 2) {
+            WebElement alert = (new WebDriverWait(driver, 10))
+                    .until(ExpectedConditions.presenceOfElementLocated(By.className("alert")));
 //                WebElement close = (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
 //                    @Override
 //                    public WebElement apply(WebDriver driver) {
@@ -141,8 +142,72 @@ public class AnyPage extends MapPage implements IAnyPage {
 //                    }
 //                });
 //                close.click();
-                alert.findElement(By.className("close")).click();
-            }
+            alert.findElement(By.className("close")).click();
+        }
+    }
+
+    @Override
+    public int addProblemOffsetPageCenter(double latitude, double longitude,
+                           String problemName, String problemType,
+                           String problemDescription, String problemPropose,
+                           List<String> imageUrls, List<String> imageComments) {
+
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
+
+        int offset = clickOffsetOfMapCenter(50, 30);
+
+        driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
+        driver.findElement(By.id("problemName")).sendKeys(problemName);
+
+        List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
+        for (WebElement element : elements) {
+            if (problemType.equals(element.getText()))
+                element.click();
+        }
+
+        driver.findElement(By.id("description-field")).sendKeys(problemDescription);
+        driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
+        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+
+//        for (String url: imageUrls) {
+//            if (url.length() == 0) {
+//                continue;
+//            }
+//            Thread clicker = new FileChooserThread(url);
+//            clicker.start();
+//            driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
+//            try {
+//                Thread.sleep(4000);
+//            } catch (Exception e) {
+//            }
+//            clicker.interrupt();
+//        }
+//        List<WebElement> commentElements = driver.findElements(By.cssSelector("textarea.comment_field"));
+//        int i = 0;
+//        for (WebElement element: commentElements) {
+//            element.sendKeys(imageComments.get(i));
+//            i++;
+//        }
+
+        driver.findElement(By.id("btn-submit")).click();
+        List<WebElement> dropdown = driver.findElements(By.xpath("//li[@class='dropdown']/a"));
+        int count = dropdown.size();
+        if (count > 2) {
+            WebElement alert = (new WebDriverWait(driver, 10))
+                    .until(ExpectedConditions.presenceOfElementLocated(By.className("alert")));
+//                WebElement close = (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
+//                    @Override
+//                    public WebElement apply(WebDriver driver) {
+//                        return driver.findElement(By.cssSelector(".close"));
+//                    }
+//                });
+//                close.click();
+            alert.findElement(By.className("close")).click();
+        }
+        return offset;
     }
     @Override
     public void addProblemToVisibleCenter(double latitude, double longitude,
