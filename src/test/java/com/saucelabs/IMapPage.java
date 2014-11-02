@@ -9,6 +9,7 @@ public interface IMapPage {
 
     void setPosition();
     void setView(double latitude, double longitude, int zoom);
+    void setVisibleView(double latitude, double longitude, int zoom);
     void clickAtPagesCenter();
     void clickAtProblemByCoordinate(double latitude, double longitude);
 

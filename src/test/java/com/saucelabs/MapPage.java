@@ -38,6 +38,57 @@ public class MapPage implements IMapPage {
     }
 
     @Override
+    public void setVisibleView(double latitude, double longitude, int zoom) {
+        int x;
+        int y;
+        int mapWidth;
+        int mapHeight;
+        int addProblemWidth = 0;
+        int addProblemHeight = 0;
+
+        JavascriptExecutor script = null;
+        if (driver instanceof JavascriptExecutor)
+            script = (JavascriptExecutor) driver;
+        script.executeScript("var map = document.getElementById(\"map-content\");" +
+                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
+                + latitude + "," + longitude + "]" + "," + zoom + ");");
+
+        WebElement map              = driver.findElement(By.id("map-content"));
+        int navBarHeight            = driver.findElement(By.className("container-fluid")).getSize().getHeight();
+        List<WebElement> addProblem = driver.findElements(By.className("b-addProblem"));
+        mapWidth         = map.getSize().getWidth();
+        mapHeight        = map.getSize().getHeight();
+        if (addProblem.size() > 0) {
+            addProblemWidth  = addProblem.get(0).getSize().getWidth();
+            addProblemHeight = addProblem.get(0).getSize().getHeight();
+        }
+        if (mapWidth != addProblemWidth) {              // wide screen, addProblem at the left side
+            x = (mapWidth - addProblemWidth) / 2;
+            y = mapHeight / 2;
+        }
+        else {                                          // tall screen, addProblem at the top
+            x = mapWidth / 2;
+            y = navBarHeight + 1 + addProblemHeight + 1 + (mapHeight - navBarHeight - addProblemHeight - 2) / 2;
+        }
+        if (driver instanceof JavascriptExecutor)
+            script = (JavascriptExecutor) driver;
+        script.executeScript("var map = document.getElementById(\"map-content\");"
+                + "var oldCenter = angular.element(map).scope().$parent.$parent.$parent.geoJson._map.getCenter();"
+                + "console.log(oldCenter);"
+                + "var newCenter = angular.element(map).scope().$parent.$parent.$parent"
+                        + ".geoJson._map.containerPointToLatLng([" + x + "," + y + "]);"
+                + "console.log(newCenter);"
+                + "console.log([" + latitude + " + oldCenter['lat'] - newCenter['lat'],"
+                                          + longitude + " + oldCenter['lng'] - newCenter['lng']]);"
+                + "angular.element(map).scope().$parent.$parent.$parent.geoJson" +
+                        "._map.setView([" + latitude + " + oldCenter['lat'] - newCenter['lat'],"
+                                          + longitude + " + oldCenter['lng'] - newCenter['lng']]"
+                                          + "," + zoom + ");"
+                + "console.log(angular.element(map).scope().$parent.$parent.$parent"
+                                          + ".geoJson._map.containerPointToLatLng([" + x + "," + y + "]));");
+    }
+
+    @Override
     public void clickAtPagesCenter() {
         int x;
         int y;
@@ -46,6 +97,35 @@ public class MapPage implements IMapPage {
         Dimension point = map.getSize();
         x = point.getWidth() / 2;
         y = point.getHeight() / 2;
+        Actions builder = new Actions(driver);
+        builder.moveToElement(map, x, y).clickAndHold().release().build().perform();
+    }
+
+    public void clickAtVisibleMapCenter() {
+        int x;
+        int y;
+        int mapWidth;
+        int mapHeight;
+        int addProblemWidth = 0;
+        int addProblemHeight = 0;
+
+        WebElement map              = driver.findElement(By.id("map-content"));
+        int navBarHeight            = driver.findElement(By.className("container-fluid")).getSize().getHeight();
+        List<WebElement> addProblem = driver.findElements(By.className("b-addProblem"));
+        mapWidth         = map.getSize().getWidth();
+        mapHeight        = map.getSize().getHeight();
+        if (addProblem.size() > 0) {
+            addProblemWidth  = addProblem.get(0).getSize().getWidth();
+            addProblemHeight = addProblem.get(0).getSize().getHeight();
+        }
+        if (mapWidth != addProblemWidth) {              // wide screen, addProblem at the left side
+            x = (mapWidth - addProblemWidth) / 2;
+            y = mapHeight / 2;
+        }
+        else {                                          // tall screen, addProblem at the top
+            x = mapWidth / 2;
+            y = navBarHeight + 1 + addProblemHeight + 1 + (mapHeight - navBarHeight - addProblemHeight - 2) / 2;
+        }
         Actions builder = new Actions(driver);
         builder.moveToElement(map, x, y).clickAndHold().release().build().perform();
     }

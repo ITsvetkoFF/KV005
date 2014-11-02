@@ -3,17 +3,11 @@ package com.saucelabs;
 import java.util.List;
 
 public interface IAnyPage {
-
     String getFirstResourceTitleFromMenu();
-
     String getFirstResourceTitleFromOpenedResource();
-
     void logIn(String email, String password);
-
     void logOut();
-
     void register(String first_name, String last_name, String email, String password);
-
     String getLoggedInUserName();
 
     void addProblem(double latitude, double longitude, String problemName, String problemType,
@@ -21,6 +15,10 @@ public interface IAnyPage {
                     List<String> imageUrls, List<String> imageComments);
 
     int addProblemOffsetPageCenter(double latitude, double longitude, String problemName, String problemType,
+                                   String problemDescription, String problemPropose,
+                                   List<String> imageUrls, List<String> imageComments);
+    void addProblemToVisibleCenter(double latitude, double longitude,
+                                   String problemName, String problemType,
                                    String problemDescription, String problemPropose,
                                    List<String> imageUrls, List<String> imageComments);
 }

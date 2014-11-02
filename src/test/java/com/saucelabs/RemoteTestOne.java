@@ -122,56 +122,60 @@ public class RemoteTestOne implements SauceOnDemandSessionIdProvider, SauceOnDem
             AdminPage   adminPage   = new AdminPage(driver);
             ProblemPage problemPage = new ProblemPage(driver);
 
-            anyPage.addProblem(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
-                    imageURLs, imageComments);
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-            }
-            adminPage.logIn(adminEmail, adminPassword);
-            Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problemTitle));
-            adminPage.approveProblem(problemTitle);
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-            }        adminPage.logOut();
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-            }
-            problemPage.clickAtProblemByCoordinate(latitude, longitude);
-            Assert.assertEquals(problemPage.getProblemTitle(), problemTitle);
-            Assert.assertEquals(problemPage.getProblemType(), problemType);
-            Assert.assertEquals(problemPage.getProblemDescription(), problemDescription);
-            Assert.assertEquals(problemPage.getProblemPropose(), problemSolution);
-            receivedURLs = problemPage.getImageURLs();
-            for(int i = 0; i < receivedURLs.size(); i++) {
-                Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(receivedURLs.get(i), imageURLs.get(i)));
-            }
-            receivedComments = problemPage.getImagesComments();
-            for(int i = 0; i < receivedComments.size(); i++){
-                Assert.assertTrue(receivedComments.get(i).equals(imageComments.get(i)));
-            }
-            try {
-                Thread.sleep(2000);
-            } catch (Exception e) {
-            }
-            problemPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
-            //problemPage.logIn(newUserEmail, newUserPassword);
-            try {
-                Thread.sleep(2000);
-            } catch (Exception e) {
-            }
-            problemPage.addComments(latitude, longitude, userComments);
-            problemPage.logOut();
+//            anyPage.addProblem(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
+//                    imageURLs, imageComments);
+//            try {
+//                Thread.sleep(1000);
+//            } catch (Exception e) {
+//            }
+//            adminPage.logIn(adminEmail, adminPassword);
+//            Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problemTitle));
+//            adminPage.approveProblem(problemTitle);
+//            try {
+//                Thread.sleep(1000);
+//            } catch (Exception e) {
+//            }        adminPage.logOut();
+//            try {
+//                Thread.sleep(1000);
+//            } catch (Exception e) {
+//            }
+//            problemPage.clickAtProblemByCoordinate(latitude, longitude);
+//            Assert.assertEquals(problemPage.getProblemTitle(), problemTitle);
+//            Assert.assertEquals(problemPage.getProblemType(), problemType);
+//            Assert.assertEquals(problemPage.getProblemDescription(), problemDescription);
+//            Assert.assertEquals(problemPage.getProblemPropose(), problemSolution);
+//            receivedURLs = problemPage.getImageURLs();
+//            for(int i = 0; i < receivedURLs.size(); i++) {
+//                Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(receivedURLs.get(i), imageURLs.get(i)));
+//            }
+//            receivedComments = problemPage.getImagesComments();
+//            for(int i = 0; i < receivedComments.size(); i++){
+//                Assert.assertTrue(receivedComments.get(i).equals(imageComments.get(i)));
+//            }
+//            try {
+//                Thread.sleep(2000);
+//            } catch (Exception e) {
+//            }
+            anyPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
+            Assert.assertEquals(anyPage.getLoggedInUserName().toUpperCase(),
+                    (newUserFirstName + " " + newUserLastName).toUpperCase());
+            anyPage.logOut();
 
-            adminPage.logIn(adminEmail, adminPassword);
-            try {
-                Thread.sleep(2000);
-            } catch (Exception e) {
-            }
-            problemPage.deleteComments(latitude, longitude);
-            adminPage.logOut();
+            //problemPage.logIn(newUserEmail, newUserPassword);
+//            try {
+//                Thread.sleep(2000);
+//            } catch (Exception e) {
+//            }
+//            problemPage.addComments(latitude, longitude, userComments);
+//            problemPage.logOut();
+//
+//            adminPage.logIn(adminEmail, adminPassword);
+//            try {
+//                Thread.sleep(2000);
+//            } catch (Exception e) {
+//            }
+//            problemPage.deleteComments(latitude, longitude);
+//            adminPage.logOut();
 
             driver.quit();
         }
