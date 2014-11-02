@@ -144,4 +144,58 @@ public class AnyPage extends MapPage implements IAnyPage {
                 alert.findElement(By.className("close")).click();
             }
     }
+    @Override
+    public void addProblemToVisibleCenter(double latitude, double longitude,
+                                          String problemName, String problemType,
+                                          String problemDescription, String problemPropose,
+                                          List<String> imageUrls, List<String> imageComments) {
+
+        driver.manage().window().maximize();
+
+        driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
+        setVisibleView(latitude, longitude, 18);
+        clickAtVisibleMapCenter();
+
+        driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
+        driver.findElement(By.id("problemName")).sendKeys(problemName);
+
+        List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
+        for (WebElement element: elements) {
+            if (problemType.equals(element.getText()))
+                element.click();
+        }
+
+        driver.findElement(By.id("description-field")).sendKeys(problemDescription);
+        driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
+        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+
+        for (String url: imageUrls) {
+            if (url.length() == 0) {
+                continue;
+            }
+            Thread clicker = new FileChooserThread(url);
+            clicker.start();
+            driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
+            try {
+                Thread.sleep(4000);
+            } catch (Exception e) {
+            }
+            clicker.interrupt();
+        }
+
+        List<WebElement> commentElements = driver.findElements(By.cssSelector("textarea.comment_field"));
+        int i = 0;
+        for (WebElement element: commentElements) {
+            element.sendKeys(imageComments.get(i));
+            i++;
+        }
+
+        driver.findElement(By.id("btn-submit")).click();
+        if (driver.findElements(By.linkText("\u0412\u0425\u0406\u0414")).size() > 0) {
+            WebElement alert = (new WebDriverWait(driver, 10))
+                    .until(ExpectedConditions.presenceOfElementLocated(By.className("alert")));
+            alert.findElement(By.className("close")).click();
+        }
+    }
 }
