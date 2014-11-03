@@ -29,17 +29,19 @@ public class AddProblemTest {
         AnyPage anyPage = new AnyPage(driver);
         //driver.get("http://localhost:8090/#/map");
         driver.get("http://176.36.11.25/#/map");
+        driver.manage().window().maximize();http://i.imgur.com/HHXCVbs.jpg
+
         anyPage.logIn("admin@.com", "admin");
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
-        int offset = anyPage.addProblemOffsetPageCenter(50, 30, problemNameTest, problemTypeTest,
+        int offset = anyPage.addProblemOffsetPageCenter(latitude, longitude, problemNameTest, problemTypeTest,
                 problemDescriptionTest, problemProposeTest,
                 imageUrls, imageComments);
 
         driver.navigate().refresh();
-        anyPage.clickAtProblemOffsetMapCenter(50, 30, offset);
+        anyPage.clickAtProblemOffsetMapCenter(latitude, longitude, offset);
         Assert.assertTrue(true);
         driver.quit();
     }
