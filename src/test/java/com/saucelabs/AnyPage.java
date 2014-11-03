@@ -2,6 +2,7 @@ package com.saucelabs;
 
 import com.google.gson.annotations.Until;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -225,8 +226,9 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         driver.findElement(By.id("description-field")).sendKeys(problemDescription);
         driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
-        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
-        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+        //driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+        driver.findElement(By.xpath("//body")).sendKeys(Keys.chord(Keys.CONTROL, Keys.HOME));
+        driver.findElement(By.className("fa-file-photo-o")).click();
 
         for (String url: imageUrls) {
             if (url.length() == 0) {

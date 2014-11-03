@@ -145,7 +145,7 @@ public class RemoteTestTwo implements SauceOnDemandSessionIdProvider, SauceOnDem
             Thread.sleep(2000);
         } catch (Exception e) {
         }
-        anyPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
+        anyPage.logIn(newUserEmail, newUserPassword);
         Assert.assertEquals(anyPage.getLoggedInUserName().toUpperCase(),
                 (newUserFirstName + " " + newUserLastName).toUpperCase());
         problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);

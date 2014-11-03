@@ -19,8 +19,8 @@ public class LocalTestOne {
     public static Object[][] testDataExample() {
         return new Object[][]{
                 new Object[]{
-                        "51.94",
-                        "31.94",
+                        "51.96",
+                        "31.96",
                         "problemTitle",
                         "Загрози біорізноманіттю",
                         "problemDescription",
@@ -31,7 +31,7 @@ public class LocalTestOne {
                         "admin",
                         "testFirstName",
                         "testLastName",
-                        "test5@test.com",
+                        "test7@test.com",
                         "test",
                         "Comment1"
                 }
@@ -55,15 +55,15 @@ public class LocalTestOne {
         List<String>    receivedComments;
 
         WebDriver driver = new FirefoxDriver();
-        //driver.get("http://localhost:8090");
-        driver.get("http://176.36.11.25");
+        driver.get("http://localhost:8090");
+        //driver.get("http://176.36.11.25");
         driver.manage().window().maximize();
 
         AnyPage     anyPage     = new AnyPage(driver);
         AdminPage   adminPage   = new AdminPage(driver);
         ProblemPage problemPage = new ProblemPage(driver);
 
-        anyPage.addProblem(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
+        anyPage.addProblemToVisibleCenter(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
                 imageURLs, imageComments);
         try {
             Thread.sleep(1000);
@@ -80,7 +80,7 @@ public class LocalTestOne {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
-        problemPage.clickAtProblemByCoordinate(latitude, longitude);
+        problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         Assert.assertEquals(problemPage.getProblemTitle(), problemTitle);
         Assert.assertEquals(problemPage.getProblemType(), problemType);
         Assert.assertEquals(problemPage.getProblemDescription(), problemDescription);

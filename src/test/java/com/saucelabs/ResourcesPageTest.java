@@ -32,7 +32,8 @@ public class ResourcesPageTest implements SauceOnDemandSessionIdProvider, SauceO
      * Constructs a {@link com.saucelabs.common.SauceOnDemandAuthentication} instance using the supplied user name/access key.  To use the authentication
      * supplied by environment variables or from an external file, use the no-arg {@link com.saucelabs.common.SauceOnDemandAuthentication} constructor.
      */
-    public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication("tsvetkoff", "7db17c4f-d114-4de0-9127-69a9a858d3c7");
+    public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication("yermek", "156a52e4-c0c6-4605-98b0-f55e8f87b574");
+    //public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication("tsvetkoff", "7db17c4f-d114-4de0-9127-69a9a858d3c7");
 
     /**
      * ThreadLocal variable which contains the  {@link WebDriver} instance which is used to perform browser interactions with.
