@@ -1,12 +1,13 @@
 package com.saucelabs;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
-
 
 /**
  * Created by Roma on 21.10.2014.
@@ -22,13 +23,13 @@ public class AddProblemTest {
     public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg", "http://i.imgur.com/1K6AdCH.jpg");
     public List<String> imageComments = Arrays.asList("comment1", "comment2");
 
-    @Test
+    //@Test
     public void addProblemTest() {
 
         WebDriver driver = new FirefoxDriver();
         AnyPage anyPage = new AnyPage(driver);
-        //driver.get("http://localhost:8090/#/map");
-        driver.get("http://176.36.11.25/#/map");
+        driver.get("http://localhost:8090/#/map");
+        //driver.get("http://176.36.11.25/#/map");
         driver.manage().window().maximize();http://i.imgur.com/HHXCVbs.jpg
 
         anyPage.logIn("admin@.com", "admin");
@@ -44,5 +45,39 @@ public class AddProblemTest {
         anyPage.clickAtProblemOffsetMapCenter(latitude, longitude, offset);
         Assert.assertTrue(true);
         driver.quit();
+    }
+
+    @Test
+    public void jDBCSample() throws SQLException {
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");//эта строка загружает драйвер DB
+
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/enviromap",
+                    "root", "root");
+
+            if (connection == null) {
+                System.out.println("Нет соединения с БД!");
+                System.exit(0);
+            }
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from problems where title = \"problemNameTest\"");
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getRow() + ". " + resultSet.getString("title")
+                        + "\t" + resultSet.getString("Content"));
+            }
+            /**
+             * При закрытии Statement автоматически закрываются
+             * все связанные с ним открытые объекты ResultSet
+             */
+            statement.close();
+        } catch(ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
