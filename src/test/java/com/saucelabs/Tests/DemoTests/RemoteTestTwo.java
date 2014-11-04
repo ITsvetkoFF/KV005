@@ -78,7 +78,7 @@ public class RemoteTestTwo implements SauceOnDemandSessionIdProvider, SauceOnDem
             capabilities.setCapability(CapabilityType.VERSION, version);
         }
         capabilities.setCapability(CapabilityType.PLATFORM, os);
-        capabilities.setCapability("name", "Ecomap Sample Test");
+        capabilities.setCapability("name", "Ecomap Add Problem, Comment Test");
         webDriver.set(new RemoteWebDriver(
                 new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub"),
                 capabilities));
@@ -148,7 +148,7 @@ public class RemoteTestTwo implements SauceOnDemandSessionIdProvider, SauceOnDem
             Thread.sleep(2000);
         } catch (Exception e) {
         }
-        anyPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
+        anyPage.logIn(newUserEmail, newUserPassword);
         Assert.assertEquals(anyPage.getLoggedInUserName().toUpperCase(),
                 (newUserFirstName + " " + newUserLastName).toUpperCase());
         problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
