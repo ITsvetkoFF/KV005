@@ -49,6 +49,13 @@ public class ProblemPage extends AnyPage{
         return problemType;
     }
 
+    public int getProblemId(double latitude, double longitude) {
+        clickAtProblemOffsetMapCenter(latitude, longitude, 300);
+        String currentUrl = driver.getCurrentUrl();
+        int problemId = Integer.parseInt(currentUrl.split("/")[6]);
+        return problemId;
+    }
+
     public String getProblemTitle() {
         //return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-title__text']/editproblemtitle")).getText();
         return driver.findElement(By.xpath("//h1")).getText();
