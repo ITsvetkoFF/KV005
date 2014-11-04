@@ -1,27 +1,47 @@
-package com.saucelabs;
+package com.saucelabs.Tests.LocalTests;
 
+import com.saucelabs.AdminPage;
+import com.saucelabs.AnyPage;
+import com.saucelabs.ProblemPage;
 import com.saucelabs.utils.ImageDistanceCalculator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import utility.Constant;
-import utility.ExcelUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Yermek on 31.10.2014.
+* Created by Yermek on 30.10.2014.
  */
-public class LocalTestTwo {
-    @DataProvider(name = "xlsLocalTestData", parallel = false)
-    public static Object[][] data() throws Exception{
-        return ExcelUtils.getTableArray(Constant.Path_LocalTestData + Constant.File_LocalTestData, "Sheet1");
+public class LocalTestOne {
+    @DataProvider(name = "sampleTestData", parallel = false)
+    public static Object[][] testDataExample() {
+        return new Object[][]{
+                new Object[]{
+                        "51.96",
+                        "31.96",
+                        "problemTitle",
+                        "Загрози біорізноманіттю",
+                        "problemDescription",
+                        "problemSolution",
+                        "", //http://i.imgur.com/HHXCVbs.jpg" + "\n" + "http://i.imgur.com/1K6AdCH.jpg",
+                        "", //imageComment1" + "\n" + "imageComment2",
+                        "admin@.com",
+                        "admin",
+                        "testFirstName",
+                        "testLastName",
+                        "test7@test.com",
+                        "test",
+                        "Comment1"
+                }
+        };
     }
-    @Test(dataProvider = "xlsLocalTestData")
+
+    @Test(dataProvider = "sampleTestData")
     public void sampleAll(String latitudeString, String longitudeString, String problemTitle,
                           String problemType, String problemDescription, String problemSolution,
                           String imageURLsString, String imageCommentsString,
@@ -36,20 +56,17 @@ public class LocalTestTwo {
         List<String>    userComments    = Arrays.asList(userCommentsString.split("\n"));
         List<String>    receivedURLs;
         List<String>    receivedComments;
-        String          afterDate       = "31 жовт. 2014";
-        String          beforeDate      = "01 лист. 2014";
-
 
         WebDriver driver = new FirefoxDriver();
         driver.get("http://localhost:8090");
         //driver.get("http://176.36.11.25");
         driver.manage().window().maximize();
 
-        AnyPage     anyPage     = new AnyPage(driver);
-        AdminPage   adminPage   = new AdminPage(driver);
+        AnyPage anyPage     = new AnyPage(driver);
+        AdminPage adminPage   = new AdminPage(driver);
         ProblemPage problemPage = new ProblemPage(driver);
 
-        anyPage.addProblem(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
+        anyPage.addProblemToVisibleCenter(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
                 imageURLs, imageComments);
         try {
             Thread.sleep(1000);
@@ -61,20 +78,12 @@ public class LocalTestTwo {
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
-        }
-        adminPage.logOut();
-
-        anyPage.clickZoomOut();
-        anyPage.openFiltersBoard();
-        anyPage.setAfterDate(afterDate);
-        anyPage.setBeforeDate(beforeDate);
-        anyPage.selectOnlyOneFilter(problemType);
-
+        }        adminPage.logOut();
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
-        problemPage.clickAtProblemByCoordinate(latitude, longitude);
+        problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         Assert.assertEquals(problemPage.getProblemTitle(), problemTitle);
         Assert.assertEquals(problemPage.getProblemType(), problemType);
         Assert.assertEquals(problemPage.getProblemDescription(), problemDescription);

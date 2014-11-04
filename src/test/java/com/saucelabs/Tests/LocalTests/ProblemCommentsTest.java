@@ -1,5 +1,8 @@
-package com.saucelabs;
+package com.saucelabs.Tests.LocalTests;
 
+import com.saucelabs.AnyPage;
+import com.saucelabs.ProblemPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;

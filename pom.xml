@@ -56,6 +56,11 @@
             <artifactId>xml-apis</artifactId>
             <version>1.4.01</version>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+        </dependency>
     </dependencies>
 <build>
         <plugins>
@@ -74,7 +79,7 @@
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <includes>
-                        <include>**/RemoteTestOne.java</include>
+                        <include>**/ResourcesPageTest.java</include>
                     </includes>
                 </configuration>
             </plugin>

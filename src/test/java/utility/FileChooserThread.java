@@ -1,4 +1,4 @@
-package com.saucelabs;
+package utility;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +22,7 @@ class FileRunner implements Runnable {
 
         public void run() {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2000);
                 Robot robot = new Robot(); // input simulation class
                 for (char c : filePath.toCharArray()){
                     if (c == ':') {

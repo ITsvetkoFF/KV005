@@ -38,6 +38,57 @@ public class MapPage implements IMapPage {
     }
 
     @Override
+    public void setVisibleView(double latitude, double longitude, int zoom) {
+        int x;
+        int y;
+        int mapWidth;
+        int mapHeight;
+        int addProblemWidth = 0;
+        int addProblemHeight = 0;
+
+        JavascriptExecutor script = null;
+        if (driver instanceof JavascriptExecutor)
+            script = (JavascriptExecutor) driver;
+        script.executeScript("var map = document.getElementById(\"map-content\");" +
+                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
+                + latitude + "," + longitude + "]" + "," + zoom + ");");
+
+        WebElement map              = driver.findElement(By.id("map-content"));
+        int navBarHeight            = driver.findElement(By.className("container-fluid")).getSize().getHeight();
+        List<WebElement> addProblem = driver.findElements(By.className("b-addProblem"));
+        mapWidth         = map.getSize().getWidth();
+        mapHeight        = map.getSize().getHeight();
+        if (addProblem.size() > 0) {
+            addProblemWidth  = addProblem.get(0).getSize().getWidth();
+            addProblemHeight = addProblem.get(0).getSize().getHeight();
+        }
+        if (mapWidth != addProblemWidth) {              // wide screen, addProblem at the left side
+            x = (mapWidth - addProblemWidth) / 2;
+            y = mapHeight / 2;
+        }
+        else {                                          // tall screen, addProblem at the top
+            x = mapWidth / 2;
+            y = navBarHeight + 1 + addProblemHeight + 1 + (mapHeight - navBarHeight - addProblemHeight - 2) / 2;
+        }
+        if (driver instanceof JavascriptExecutor)
+            script = (JavascriptExecutor) driver;
+        script.executeScript("var map = document.getElementById(\"map-content\");"
+                + "var oldCenter = angular.element(map).scope().$parent.$parent.$parent.geoJson._map.getCenter();"
+                + "console.log(oldCenter);"
+                + "var newCenter = angular.element(map).scope().$parent.$parent.$parent"
+                        + ".geoJson._map.containerPointToLatLng([" + x + "," + y + "]);"
+                + "console.log(newCenter);"
+                + "console.log([" + latitude + " + oldCenter['lat'] - newCenter['lat'],"
+                                          + longitude + " + oldCenter['lng'] - newCenter['lng']]);"
+                + "angular.element(map).scope().$parent.$parent.$parent.geoJson" +
+                        "._map.setView([" + latitude + " + oldCenter['lat'] - newCenter['lat'],"
+                                          + longitude + " + oldCenter['lng'] - newCenter['lng']]"
+                                          + "," + zoom + ");"
+                + "console.log(angular.element(map).scope().$parent.$parent.$parent"
+                                          + ".geoJson._map.containerPointToLatLng([" + x + "," + y + "]));");
+    }
+
+    @Override
     public void clickAtPagesCenter() {
         int x;
         int y;
@@ -51,22 +102,96 @@ public class MapPage implements IMapPage {
     }
 
     @Override
+    public void clickAtVisibleMapCenter(int offset) {
+        int x;
+        int y;
+        int mapWidth;
+        int mapHeight;
+        int addProblemWidth = 0;
+        int addProblemHeight = 0;
+
+        WebElement map              = driver.findElement(By.id("map-content"));
+        int navBarHeight            = driver.findElement(By.className("container-fluid")).getSize().getHeight();
+        List<WebElement> addProblem = driver.findElements(By.className("b-addProblem"));
+        mapWidth         = map.getSize().getWidth();
+        mapHeight        = map.getSize().getHeight();
+        if (addProblem.size() > 0) {
+            addProblemWidth  = addProblem.get(0).getSize().getWidth();
+            addProblemHeight = addProblem.get(0).getSize().getHeight();
+        }
+        if (mapWidth != addProblemWidth) {              // wide screen, addProblem at the left side
+            x = (mapWidth - addProblemWidth) / 2;
+            y = mapHeight / 2;
+        }
+        else {                                          // tall screen, addProblem at the top
+            x = mapWidth / 2;
+            y = navBarHeight + 1 + addProblemHeight + 1 + (mapHeight - navBarHeight - addProblemHeight - 2) / 2;
+        }
+        Actions builder = new Actions(driver);
+        builder.moveToElement(map, x, y + offset).clickAndHold().release().build().perform();
+    }
+
+    @Override
     public void clickAtProblemByCoordinate (double latitude, double longitude) {
+
         JavascriptExecutor script = null;
         if (driver instanceof JavascriptExecutor)
             script = (JavascriptExecutor) driver;
         script.executeScript("var map = document.getElementById(\"map-content\");" +
                 "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
-                + latitude + "," + longitude + "]" + "," + 18 + ");");
-        int x;
-        int y;
+                + latitude + "," + longitude + "]" + "," + 14 + ");");
 
         WebElement container = driver.findElement(By.id("map-content"));
         Dimension point = container.getSize();
-        x = point.getWidth() / 2;
-        y = point.getHeight() / 2;
+        int x = point.getWidth() / 2;
+        int y = point.getHeight() / 2;
         Actions builder = new Actions(driver);
         builder.moveToElement(container, x, y - 10).click().build().perform();
+    }
+
+    @Override
+    public void clickAtProblemByCoordinateVisible (double latitude, double longitude) {
+
+        setVisibleView(latitude, longitude, 18);
+        clickAtVisibleMapCenter(-10);
+    }
+
+	public int clickOffsetOfMapCenter(double latitude, double longitude) {
+		
+		JavascriptExecutor script = null;
+		if (driver instanceof JavascriptExecutor)
+			script = (JavascriptExecutor) driver;
+		script.executeScript("var map = document.getElementById(\"map-content\");" +
+                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
+                + latitude + "," + longitude + "]" + "," + 14 + ");");
+				
+		WebElement map = driver.findElement(By.id("map-content"));
+        Dimension mapSize = map.getSize();
+        int x = mapSize.getWidth() / 2;
+        int y = mapSize.getHeight() / 2;
+        WebElement problemFrame = driver.findElement(By.xpath("//div[@class='b-addProblem ng-scope']"));
+        Dimension problemFrameSize = problemFrame.getSize();
+        int problemWidth = problemFrameSize.getWidth();
+        Actions point = new Actions(driver);
+        point.moveToElement(map, x - (problemWidth / 2), y).click().build().perform();
+        return problemWidth / 2;
+	}
+
+    public void clickAtProblemOffsetMapCenter(double latitude, double longitude, int offset) {
+
+        JavascriptExecutor script = null;
+        if (driver instanceof JavascriptExecutor)
+            script = (JavascriptExecutor) driver;
+        script.executeScript("var map = document.getElementById(\"map-content\");" +
+                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
+                + latitude + "," + longitude + "]" + "," + 14 + ");");
+
+        WebElement map = driver.findElement(By.id("map-content"));
+        Dimension mapSize = map.getSize();
+        int x = mapSize.getWidth() / 2;
+        int y = mapSize.getHeight() / 2;
+        Actions builder = new Actions(driver);
+        builder.moveToElement(map, x - offset, y - 10).click().build().perform();
     }
 
     @Override

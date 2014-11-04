@@ -9,8 +9,11 @@ public interface IMapPage {
 
     void setPosition();
     void setView(double latitude, double longitude, int zoom);
+    void setVisibleView(double latitude, double longitude, int zoom);
     void clickAtPagesCenter();
+    void clickAtVisibleMapCenter(int offset);
     void clickAtProblemByCoordinate(double latitude, double longitude);
+    void clickAtProblemByCoordinateVisible (double latitude, double longitude);
 
     // for filters
     String getFilterTitle(int typeNumber);
