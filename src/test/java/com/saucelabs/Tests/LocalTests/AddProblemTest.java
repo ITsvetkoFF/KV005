@@ -22,7 +22,10 @@ public class AddProblemTest {
     public String problemDescriptionTest = "problemDescriptionTest";
     public String problemProposeTest = "problemProposeTest";
     public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg", "http://i.imgur.com/1K6AdCH.jpg");
+    public List<String> imagePath = Arrays.asList("C:\\Users\\Public\\Pictures\\Sample Pictures\\desert.jpg",
+                                                  "C:\\Users\\Public\\Pictures\\Sample Pictures\\koala.jpg");
     public List<String> imageComments = Arrays.asList("comment1", "comment2");
+
 
     @Test
     public void addProblemTest() {
@@ -40,12 +43,36 @@ public class AddProblemTest {
 
         int offset = anyPage.addProblemOffsetPageCenter(latitude, longitude, problemNameTest, problemTypeTest,
                 problemDescriptionTest, problemProposeTest,
-                imageUrls, imageComments);
+                imagePath, imageComments);
 
         driver.navigate().refresh();
         anyPage.clickAtProblemOffsetMapCenter(latitude, longitude, offset);
-        Assert.assertTrue(true);
+        String problemNameUI = anyPage.getProblemTitle();
         driver.quit();
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection connection = DriverManager
+                    .getConnection("jdbc:mysql://localhost:3306/enviromap", "root", "root");
+
+            if (connection == null) {
+                System.out.println("Нет соединения с БД!");
+                System.exit(0);
+            }
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement
+                    .executeQuery("select * from problems where title = " + problemNameTest + "\";");
+
+//            while (resultSet.next()) {
+//                System.out.println(resultSet.getRow() + ". " + resultSet.getString("title"));
+//            }
+
+            String problemNameInDB = resultSet.getString("title");
+            Assert.assertTrue(problemNameInDB.equals(problemNameUI));
+            statement.close();
+        } catch (Exception e) {
+        }
     }
 
     //@Test

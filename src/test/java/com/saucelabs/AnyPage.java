@@ -53,6 +53,12 @@ public class AnyPage extends MapPage implements IAnyPage {
         return linkText;
     }
 
+    public String getProblemTitle() {
+
+        String problemTitle = driver.findElement(By.xpath("//h1[@class='ng-binding']")).getText();
+        return problemTitle;
+    }
+
     @Override
     public void logIn(String email, String password) {
         driver.findElement(LOGIN).click();
