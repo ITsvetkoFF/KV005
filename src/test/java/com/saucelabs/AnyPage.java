@@ -7,11 +7,25 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
 public class AnyPage extends MapPage implements IAnyPage {
+
+    public static final By ADD_PROBLEM_BUTTON = By.xpath("//*[@class='navbar-brand b-menu__button']");
+    public static final By ADD_PROBLEM_NEXT_TAB2_BUTTON = By.xpath("//button[@class='btn btn-default btn-sm ng-scope']");
+    public static final By PROBLEM_NAME_TEXT_BOX = By.id("problemName");
+    public static final By PROBLEM_TYPE_DROP_DOWN_LIST = By.cssSelector("#select-field option");
+    public static final By PROBLEM_DESCRIPTION_TEXT_BOX = By.id("description-field");
+    public static final By PROBLEM_PROPOSE_TEXT_BOX = By.id("proposal-field");
+    public static final By ADD_PROBLEM_TAB3 = By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]");
+    public static final By DROP_ZONE = By.xpath("//div[contains(@class,'dz-clickable')]/span");
+    public static final By IMAGE_COMMENT_TEXT_BOX = By.cssSelector("textarea.comment_field");
+    public static final By ADD_PROBLEM_SUBMIT_BUTTON = By.id("btn-submit");
+    public static final By DROP_DOWN_MENU = By.xpath("//li[@class='dropdown']/a");
+    public static final By ALERT = By.className("alert");
+    public static final By CLOSE_CROSS = By.className("close");
+    public static final By LOGIN = By.linkText("\u0412\u0425\u0406\u0414");
 
     private WebDriver driver;
 
@@ -41,7 +55,7 @@ public class AnyPage extends MapPage implements IAnyPage {
 
     @Override
     public void logIn(String email, String password) {
-        driver.findElement(By.linkText("\u0412\u0425\u0406\u0414")).click();
+        driver.findElement(LOGIN).click();
         driver.findElement(By.name("email")).clear();
         driver.findElement(By.name("email")).sendKeys(email);
         driver.findElement(By.name("password")).clear();
@@ -57,7 +71,7 @@ public class AnyPage extends MapPage implements IAnyPage {
 
     @Override
     public void register(String first_name, String last_name, String email, String password) {
-        driver.findElement(By.linkText("\u0412\u0425\u0406\u0414")).click();
+        driver.findElement(LOGIN).click();
         driver.findElement(By.xpath("//button[@id='register-button']")).click();
         driver.findElement(By.id("email")).sendKeys(email);
         driver.findElement(By.id("password")).sendKeys(password);
@@ -72,7 +86,7 @@ public class AnyPage extends MapPage implements IAnyPage {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
-        driver.findElement(By.className("close")).click();
+        driver.findElement(CLOSE_CROSS).click();
     }
 
     @Override
@@ -91,23 +105,23 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
 
-        driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
+        driver.findElement(ADD_PROBLEM_BUTTON).click();
 
         clickAtPagesCenter();
 
-        driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
-        driver.findElement(By.id("problemName")).sendKeys(problemName);
+        driver.findElement(ADD_PROBLEM_NEXT_TAB2_BUTTON).click();
+        driver.findElement(PROBLEM_NAME_TEXT_BOX).sendKeys(problemName);
 
-        List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
+        List<WebElement> elements = driver.findElements(PROBLEM_TYPE_DROP_DOWN_LIST);
         for (WebElement element : elements) {
             if (problemType.equals(element.getText()))
                 element.click();
         }
 
-        driver.findElement(By.id("description-field")).sendKeys(problemDescription);
-        driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
-        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
-        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+        driver.findElement(PROBLEM_DESCRIPTION_TEXT_BOX).sendKeys(problemDescription);
+        driver.findElement(PROBLEM_PROPOSE_TEXT_BOX).sendKeys(problemPropose);
+        driver.findElement(ADD_PROBLEM_TAB3).click();
+        driver.findElement(ADD_PROBLEM_TAB3).click();
 
         for (String url: imageUrls) {
             if (url.length() == 0) {
@@ -115,34 +129,25 @@ public class AnyPage extends MapPage implements IAnyPage {
             }
             Thread clicker = new FileChooserThread(url);
             clicker.start();
-            driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
+            driver.findElement(DROP_ZONE).click();
             try {
                 Thread.sleep(3000);
             } catch (Exception e) {
             }
             clicker.interrupt();
         }
-        List<WebElement> commentElements = driver.findElements(By.cssSelector("textarea.comment_field"));
+        List<WebElement> commentElements = driver.findElements(IMAGE_COMMENT_TEXT_BOX);
         int i = 0;
         for (WebElement element: commentElements) {
             element.sendKeys(imageComments.get(i));
             i++;
         }
 
-        driver.findElement(By.id("btn-submit")).click();
-        List<WebElement> dropdown = driver.findElements(By.xpath("//li[@class='dropdown']/a"));
-        int count = dropdown.size();
-        if (count > 2) {
+        driver.findElement(ADD_PROBLEM_SUBMIT_BUTTON).click();
+        if (driver.findElements(LOGIN).size() > 0) {
             WebElement alert = (new WebDriverWait(driver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.className("alert")));
-//                WebElement close = (new WebDriverWait(driver, 10)).until(new ExpectedCondition<WebElement>() {
-//                    @Override
-//                    public WebElement apply(WebDriver driver) {
-//                        return driver.findElement(By.cssSelector(".close"));
-//                    }
-//                });
-//                close.click();
-            alert.findElement(By.className("close")).click();
+                    .until(ExpectedConditions.presenceOfElementLocated(ALERT));
+            alert.findElement(CLOSE_CROSS).click();
         }
     }
 
@@ -153,23 +158,20 @@ public class AnyPage extends MapPage implements IAnyPage {
                            List<String> imageUrls, List<String> imageComments) {
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
-        driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
-
+        driver.findElement(ADD_PROBLEM_BUTTON).click();
         int offset = clickOffsetOfMapCenter(latitude, longitude);
+        driver.findElement(ADD_PROBLEM_NEXT_TAB2_BUTTON).click();
+        driver.findElement(PROBLEM_NAME_TEXT_BOX).sendKeys(problemName);
 
-        driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
-        driver.findElement(By.id("problemName")).sendKeys(problemName);
-
-        List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
+        List<WebElement> elements = driver.findElements(PROBLEM_TYPE_DROP_DOWN_LIST);
         for (WebElement element : elements) {
             if (problemType.equals(element.getText()))
                 element.click();
         }
 
-        driver.findElement(By.id("description-field")).sendKeys(problemDescription);
-        driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
-        WebElement thirdTab = driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]"));
+        driver.findElement(PROBLEM_DESCRIPTION_TEXT_BOX).sendKeys(problemDescription);
+        driver.findElement(PROBLEM_PROPOSE_TEXT_BOX).sendKeys(problemPropose);
+        WebElement thirdTab = driver.findElement(ADD_PROBLEM_TAB3);
         thirdTab.click();
         thirdTab.click();
 
@@ -178,27 +180,25 @@ public class AnyPage extends MapPage implements IAnyPage {
                 continue;
             Thread thread = new DropZoneUploadThread(url);
             thread.start();
-            driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
+            driver.findElement(DROP_ZONE).click();
             try {
-                Thread.sleep(4000);
+                Thread.sleep(2500);
             } catch (Exception e) {
             }
             thread.interrupt();
         }
-        List<WebElement> commentElements = driver.findElements(By.cssSelector("textarea.comment_field"));
+        List<WebElement> commentElements = driver.findElements(IMAGE_COMMENT_TEXT_BOX);
         int i = 0;
         for (WebElement element: commentElements) {
             element.sendKeys(imageComments.get(i));
             i++;
         }
 
-        driver.findElement(By.id("btn-submit")).click();
-        List<WebElement> dropdown = driver.findElements(By.xpath("//li[@class='dropdown']/a"));
-        int count = dropdown.size();
-        if (count > 2) {
+        driver.findElement(ADD_PROBLEM_SUBMIT_BUTTON).click();
+        if (driver.findElements(LOGIN).size() > 0) {
             WebElement alert = (new WebDriverWait(driver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.className("alert")));
-            alert.findElement(By.className("close")).click();
+                    .until(ExpectedConditions.presenceOfElementLocated(ALERT));
+            alert.findElement(CLOSE_CROSS).click();
         }
         return offset;
     }
@@ -209,51 +209,49 @@ public class AnyPage extends MapPage implements IAnyPage {
                                           List<String> imageUrls, List<String> imageComments) {
 
         driver.manage().window().maximize();
-
-        driver.findElement(By.xpath("//*[@class='navbar-brand b-menu__button']")).click();
+        driver.findElement(ADD_PROBLEM_BUTTON).click();
         setVisibleView(latitude, longitude, 18);
         clickAtVisibleMapCenter(0);
+        driver.findElement(ADD_PROBLEM_NEXT_TAB2_BUTTON).click();
+        driver.findElement(PROBLEM_NAME_TEXT_BOX).sendKeys(problemName);
 
-        driver.findElement(By.xpath("//button[@class='btn btn-default btn-sm ng-scope']")).click();
-        driver.findElement(By.id("problemName")).sendKeys(problemName);
-
-        List<WebElement> elements = driver.findElements(By.cssSelector("#select-field option"));
+        List<WebElement> elements = driver.findElements(PROBLEM_TYPE_DROP_DOWN_LIST);
         for (WebElement element: elements) {
             if (problemType.equals(element.getText()))
                 element.click();
         }
 
-        driver.findElement(By.id("description-field")).sendKeys(problemDescription);
-        driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
-        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
-        driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+        driver.findElement(PROBLEM_DESCRIPTION_TEXT_BOX).sendKeys(problemDescription);
+        driver.findElement(PROBLEM_PROPOSE_TEXT_BOX).sendKeys(problemPropose);
+        driver.findElement(ADD_PROBLEM_TAB3).click();
+        driver.findElement(ADD_PROBLEM_TAB3).click();
 
         for (String url: imageUrls) {
             if (url.length() == 0) {
                 continue;
             }
-            Thread clicker = new FileChooserThread(url);
-            clicker.start();
-            driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
+            Thread thread = new FileChooserThread(url);
+            thread.start();
+            driver.findElement(DROP_ZONE).click();
             try {
                 Thread.sleep(4000);
             } catch (Exception e) {
             }
-            clicker.interrupt();
+            thread.interrupt();
         }
 
-        List<WebElement> commentElements = driver.findElements(By.cssSelector("textarea.comment_field"));
+        List<WebElement> commentElements = driver.findElements(IMAGE_COMMENT_TEXT_BOX);
         int i = 0;
         for (WebElement element: commentElements) {
             element.sendKeys(imageComments.get(i));
             i++;
         }
 
-        driver.findElement(By.id("btn-submit")).click();
-        if (driver.findElements(By.linkText("\u0412\u0425\u0406\u0414")).size() > 0) {
+        driver.findElement(ADD_PROBLEM_SUBMIT_BUTTON).click();
+        if (driver.findElements(LOGIN).size() > 0) {
             WebElement alert = (new WebDriverWait(driver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.className("alert")));
-            alert.findElement(By.className("close")).click();
+                    .until(ExpectedConditions.presenceOfElementLocated(ALERT));
+            alert.findElement(CLOSE_CROSS).click();
         }
     }
 }

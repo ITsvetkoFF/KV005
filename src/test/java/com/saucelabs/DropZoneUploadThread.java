@@ -22,7 +22,7 @@ class Runner implements Runnable {
 
     public void run() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1500);
             Robot robot = new Robot();
             StringSelection stringSelection = new StringSelection(filePath);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
