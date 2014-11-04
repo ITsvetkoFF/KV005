@@ -1,5 +1,6 @@
-package com.saucelabs;
+package com.saucelabs.Tests.DemoTests;
 
+import com.saucelabs.ResourcesPage;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.testng.SauceOnDemandAuthenticationProvider;

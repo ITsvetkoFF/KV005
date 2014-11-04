@@ -1,9 +1,10 @@
-package com.saucelabs;
+package com.saucelabs.Tests.LocalTests;
 
 /**
  * Created by ykadytc on 20.10.2014.
  */
 
+import com.saucelabs.AdminPage;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

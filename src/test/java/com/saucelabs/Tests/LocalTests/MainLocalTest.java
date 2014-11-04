@@ -1,5 +1,8 @@
-package com.saucelabs;
+package com.saucelabs.Tests.LocalTests;
 
+import com.saucelabs.AdminPage;
+import com.saucelabs.AnyPage;
+import com.saucelabs.ProblemPage;
 import com.saucelabs.utils.ImageDistanceCalculator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -61,8 +64,8 @@ public class MainLocalTest {
         driver.get("http://localhost:8090/#/map");
         driver.manage().window().maximize();
 
-        AnyPage     anyPage     = new AnyPage(driver);
-        AdminPage   adminPage   = new AdminPage(driver);
+        AnyPage anyPage     = new AnyPage(driver);
+        AdminPage adminPage   = new AdminPage(driver);
         ProblemPage problemPage = new ProblemPage(driver);
 
         List<String> gettedURLs;

@@ -1,5 +1,8 @@
-package com.saucelabs;
+package com.saucelabs.Tests.LocalTests;
 
+import com.saucelabs.AdminPage;
+import com.saucelabs.AnyPage;
+import com.saucelabs.ProblemPage;
 import com.saucelabs.utils.ImageDistanceCalculator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -59,8 +62,8 @@ public class LocalTestOne {
         //driver.get("http://176.36.11.25");
         driver.manage().window().maximize();
 
-        AnyPage     anyPage     = new AnyPage(driver);
-        AdminPage   adminPage   = new AdminPage(driver);
+        AnyPage anyPage     = new AnyPage(driver);
+        AdminPage adminPage   = new AdminPage(driver);
         ProblemPage problemPage = new ProblemPage(driver);
 
         anyPage.addProblemToVisibleCenter(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,

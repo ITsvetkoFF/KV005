@@ -1,5 +1,6 @@
-package com.saucelabs;
+package com.saucelabs.Tests.DemoTests;
 
+import com.saucelabs.ResourcesPage;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -77,5 +78,4 @@ public class ResourcesPageTestLocal {
         resourcesPage.logOut();
         driver.quit();
     }
-
 }
