@@ -17,14 +17,14 @@ import java.util.List;
  * Created by onikistc on 21.10.2014.
  */
 public class ProblemTest {
-    public static double latitude = 50.2;
-    public static double longitude = 30.2;
+    public static double latitude = 50.243;
+    public static double longitude = 30.243;
     public String problemNameTest = "problemNameTest";
     public String problemTypeTest = "Загрози біорізноманіттю";
     public String problemDescriptionTest = "problemDescriptionTest";
     public String problemProposeTest = "problemProposeTest";
-    public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg", "http://i.imgur.com/1K6AdCH.jpg");
-    public List<String> imageComments = Arrays.asList("comment1", "comment2");
+    public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg");
+    public List<String> imageComments = Arrays.asList("comment1");
 
     WebDriver driver;
     ProblemPage problemPage;
@@ -39,11 +39,10 @@ public class ProblemTest {
 
 //        problemPage.logIn("admin@.com", "admin");
 //        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//        problemPage.addProblem(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, imageUrls, imageComments);
+//        problemPage.addProblemOffsetPageCenter(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, imageUrls, imageComments);
 //        driver.navigate().refresh();
 //        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//        problemPage.clickAtProblemByCoordinate(latitude, longitude);
-        problemPage.clickAtProblemByCoordinate(50.111573, 29.967512);
+//        problemPage.clickAtProblemOffsetMapCenter(latitude, longitude, 300);
     }
     @AfterSuite
     public  void turnDown() {
@@ -51,6 +50,10 @@ public class ProblemTest {
         System.out.println("Browser close\n");
     }
 
+    @Test
+    public void problemGetId() {
+        System.out.println("id=" + problemPage.getProblemId(latitude, longitude));
+    }
     @Test
     public void problemCheckTitle() {
         Assert.assertTrue(problemPage.getProblemTitle().equals(problemNameTest));
