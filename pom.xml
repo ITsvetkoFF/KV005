@@ -79,7 +79,7 @@
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <includes>
-                        <include>**/RemoteTestTwo.java</include>
+                        <include>**/ResourcesPageTest.java</include>
                     </includes>
                 </configuration>
             </plugin>
