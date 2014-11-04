@@ -20,6 +20,9 @@ public interface IMapPage {
     void clickZoomOut();
     void openFiltersBoard();
     void selectAllExceptOneFilter(int typeNumber) throws Exception;
+
+    void selectAllExceptOneFilter(String typeName);
+
     void selectOnlyOneFilter(int typeNumber);
     void selectOnlyOneFilter(String typeName);
     void setAfterDate(String afterDate);
