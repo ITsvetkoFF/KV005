@@ -1,4 +1,4 @@
-package com.saucelabs;
+package utility;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package com.saucelabs;
+package utility;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

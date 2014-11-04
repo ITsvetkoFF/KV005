@@ -1,6 +1,5 @@
-package com.saucelabs;
+package utility;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;

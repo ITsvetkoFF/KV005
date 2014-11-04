@@ -1,5 +1,8 @@
-package com.saucelabs;
+package com.saucelabs.Tests.DemoTests;
 
+import com.saucelabs.AdminPage;
+import com.saucelabs.AnyPage;
+import com.saucelabs.ProblemPage;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 import com.saucelabs.testng.SauceOnDemandAuthenticationProvider;
@@ -77,7 +80,7 @@ public class RemoteTestOne implements SauceOnDemandSessionIdProvider, SauceOnDem
                 capabilities.setCapability(CapabilityType.VERSION, version);
             }
             capabilities.setCapability(CapabilityType.PLATFORM, os);
-            capabilities.setCapability("name", "Ecomap Sample Test");
+            capabilities.setCapability("name", "Ecomap Create New User Test");
             webDriver.set(new RemoteWebDriver(
                     new URL("http://" + authentication.getUsername() + ":" + authentication.getAccessKey() + "@ondemand.saucelabs.com:80/wd/hub"),
                     capabilities));
@@ -118,8 +121,8 @@ public class RemoteTestOne implements SauceOnDemandSessionIdProvider, SauceOnDem
             driver.get("http://176.36.11.25/#/map");
             driver.manage().window().maximize();
 
-            AnyPage     anyPage     = new AnyPage(driver);
-            AdminPage   adminPage   = new AdminPage(driver);
+            AnyPage anyPage     = new AnyPage(driver);
+            AdminPage adminPage   = new AdminPage(driver);
             ProblemPage problemPage = new ProblemPage(driver);
 
             anyPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);

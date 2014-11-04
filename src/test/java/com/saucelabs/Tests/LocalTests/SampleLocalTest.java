@@ -1,5 +1,6 @@
-package com.saucelabs;
+package com.saucelabs.Tests.LocalTests;
 
+import com.saucelabs.AnyPage;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;

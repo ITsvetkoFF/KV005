@@ -1,44 +1,30 @@
-package com.saucelabs;
+package com.saucelabs.Tests.LocalTests;
 
+import com.saucelabs.AdminPage;
+import com.saucelabs.AnyPage;
+import com.saucelabs.ProblemPage;
 import com.saucelabs.utils.ImageDistanceCalculator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import utility.Constant;
+import utility.ExcelUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 /**
-* Created by Yermek on 30.10.2014.
+ * Created by Yermek on 03.11.2014.
  */
-public class LocalTestOne {
-    @DataProvider(name = "sampleTestData", parallel = false)
-    public static Object[][] testDataExample() {
-        return new Object[][]{
-                new Object[]{
-                        "51.94",
-                        "31.94",
-                        "problemTitle",
-                        "Загрози біорізноманіттю",
-                        "problemDescription",
-                        "problemSolution",
-                        "", //http://i.imgur.com/HHXCVbs.jpg" + "\n" + "http://i.imgur.com/1K6AdCH.jpg",
-                        "", //imageComment1" + "\n" + "imageComment2",
-                        "admin@.com",
-                        "admin",
-                        "testFirstName",
-                        "testLastName",
-                        "test5@test.com",
-                        "test",
-                        "Comment1"
-                }
-        };
+public class LocalTestThree {
+    @DataProvider(name = "xlsLocalTestData", parallel = false)
+    public static Object[][] data() throws Exception{
+        return ExcelUtils.getTableArray(Constant.Path_LocalTestData + Constant.File_LocalTestData, "Sheet1");
     }
-
-    @Test(dataProvider = "sampleTestData")
+    @Test(dataProvider = "xlsLocalTestData")
     public void sampleAll(String latitudeString, String longitudeString, String problemTitle,
                           String problemType, String problemDescription, String problemSolution,
                           String imageURLsString, String imageCommentsString,
@@ -48,39 +34,53 @@ public class LocalTestOne {
                           String userCommentsString) throws IOException {
         double          latitude        = Double.parseDouble(latitudeString);
         double          longitude       = Double.parseDouble(longitudeString);
-        List<String>    imageURLs       = Arrays.asList(imageURLsString.split("\n"));
+        List<String> imageURLs       = Arrays.asList(imageURLsString.split("\n"));
         List<String>    imageComments   = Arrays.asList(imageCommentsString.split("\n"));
         List<String>    userComments    = Arrays.asList(userCommentsString.split("\n"));
         List<String>    receivedURLs;
         List<String>    receivedComments;
+        String          afterDate       = "31 жовт. 2014";
+        String          beforeDate      = "01 лист. 2014";
+
 
         WebDriver driver = new FirefoxDriver();
-        //driver.get("http://localhost:8090");
-        driver.get("http://176.36.11.25");
+        driver.get("http://localhost:8090");
+        //driver.get("http://176.36.11.25");
         driver.manage().window().maximize();
 
-        AnyPage     anyPage     = new AnyPage(driver);
-        AdminPage   adminPage   = new AdminPage(driver);
+        AnyPage anyPage     = new AnyPage(driver);
+        AdminPage adminPage   = new AdminPage(driver);
         ProblemPage problemPage = new ProblemPage(driver);
 
-        anyPage.addProblem(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
+        adminPage.logIn(adminEmail, adminPassword);
+
+        anyPage.addProblemToVisibleCenter(latitude, longitude,
+                problemTitle, problemType, problemDescription, problemSolution,
                 imageURLs, imageComments);
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
-        adminPage.logIn(adminEmail, adminPassword);
-        Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problemTitle));
-        adminPage.approveProblem(problemTitle);
+//            adminPage.logIn(adminEmail, adminPassword);
+//            Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problemTitle));
+//            adminPage.approveProblem(problemTitle);
+//            try {
+//                Thread.sleep(1000);
+//            } catch (Exception e) {
+//            }        adminPage.logOut();
+//            try {
+//                Thread.sleep(1000);
+//            } catch (Exception e) {
+//            }
+        adminPage.logOut();
         try {
-            Thread.sleep(1000);
-        } catch (Exception e) {
-        }        adminPage.logOut();
-        try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (Exception e) {
         }
-        problemPage.clickAtProblemByCoordinate(latitude, longitude);
+        anyPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
+        Assert.assertEquals(anyPage.getLoggedInUserName().toUpperCase(),
+                (newUserFirstName + " " + newUserLastName).toUpperCase());
+        problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         Assert.assertEquals(problemPage.getProblemTitle(), problemTitle);
         Assert.assertEquals(problemPage.getProblemType(), problemType);
         Assert.assertEquals(problemPage.getProblemDescription(), problemDescription);
@@ -93,18 +93,14 @@ public class LocalTestOne {
         for(int i = 0; i < receivedComments.size(); i++){
             Assert.assertTrue(receivedComments.get(i).equals(imageComments.get(i)));
         }
-        try {
-            Thread.sleep(2000);
-        } catch (Exception e) {
-        }
-        problemPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
-        //problemPage.logIn(newUserEmail, newUserPassword);
-        try {
-            Thread.sleep(2000);
-        } catch (Exception e) {
-        }
+
         problemPage.addComments(latitude, longitude, userComments);
         problemPage.logOut();
+
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+        }
 
         adminPage.logIn(adminEmail, adminPassword);
         try {

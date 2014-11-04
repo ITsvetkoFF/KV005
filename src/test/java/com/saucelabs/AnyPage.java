@@ -1,12 +1,14 @@
 package com.saucelabs;
 
-import com.google.gson.annotations.Until;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utility.DropZoneUploadThread;
+import utility.FileChooserThread;
+
 import java.util.concurrent.TimeUnit;
 import java.util.List;
 
@@ -225,6 +227,11 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(PROBLEM_PROPOSE_TEXT_BOX).sendKeys(problemPropose);
         driver.findElement(ADD_PROBLEM_TAB3).click();
         driver.findElement(ADD_PROBLEM_TAB3).click();
+        driver.findElement(By.id("description-field")).sendKeys(problemDescription);
+        driver.findElement(By.id("proposal-field")).sendKeys(problemPropose);
+        //driver.findElement(By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[3]")).click();
+        driver.findElement(By.xpath("//body")).sendKeys(Keys.chord(Keys.CONTROL, Keys.HOME));
+        driver.findElement(By.className("fa-file-photo-o")).click();
 
         for (String url: imageUrls) {
             if (url.length() == 0) {
