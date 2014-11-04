@@ -15,6 +15,21 @@ import java.util.List;
  * Created by Olya on 10/26/14.
  */
 public class ResourcesPage extends AnyPage implements IResourcesPage{
+    public static final By RESOURCE_BUTTON = By.linkText("РЕСУРСИ");
+    public static final By ADD_NEW_RESOURCE_BUTTON = By.linkText("ДОДАТИ НОВИЙ РЕСУРС");
+    public static final By RESOURCE_TITLE = By.name("Title");
+    public static final By RESOURCE_ALIAS = By.name("Alias");
+    public static final By RESOURCE_BODY = By.cssSelector("div[id^='taTextElement']");
+    public static final By RESOURCE_SAVE_PLACE = By.name("IsResource");
+    public static final By SEND_BUTTON = By.cssSelector(".b-form__button.editor_button");
+    public static final By LOGO = By.className("b-header__logo");
+    public static final By HEADER_RESOURCES = By.cssSelector(".b-menu__button.ng-scope");
+    public static final By LIST_RESOURCES = By.cssSelector("#b-header__resources li");
+    public static final By EDIT_HEADER_RESOURCES = By.cssSelector(".fa.fa-pencil.fa-xs.ng-scope");
+    public static final By EDIT_LIST_RESOURCES = By.cssSelector(".fa.fa-pencil.ng-scope");
+    public static final By DELETE_HEADER_RESOURCES = By.cssSelector(".fa.fa-trash.fa-xs.ng-scope");
+    public static final By SUBMIT_DELITING = By.cssSelector(".btn.btn-warning.ng-binding");
+    public static final By DELETE_LIST_RESOURCES = By.cssSelector(".fa.fa-trash.ng-scope");
     private WebDriver driver;
 
     public ResourcesPage(WebDriver driver) {
@@ -24,25 +39,25 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
 
     public void createResource(String sTitle, String sAlias, String sBody, String sPlaceToSave) throws Exception{
 
-        driver.findElement(By.linkText("РЕСУРСИ")).click();
-        driver.findElement(By.linkText("ДОДАТИ НОВИЙ РЕСУРС")).click();
-        driver.findElement(By.name("Title")).sendKeys(sTitle);
-        driver.findElement(By.name("Alias")).sendKeys(sAlias);
-        driver.findElement(By.cssSelector("div[id^='taTextElement']")).sendKeys(sBody);
-        org.openqa.selenium.support.ui.Select select = new org.openqa.selenium.support.ui.Select(driver.findElement(By.name("IsResource")));
+        driver.findElement(RESOURCE_BUTTON).click();
+        driver.findElement(ADD_NEW_RESOURCE_BUTTON).click();
+        driver.findElement(RESOURCE_TITLE).sendKeys(sTitle);
+        driver.findElement(RESOURCE_ALIAS).sendKeys(sAlias);
+        driver.findElement(RESOURCE_BODY).sendKeys(sBody);
+        org.openqa.selenium.support.ui.Select select = new org.openqa.selenium.support.ui.Select(driver.findElement(RESOURCE_SAVE_PLACE));
         select.selectByVisibleText(sPlaceToSave);
-        driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
-        driver.findElement(By.className("b-header__logo")).click();
+        driver.findElement(SEND_BUTTON).click();
+        driver.findElement(LOGO).click();
 
     }
 
     public String existResource(String resource) throws  Exception{
         String value = null;
-        driver.findElement(By.className("b-header__logo")).click();
+        driver.findElement(LOGO).click();
         //try {
         //WebDriverWait wait = new WebDriverWait(driver, 3);
         //WebElement elements = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".b-menu__button.ng-scope")));
-        List<WebElement> resources1 = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
+        List<WebElement> resources1 = driver.findElements(HEADER_RESOURCES);
         for (WebElement listElement : resources1){
             String searchText = listElement.getText();
             if (searchText.equals(resource.toUpperCase())){
@@ -53,46 +68,46 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
         //catch (Exception e) {};
 
 
-        driver.findElement(By.linkText("РЕСУРСИ")).click();
-        List<WebElement> resources2 = driver.findElements(By.cssSelector("#b-header__resources li"));
+        driver.findElement(RESOURCE_BUTTON).click();
+        List<WebElement> resources2 = driver.findElements(LIST_RESOURCES);
         for (WebElement listElement : resources2){
             //System.out.println(listElement.getText());
             if (listElement.getText().equals(resource)){
                 value = "В розділі \"Ресурси\"";
             }
         }
-        driver.findElement(By.className("b-header__logo")).click();
+        driver.findElement(LOGO).click();
         return value;
     }
 
     public void editResourceHeader(String sTitle, String sTextToAdd) throws Exception{
 
-        List<WebElement> resources = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
+        List<WebElement> resources = driver.findElements(HEADER_RESOURCES);
         for (WebElement listElement : resources){
             String searchText = listElement.getText();
             if (searchText.equals(sTitle.toUpperCase())){
-                listElement.findElement(By.cssSelector(".fa.fa-pencil.fa-xs.ng-scope")).click();
-                driver.findElement(By.name("Title")).sendKeys(sTextToAdd);
-                driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
+                listElement.findElement(EDIT_HEADER_RESOURCES).click();
+                driver.findElement(RESOURCE_TITLE).sendKeys(sTextToAdd);
+                driver.findElement(SEND_BUTTON).click();
                 break;
             }
         }
-        driver.findElement(By.className("b-header__logo")).click();
+        driver.findElement(LOGO).click();
     }
 
     public void editResourceList(String sTitle, String sTextToAdd) throws  Exception{
 
-        driver.findElement(By.linkText("РЕСУРСИ")).click();
-        List<WebElement> resources = driver.findElements(By.cssSelector("#b-header__resources li"));
+        driver.findElement(RESOURCE_BUTTON).click();
+        List<WebElement> resources = driver.findElements(LIST_RESOURCES);
         for (WebElement listElement : resources){
             if (listElement.getText().equals(sTitle)){
-                listElement.findElement(By.cssSelector(".fa.fa-pencil.ng-scope")).click();
-                driver.findElement(By.name("Title")).sendKeys(sTextToAdd);
-                driver.findElement(By.cssSelector(".b-form__button.editor_button")).click();
+                listElement.findElement(EDIT_LIST_RESOURCES).click();
+                driver.findElement(RESOURCE_TITLE).sendKeys(sTextToAdd);
+                driver.findElement(SEND_BUTTON).click();
                 break;
             }
         }
-        driver.findElement(By.className("b-header__logo")).click();
+        driver.findElement(LOGO).click();
     }
 
     public void editResource(String sTitle, String sTextToAdd) throws  Exception{
@@ -107,31 +122,31 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
 
     public void deleteResourceFromHeader(String deleteTitle) throws Exception{
 
-        driver.findElement(By.className("b-header__logo")).click();
-        List<WebElement> resources = driver.findElements(By.cssSelector(".b-menu__button.ng-scope"));
+        driver.findElement(LOGO).click();
+        List<WebElement> resources = driver.findElements(HEADER_RESOURCES);
         for (WebElement listElement : resources){
             String searchText = listElement.getText();
             if (searchText.equals(deleteTitle.toUpperCase())){
-                listElement.findElement(By.cssSelector(".fa.fa-trash.fa-xs.ng-scope")).click();
+                listElement.findElement(DELETE_HEADER_RESOURCES).click();
                 //driver.findElement(By.partialLinkText("Видалити ресурс")).click();
-                driver.findElement(By.cssSelector(".btn.btn-warning.ng-binding")).click();
+                driver.findElement(SUBMIT_DELITING).click();
                 break;
             }
         }
-        driver.findElement(By.className("b-header__logo")).click();
+        driver.findElement(LOGO).click();
 
     }
 
     public void deleteResourceFromList(String deleteTitle) throws Exception{
 
-        driver.findElement(By.className("b-header__logo")).click();
-        driver.findElement(By.linkText("РЕСУРСИ")).click();
-        List<WebElement> resources = driver.findElements(By.cssSelector("#b-header__resources li"));
+        driver.findElement(LOGO).click();
+        driver.findElement(RESOURCE_BUTTON).click();
+        List<WebElement> resources = driver.findElements(LIST_RESOURCES);
         for (WebElement listElement : resources){
             if (listElement.getText().equals(deleteTitle)){
-                listElement.findElement(By.cssSelector(".fa.fa-trash.ng-scope")).click();
+                listElement.findElement(DELETE_LIST_RESOURCES).click();
                 //driver.findElement(By.partialLinkText("Видалити ресурс")).click();
-                driver.findElement(By.cssSelector(".btn.btn-warning.ng-binding")).click();
+                driver.findElement(SUBMIT_DELITING).click();
                 break;
             }
         }

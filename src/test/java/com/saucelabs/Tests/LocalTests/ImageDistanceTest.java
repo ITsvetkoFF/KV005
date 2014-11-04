@@ -1,4 +1,4 @@
-package com.saucelabs;
+package com.saucelabs.Tests.LocalTests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
