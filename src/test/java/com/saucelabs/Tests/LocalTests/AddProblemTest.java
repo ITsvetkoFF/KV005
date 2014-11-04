@@ -1,6 +1,7 @@
 package com.saucelabs.Tests.LocalTests;
 
 import com.saucelabs.AnyPage;
+import com.saucelabs.ProblemPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -32,6 +33,8 @@ public class AddProblemTest {
 
         WebDriver driver = new FirefoxDriver();
         AnyPage anyPage = new AnyPage(driver);
+        ProblemPage problemPage = new ProblemPage(driver);
+
         driver.get("http://localhost:8090/#/map");
         driver.manage().window().maximize();
         anyPage.logIn("admin@.com", "admin");
@@ -47,7 +50,7 @@ public class AddProblemTest {
 
         driver.navigate().refresh();
         anyPage.clickAtProblemOffsetMapCenter(latitude, longitude, offset);
-        String problemNameUI = anyPage.getProblemTitle();
+        String problemNameUI = problemPage.getProblemTitle();
         driver.quit();
 
         try {
@@ -64,43 +67,11 @@ public class AddProblemTest {
             ResultSet resultSet = statement
                     .executeQuery("select * from problems where title = " + problemNameTest + "\";");
 
-//            while (resultSet.next()) {
-//                System.out.println(resultSet.getRow() + ". " + resultSet.getString("title"));
-//            }
-
             String problemNameInDB = resultSet.getString("title");
+
             Assert.assertTrue(problemNameInDB.equals(problemNameUI));
             statement.close();
         } catch (Exception e) {
-        }
-    }
-
-    //@Test
-    public void jDBCSample() throws SQLException {
-
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager
-                    .getConnection("jdbc:mysql://localhost:3306/enviromap", "root", "root");
-
-            if (connection == null) {
-                System.out.println("Нет соединения с БД!");
-                System.exit(0);
-            }
-
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from problems;");
-
-            while (resultSet.next()) {
-                System.out.println(resultSet.getRow() + ". " + resultSet.getString("title"));
-            }
-
-            statement.close();
-
-        } catch(ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch(SQLException e) {
-            e.printStackTrace();
         }
     }
 }
