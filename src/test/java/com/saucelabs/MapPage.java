@@ -10,6 +10,18 @@ import java.util.regex.PatternSyntaxException;
  */
 public class MapPage implements IMapPage {
 
+    public static final By PROBLEM_TYPE = By.cssSelector(".problem label");
+    public static final By ZOOM_OUT = By.xpath("//a[@title='Zoom out']");
+    public static final By LEFT_SIDE_POINTER = By.xpath("//div[@class='b-left-side__pointer']");
+    public static final By BYPROBLEM_TYPE_WITH_LABEL_FOR = By.cssSelector(".problem label[for^='type']");
+    public static final By PROBLEM_TYPE_STARTS_WITH_TYPE_BY_ID = By.xpath("//input[starts-with(@id, 'type')]");
+    public static final By INPUT_FIELD_FOR_DATE = By.cssSelector(".datepicker .form-control");
+    public static final By DATEPICKER = By.cssSelector(".datepicker");
+    public static final By CALENDAR_ICON = By.cssSelector(".fa-calendar");
+    public static final By TODAY_BUTTON = By.cssSelector("span.btn-group>button.btn-info");
+    public static final By CLEAR_BUTTON = By.cssSelector("button.btn-success");
+    public static final By CLOSE_BUTTON = By.cssSelector("button.btn-danger");
+    public static final By TOP_BUTTON_FOR_UPPER_PERIOD = By.className("ng-binding");
     private WebDriver driver;
 
     public MapPage(WebDriver driver) {
@@ -197,14 +209,14 @@ public class MapPage implements IMapPage {
     @Override
     public String getFilterTitle(int typeNumber) {
 
-        List<WebElement> names = driver.findElements(By.cssSelector(".problem label"));
+        List<WebElement> names = driver.findElements(PROBLEM_TYPE);
 
         return names.get(typeNumber).getAttribute("textContent");
     }
 
     @Override
     public void clickZoomOut() {
-        WebElement zoomOut = driver.findElement(By.xpath("//a[@title='Zoom out']"));
+        WebElement zoomOut = driver.findElement(ZOOM_OUT);
 
         do {
             zoomOut.click();
@@ -213,14 +225,14 @@ public class MapPage implements IMapPage {
 
     @Override
     public void openFiltersBoard() {
-        driver.findElement(By.xpath("//div[@class='b-left-side__pointer']")).click();
+        driver.findElement(LEFT_SIDE_POINTER).click();
     }
 
     @Override
     public void selectAllExceptOneFilter(int typeNumber) throws Exception {
 
-        List<WebElement> filtersNames = driver.findElements(By.cssSelector(".problem label[for^='type']"));
-        List<WebElement> filtersChecks = driver.findElements(By.xpath("//input[starts-with(@id, 'type')]"));
+        List<WebElement> filtersNames = driver.findElements(BYPROBLEM_TYPE_WITH_LABEL_FOR);
+        List<WebElement> filtersChecks = driver.findElements(PROBLEM_TYPE_STARTS_WITH_TYPE_BY_ID);
         String typeId = "";
 //        JavascriptExecutor js = null;
 //        if (driver instanceof JavascriptExecutor) {
@@ -240,25 +252,10 @@ public class MapPage implements IMapPage {
     }
 
     @Override
-    public void selectOnlyOneFilter(int typeNumber) {
+    public void selectAllExceptOneFilter(String typeName) {
 
-        List<WebElement> filtersNames = driver.findElements(By.cssSelector(".problem label[for^='type']"));
-        List<WebElement> filtersChecks = driver.findElements(By.xpath("//input[starts-with(@id, 'type')]"));
-        String typeId = "";
-        for (int i = 0; i < filtersChecks.size(); i++) {
-            typeId = filtersChecks.get(i).getAttribute("id");
-            if (i != typeNumber - 1) {
-                if ("true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
-            } else {
-                if (!"true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
-            }
-        }
-    }
-    @Override
-    public void selectOnlyOneFilter(String typeName) {
-
-        List<WebElement> filtersNames = driver.findElements(By.cssSelector(".problem label[for^='type']"));
-        List<WebElement> filtersChecks = driver.findElements(By.xpath("//input[starts-with(@id, 'type')]"));
+        List<WebElement> filtersNames = driver.findElements(BYPROBLEM_TYPE_WITH_LABEL_FOR);
+        List<WebElement> filtersChecks = driver.findElements(PROBLEM_TYPE_STARTS_WITH_TYPE_BY_ID);
         String typeId = "";
         for (int i = 0; i < filtersChecks.size(); i++) {
             typeId = filtersChecks.get(i).getAttribute("id");
@@ -269,40 +266,73 @@ public class MapPage implements IMapPage {
             }
         }
     }
-    //@Override
+
+    @Override
+    public void selectOnlyOneFilter(int typeNumber) {
+
+        List<WebElement> filtersNames = driver.findElements(BYPROBLEM_TYPE_WITH_LABEL_FOR);
+        List<WebElement> filtersChecks = driver.findElements(PROBLEM_TYPE_STARTS_WITH_TYPE_BY_ID);
+        String typeId = "";
+        for (int i = 0; i < filtersChecks.size(); i++) {
+            typeId = filtersChecks.get(i).getAttribute("id");
+            if (i != typeNumber - 1) {
+                if ("true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
+            } else {
+                if (!"true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
+            }
+        }
+    }
+
+    @Override
+    public void selectOnlyOneFilter(String typeName) {
+
+        List<WebElement> filtersNames = driver.findElements(BYPROBLEM_TYPE_WITH_LABEL_FOR);
+        List<WebElement> filtersChecks = driver.findElements(PROBLEM_TYPE_STARTS_WITH_TYPE_BY_ID);
+        String typeId = "";
+        for (int i = 0; i < filtersChecks.size(); i++) {
+            typeId = filtersChecks.get(i).getAttribute("id");
+            if (!typeName.equals(filtersNames.get(i).getText())) {
+                if ("true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
+            } else {
+                if (!"true".equals(filtersChecks.get(i).getAttribute("checked"))) filtersNames.get(i).click();
+            }
+        }
+    }
+
+    @Override
     public void setAfterDate(String afterDate) {
-        List<WebElement> dateFields = driver.findElements(By.cssSelector(".datepicker .form-control"));
+        List<WebElement> dateFields = driver.findElements(INPUT_FIELD_FOR_DATE);
         WebElement dateField = dateFields.get(0);
         dateField.clear();
         dateField.sendKeys(afterDate);
     }
 
-    //@Override
+    @Override
     public void setBeforeDate(String beforeDate) {
-        List<WebElement> dateFields = driver.findElements(By.cssSelector(".datepicker .form-control"));
+        List<WebElement> dateFields = driver.findElements(INPUT_FIELD_FOR_DATE);
         WebElement dateField = dateFields.get(1);
         dateField.clear();
         dateField.sendKeys(beforeDate);
     }
 
-    //@Override
+    @Override
     public void datePickersButtons() {
 
-        List<WebElement> datePickerButtons = driver.findElements(By.cssSelector(".datepicker"));
+        List<WebElement> datePickerButtons = driver.findElements(DATEPICKER);
 
         for (WebElement datePickers : datePickerButtons) {
-            WebElement buttonElement = datePickers.findElement(By.cssSelector(".fa-calendar"));
+            WebElement buttonElement = datePickers.findElement(CALENDAR_ICON);
 
             buttonElement.click();
-            WebElement todayButton = datePickers.findElement(By.cssSelector("span.btn-group>button.btn-info"));
+            WebElement todayButton = datePickers.findElement(TODAY_BUTTON);
             todayButton.click();
 
             buttonElement.click();
-            WebElement clearButton = datePickers.findElement(By.cssSelector("button.btn-success"));
+            WebElement clearButton = datePickers.findElement(CLEAR_BUTTON);
             clearButton.click();
 
             buttonElement.click();
-            WebElement closeButton = datePickers.findElement(By.cssSelector("button.btn-danger"));
+            WebElement closeButton = datePickers.findElement(CLOSE_BUTTON);
             closeButton.click();
         }
     }
@@ -335,14 +365,14 @@ public class MapPage implements IMapPage {
         String[] splitDate;
         splitDate = fullDate.split("\\s+");
 
-        List<WebElement> datePickers = driver.findElements(By.cssSelector(".datepicker"));
+        List<WebElement> datePickers = driver.findElements(DATEPICKER);
 
         for (WebElement datePicker : datePickers) {
-            WebElement buttonElement = datePicker.findElement(By.cssSelector(".fa-calendar"));
+            WebElement buttonElement = datePicker.findElement(CALENDAR_ICON);
 
             buttonElement.click();
-            datePicker.findElement(By.className("ng-binding")).click();
-            datePicker.findElement(By.className("ng-binding")).click();
+            datePicker.findElement(TOP_BUTTON_FOR_UPPER_PERIOD).click();
+            datePicker.findElement(TOP_BUTTON_FOR_UPPER_PERIOD).click();
 
             selectDate(datePicker, splitDate[0], splitDate[1], splitDate[2]);
         }

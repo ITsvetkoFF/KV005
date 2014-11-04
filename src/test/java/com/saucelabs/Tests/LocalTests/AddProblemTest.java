@@ -22,41 +22,38 @@ public class AddProblemTest {
     public String problemDescriptionTest = "problemDescriptionTest";
     public String problemProposeTest = "problemProposeTest";
     public List<String> imageUrls = Arrays.asList("http://i.imgur.com/HHXCVbs.jpg", "http://i.imgur.com/1K6AdCH.jpg");
+    public List<String> imagePath = Arrays.asList("C:\\Users\\Public\\Pictures\\Sample Pictures\\desert.jpg",
+                                                  "C:\\Users\\Public\\Pictures\\Sample Pictures\\koala.jpg");
     public List<String> imageComments = Arrays.asList("comment1", "comment2");
 
-    //@Test
+
+    @Test
     public void addProblemTest() {
 
         WebDriver driver = new FirefoxDriver();
         AnyPage anyPage = new AnyPage(driver);
         driver.get("http://localhost:8090/#/map");
-        //driver.get("http://176.36.11.25/#/map");
-        driver.manage().window().maximize();http://i.imgur.com/HHXCVbs.jpg
-
+        driver.manage().window().maximize();
         anyPage.logIn("admin@.com", "admin");
+
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
+
         int offset = anyPage.addProblemOffsetPageCenter(latitude, longitude, problemNameTest, problemTypeTest,
                 problemDescriptionTest, problemProposeTest,
-                imageUrls, imageComments);
+                imagePath, imageComments);
 
         driver.navigate().refresh();
         anyPage.clickAtProblemOffsetMapCenter(latitude, longitude, offset);
-        Assert.assertTrue(true);
+        String problemNameUI = anyPage.getProblemTitle();
         driver.quit();
-    }
-
-    @Test
-    public void jDBCSample() throws SQLException {
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");//эта строка загружает драйвер DB
-
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/enviromap",
-                    "root", "root");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection connection = DriverManager
+                    .getConnection("jdbc:mysql://localhost:3306/enviromap", "root", "root");
 
             if (connection == null) {
                 System.out.println("Нет соединения с БД!");
@@ -64,17 +61,42 @@ public class AddProblemTest {
             }
 
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from problems where title = \"problemNameTest\"");
+            ResultSet resultSet = statement
+                    .executeQuery("select * from problems where title = " + problemNameTest + "\";");
+
+//            while (resultSet.next()) {
+//                System.out.println(resultSet.getRow() + ". " + resultSet.getString("title"));
+//            }
+
+            String problemNameInDB = resultSet.getString("title");
+            Assert.assertTrue(problemNameInDB.equals(problemNameUI));
+            statement.close();
+        } catch (Exception e) {
+        }
+    }
+
+    //@Test
+    public void jDBCSample() throws SQLException {
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection connection = DriverManager
+                    .getConnection("jdbc:mysql://localhost:3306/enviromap", "root", "root");
+
+            if (connection == null) {
+                System.out.println("Нет соединения с БД!");
+                System.exit(0);
+            }
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from problems;");
 
             while (resultSet.next()) {
-                System.out.println(resultSet.getRow() + ". " + resultSet.getString("title")
-                        + "\t" + resultSet.getString("Content"));
+                System.out.println(resultSet.getRow() + ". " + resultSet.getString("title"));
             }
-            /**
-             * При закрытии Statement автоматически закрываются
-             * все связанные с ним открытые объекты ResultSet
-             */
+
             statement.close();
+
         } catch(ClassNotFoundException e) {
             e.printStackTrace();
         } catch(SQLException e) {
