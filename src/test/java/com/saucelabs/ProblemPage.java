@@ -2,7 +2,6 @@ package com.saucelabs;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,26 @@ import java.util.concurrent.TimeUnit;
  */
 public class ProblemPage extends AnyPage{
 
+    private static final By PROBLEM_ICON_SRC = By.xpath("//img[@class='b-problem-deatiled-info-title__icon']");
+    private static final By PROBLEM_TITLE = By.xpath("//h1");
+    private static final By PROBLEM_DESCRIPTION = By.xpath("//div[contains(@class,'b-problem-deatiled-info-description__content')]/editproblemcontent/span");
+    private static final By PROBLEM_PROPOSE = By.xpath("//div[contains(@class,'b-problem-deatiled-info-description__content')]/editproblemcontent/span");
+
+    private static final By IMAGES_EXISTED = By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[contains(@class,'show_photo')]");
+    private static final By THE_FIRST_ADDED_PHOTO = By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[1]/img");
+    private static final By NEXT_PHOTO_CONTROL = By.xpath("//div[@class='rn-carousel-controls ng-isolate-scope']/span[@ng-click='next()']");
+    private static final By CLOSE_PHOTO_VIEWER_BUTTON = By.className("close");
+
+    private static final By COMMENTS_BUTTON = By.xpath("//div[@class='b-problem-tab ng-isolate-scope']/ul/li[2]/a");
+    private static final By ADD_COMMENT_TEXT_FIELD = By.xpath("//div[@class='form-group']/textarea");
+    private static final By ADDED_COMMENTS = By.xpath("//div[contains(@class,'b-activity__comments-item')]/i[contains(@class,'fa-weixin')]");
+    private static final By ADD_COMMENT_BUTTON = By.xpath("//div[@class='form-group']/a[contains(@class,'btn')]");
+    private static final By DELETE_COMMENT_BUTTON = By.xpath(".//div[2]/span[2]/i");
+    private static final By ALL_ACTIVITIES = By.className("b-activity__comments-item");
+    private static final By CHECKER_THAT_ACTIVITY_IS_A_COMMENT = By.xpath(".//i[@class='fa fa-weixin b-activity__comments-item-image']");
+
     private WebDriver driver;
+
     public ProblemPage(WebDriver driver) {
         super(driver);
         this.driver = driver;
@@ -21,7 +39,7 @@ public class ProblemPage extends AnyPage{
 
     public String getProblemType() {
         String problemIconSRC;
-            problemIconSRC = driver.findElement(By.xpath("//img[@class='b-problem-deatiled-info-title__icon']")).getAttribute("ng-src");
+        problemIconSRC = driver.findElement(PROBLEM_ICON_SRC).getAttribute("ng-src");
         String problemType = null;
         switch(problemIconSRC) {
             case "images/markers/1.png":
@@ -50,87 +68,78 @@ public class ProblemPage extends AnyPage{
     }
 
     public int getProblemId(double latitude, double longitude) {
-        clickAtProblemOffsetMapCenter(latitude, longitude, 300);
-        String currentUrl = driver.getCurrentUrl();
-        int problemId = Integer.parseInt(currentUrl.split("/")[6]);
-        return problemId;
+        clickAtProblemByCoordinateVisible(latitude, longitude);
+        return Integer.parseInt(driver.getCurrentUrl().split("/")[6]);
     }
 
     public String getProblemTitle() {
-        //return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-title__text']/editproblemtitle")).getText();
-        return driver.findElement(By.xpath("//h1")).getText();
+        return driver.findElement(PROBLEM_TITLE).getText();
     }
 
     public String getProblemDescription() {
-        //return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemcontent/span")).getAttribute("textContent");
-        return driver.findElement(By.xpath("//div[contains(@class,'b-problem-deatiled-info-description__content')]/editproblemcontent/span")).getAttribute("textContent");
+        return driver.findElement(PROBLEM_DESCRIPTION).getAttribute("textContent");
     }
 
     public String getProblemPropose() {
-        //return driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description__content']/editproblemproposal/span")).getAttribute("textContent");
-        return driver.findElements(By.xpath("//div[contains(@class,'b-problem-deatiled-info-description__content')]/editproblemcontent/span")).get(1).getAttribute("textContent");
+        return driver.findElements(PROBLEM_PROPOSE).get(1).getAttribute("textContent");
     }
 
-    public List<String> getImageURLs(){
-        //ProblemTest problemTest = new ProblemTest();
-        //int imagesAmount = problemTest.imageUrls.size();
-        int imagesAmount = driver.findElements(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[contains(@class,'show_photo')]")).size();
+    public List<String> getAllImagesURLs(){
+        int imagesAmount = driver.findElements(IMAGES_EXISTED).size();
         List<String> imageUrls = new ArrayList<>();
+        String currentUrlHost = driver.getCurrentUrl().split("/")[2];
         for(int i = 1; i <= imagesAmount; i++) {
-            imageUrls.add("http://" + driver.getCurrentUrl().split("/")[2] + "/"
-            + driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[" + i + "]/img")).getAttribute("ng-src"));
+            imageUrls.add("http://" + currentUrlHost + "/"
+            + driver.findElement(getImageSRCByItsOrderNumber(i)).getAttribute("ng-src"));
         }
         return imageUrls;
     }
 
+    private By getImageSRCByItsOrderNumber(int i) {
+        return By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[" + i + "]/img");
+    }
+
+
     public List<String> getImagesComments() {
-        //ProblemTest problemTest = new ProblemTest();
-        //int commentsAmount = problemTest.imageComments.size();
         List<String> comments = new ArrayList<>();
-        int commentsAmount = driver.findElements(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[contains(@class,'show_photo')]")).size();
+        int commentsAmount = driver.findElements(IMAGES_EXISTED).size();
         if (commentsAmount == 0) {
             return comments;
         }
-        driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-description-photos']/div[1]/img")).click();
+        driver.findElement(THE_FIRST_ADDED_PHOTO).click();
         for(int i = 1; i <= commentsAmount; i++){
             comments.add(driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li[" + i + "]/div")).getAttribute("textContent"));
             if (i < commentsAmount) {
-                driver.findElement(By.xpath("//div[@class='rn-carousel-controls ng-isolate-scope']/span[@ng-click='next()']")).click();
+                driver.findElement(NEXT_PHOTO_CONTROL).click();
             }
         }
-        driver.findElement(By.className("close")).click();
+        driver.findElement(CLOSE_PHOTO_VIEWER_BUTTON).click();
         return comments;
     }
 
     public void addComments(double latitude, double longitude, List<String> comments) {
         clickAtProblemByCoordinateVisible(latitude, longitude);
-        driver.findElement(By.xpath("//div[@class='b-problem-tab ng-isolate-scope']/ul/li[2]/a")).click();
+        driver.findElement(COMMENTS_BUTTON).click();
         for(String comment : comments) {
-            //driver.findElement(By.xpath("//div[@class='b-activity__input-field']/textarea")).sendKeys(comment);
-            driver.findElement(By.xpath("//div[@class='form-group']/textarea")).sendKeys(comment);
-            //driver.findElement(By.xpath("//button[@class='b-activity-comment__btn']")).click();
-            driver.findElement(By.xpath("//div[@class='form-group']/a[contains(@class,'btn')]")).click();
+            driver.findElement(ADD_COMMENT_TEXT_FIELD).sendKeys(comment);
+            driver.findElement(ADD_COMMENT_BUTTON).click();
             driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         }
     }
 
     public void deleteComments(double latitude, double longitude) {
-        clickAtProblemByCoordinateVisible(latitude, longitude);
-        driver.findElement(By.xpath("//div[@class='b-problem-tab ng-isolate-scope']/ul/li[2]/a")).click();
-
-        List<WebElement> foundActivities = driver.findElements(By.className("b-activity__comments-item"));
-        for(WebElement activity : foundActivities) {
-            if (activity.findElements(By.xpath(".//i[@class='fa fa-weixin b-activity__comments-item-image']")).size() == 1 ) {
-                driver.findElement(By.xpath(".//div[2]/span[2]/i")).click();
-            }
+//        clickAtProblemByCoordinateVisible(latitude, longitude);
+        driver.findElement(COMMENTS_BUTTON).click();
+        int commentsAmount = driver.findElements(ADDED_COMMENTS).size();
+        for(int i = 0; i < commentsAmount; i++) {
+            driver.findElement(DELETE_COMMENT_BUTTON).click();
         }
     }
 
     public List<String> getComments() {
-        driver.findElement(By.xpath("//div[@class='b-problem-tab ng-isolate-scope']/ul/li[2]/a")).click();
+        driver.findElement(COMMENTS_BUTTON).click();
         List<String> comments = new ArrayList<>();
-//        int commentsAmount = driver.findElements(By.className("b-activity__comments-item-content")).size() - 1;
-        int commentsAmount = driver.findElements(By.xpath("//div[@class='b-activity__comments-item']/i[@class='fa fa-weixin b-activity__comments-item-image']")).size();
+        int commentsAmount = driver.findElements(ADDED_COMMENTS).size();
         for(int i = 1; i <= commentsAmount; i++) {
             comments.add(0, driver.findElement(By.xpath("//div[@class='b-activity__comments']/div[" + i + "]/div[2]/span[2]")).getAttribute("textContent"));
         }

@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by onikistc on 21.10.2014.
@@ -37,12 +38,12 @@ public class ProblemTest {
         driver.get("http://localhost:8090/#/map");
         driver.manage().window().maximize();
 
-//        problemPage.logIn("admin@.com", "admin");
-//        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//        problemPage.addProblemOffsetPageCenter(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, imageUrls, imageComments);
+        problemPage.logIn("admin@.com", "admin");
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+//        problemPage.addProblemToVisibleCenter(latitude, longitude, problemNameTest, problemTypeTest, problemDescriptionTest, problemProposeTest, imageUrls, imageComments);
 //        driver.navigate().refresh();
 //        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//        problemPage.clickAtProblemOffsetMapCenter(latitude, longitude, 300);
+//        problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
     }
     @AfterSuite
     public  void turnDown() {
@@ -72,7 +73,7 @@ public class ProblemTest {
     }
     @Test(dependsOnMethods = {"problemCheckPropose"})
     public void problemCheckImage() throws IOException {
-        List<String> receivedUrls = problemPage.getImageURLs();
+        List<String> receivedUrls = problemPage.getAllImagesURLs();
         for(int i = 0; i < receivedUrls.size(); i++) {
             Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(receivedUrls.get(i), imageUrls.get(i)));
         }

@@ -1,8 +1,6 @@
 package com.saucelabs.Tests.LocalTests;
 
-import com.saucelabs.AnyPage;
 import com.saucelabs.ProblemPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
@@ -17,14 +15,13 @@ import java.util.concurrent.TimeUnit;
  * Created by onikistc on 23.10.2014.
  */
 public class ProblemCommentsTest {
-    public static double latitude = 47.240788;
-    public static double longitude = 31.933935;
-    public List<String> comments = Arrays.asList("Comment 1", "Comment 2", "Comment 3");
+    public static double latitude = 50.243;
+    public static double longitude = 30.243;
+    public List<String> addedComments = Arrays.asList("Comment 1", "Comment 2", "Comment 3");
 
     @Test
     public void addComment() throws InterruptedException, IOException {
         WebDriver driver = new FirefoxDriver();
-
         ProblemPage problemPage = new ProblemPage(driver);
 
         driver.get("http://localhost:8090/#/map");
@@ -36,18 +33,16 @@ public class ProblemCommentsTest {
         } catch (Exception e) {
         }
 
-        problemPage.addComments(latitude, longitude, comments);
-        int commentsAmountAfterAdding = problemPage.getComments().size();
+        problemPage.addComments(latitude, longitude, addedComments);
+        int amountAfterAdding = problemPage.getComments().size();
         List<String> foundComments = problemPage.getComments();
-        for(String comment : comments) {
+        for(String comment : addedComments) {
             Assert.assertTrue(comment.trim().equals(foundComments.remove(0).trim()));
         }
-
         problemPage.deleteComments(latitude, longitude);
-
 //        driver.navigate().refresh();
-        int commentsAmountAfterDeleting = problemPage.getComments().size();
-        Assert.assertTrue(commentsAmountAfterDeleting == commentsAmountAfterAdding - comments.size());
+        int amountAfterDeleting = problemPage.getComments().size();
+        Assert.assertTrue(amountAfterDeleting == amountAfterAdding - addedComments.size());
 
         driver.quit();
     }
