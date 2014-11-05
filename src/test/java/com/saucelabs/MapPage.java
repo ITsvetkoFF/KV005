@@ -146,24 +146,6 @@ public class MapPage implements IMapPage {
     }
 
     @Override
-    public void clickAtProblemByCoordinate (double latitude, double longitude) {
-
-        JavascriptExecutor script = null;
-        if (driver instanceof JavascriptExecutor)
-            script = (JavascriptExecutor) driver;
-        script.executeScript("var map = document.getElementById(\"map-content\");" +
-                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
-                + latitude + "," + longitude + "]" + "," + 14 + ");");
-
-        WebElement container = driver.findElement(MAP);
-        Dimension point = container.getSize();
-        int x = point.getWidth() / 2;
-        int y = point.getHeight() / 2;
-        Actions builder = new Actions(driver);
-        builder.moveToElement(container, x, y - 10).click().build().perform();
-    }
-
-    @Override
     public void clickAtProblemByCoordinateVisible (double latitude, double longitude) {
 
         setVisibleView(latitude, longitude, 18);
