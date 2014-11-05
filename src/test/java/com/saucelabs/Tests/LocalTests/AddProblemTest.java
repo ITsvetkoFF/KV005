@@ -44,13 +44,14 @@ public class AddProblemTest {
         } catch (Exception e) {
         }
 
-        int offset = anyPage.addProblemOffsetPageCenter(latitude, longitude, problemNameTest, problemTypeTest,
+        anyPage.addProblemToVisibleCenter(latitude, longitude, problemNameTest, problemTypeTest,
                 problemDescriptionTest, problemProposeTest,
                 imagePath, imageComments);
-
         driver.navigate().refresh();
-        anyPage.clickAtProblemOffsetMapCenter(latitude, longitude, offset);
+
+        anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         String problemNameUI = problemPage.getProblemTitle();
+        int problemID = problemPage.getProblemId(latitude, longitude);
         driver.quit();
 
         try {
@@ -68,8 +69,9 @@ public class AddProblemTest {
                     .executeQuery("select * from problems where title = " + problemNameTest + "\";");
 
             String problemNameInDB = resultSet.getString("title");
+            String problemIDInDB = resultSet.getString("id");
 
-            Assert.assertTrue(problemNameInDB.equals(problemNameUI));
+            Assert.assertTrue(problemIDInDB.equals(problemID) && problemNameInDB.equals(problemNameUI));
             statement.close();
         } catch (Exception e) {
         }
