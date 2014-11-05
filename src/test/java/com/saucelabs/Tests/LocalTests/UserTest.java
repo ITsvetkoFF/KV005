@@ -20,7 +20,7 @@ public class UserTest {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
         AnyPage anyPage = new AnyPage(driver);
-        anyPage.register("TestName", "TestSurname", "test8@test.com", "test");
+        anyPage.register("TestName", "TestSurname", "test9@test.com", "test");
         Assert.assertTrue("TestName TestSurname".toUpperCase().equals(anyPage.getLoggedInUserName().toUpperCase()));
         anyPage.logOut();
         driver.quit();

@@ -56,7 +56,7 @@ public class AdminTest {
                 problem.click();
                 Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problem.getText()));
                 Assert.assertTrue(problem.getText().equals(adminPage.getProblemTitle()));
-                adminPage.approveProblem(problem.getText());
+                //adminPage.approveProblem(problem.getText());
             }
             adminPage.logOut();
             driver.quit();
