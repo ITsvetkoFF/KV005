@@ -53,6 +53,7 @@ public class AnyPage extends MapPage implements IAnyPage {
         return linkText;
     }
 
+
     @Override
     public void logIn(String email, String password) {
         driver.findElement(LOGIN).click();
@@ -227,7 +228,7 @@ public class AnyPage extends MapPage implements IAnyPage {
             if (url.length() == 0) {
                 continue;
             }
-            Thread thread = new FileChooserThread(url);
+            Thread thread = new DropZoneUploadThread(url);
             thread.start();
             driver.findElement(DROP_ZONE).click();
             try {
