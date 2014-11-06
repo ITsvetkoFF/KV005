@@ -82,7 +82,7 @@ public class MainLocalTest {
         adminPage.approveProblem(problemTitle);
         adminPage.logOut();
 
-        problemPage.clickAtProblemByCoordinate(latitude, longitude);
+        problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
 
         Assert.assertTrue(problemPage.getProblemTitle().equals(problemTitle));
         Assert.assertTrue(problemPage.getProblemType().equals(problemType));

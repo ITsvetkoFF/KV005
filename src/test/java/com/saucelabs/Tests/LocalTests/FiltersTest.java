@@ -54,7 +54,7 @@ public class FiltersTest {
         mapPage.setAfterDate(afterDate);
         mapPage.setBeforeDate(beforeDate);
         mapPage.selectOnlyOneFilter(typeNumber);
-        mapPage.clickAtProblemByCoordinate(latitude, longitude);
+        mapPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
     }
 
@@ -70,7 +70,7 @@ public class FiltersTest {
         mapPage.setAfterDate(afterDate);
         mapPage.setBeforeDate(beforeDate);
         mapPage.selectOnlyOneFilter(typeNumber);
-        mapPage.clickAtProblemByCoordinate(latitude, longitude);
+        mapPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
     }
 
