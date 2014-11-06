@@ -7,8 +7,8 @@ import java.awt.event.KeyEvent;
 /**
  * Created by Tanya on 02.11.2014.
  */
-public class DropZoneUploadThread extends Thread {
-    public DropZoneUploadThread(String filePath) {
+public class ClipboardUploadThread extends Thread {
+    public ClipboardUploadThread(String filePath) {
         super(new Runner(filePath));
     }
 }

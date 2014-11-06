@@ -6,9 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import utility.DropZoneUploadThread;
-import utility.FileChooserThread;
-import java.util.concurrent.TimeUnit;
+import utility.ClipboardUploadThread;
 import java.util.List;
 
 public class AnyPage extends MapPage implements IAnyPage {
@@ -66,7 +64,6 @@ public class AnyPage extends MapPage implements IAnyPage {
 
         return linkText;
     }
-
 
     @Override
     public void logIn(String email, String password) {
@@ -139,11 +136,11 @@ public class AnyPage extends MapPage implements IAnyPage {
             if (url.length() == 0) {
                 continue;
             }
-            Thread thread = new DropZoneUploadThread(url);
+            Thread thread = new ClipboardUploadThread(url);
             thread.start();
             driver.findElement(DROP_ZONE).click();
             try {
-                Thread.sleep(4000);
+                Thread.sleep(3000);
             } catch (Exception e) {
             }
             thread.interrupt();
