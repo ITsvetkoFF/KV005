@@ -28,8 +28,10 @@ public class LocalTestOne {
                         "Загрози біорізноманіттю",
                         "problemDescription",
                         "problemSolution",
-                        "", //http://i.imgur.com/HHXCVbs.jpg" + "\n" + "http://i.imgur.com/1K6AdCH.jpg",
-                        "", //imageComment1" + "\n" + "imageComment2",
+                        //"http://i.imgur.com/HHXCVbs.jpg" + "\n" + "http://i.imgur.com/1K6AdCH.jpg",
+                        "",
+                        //"imageComment1" + "\n" + "imageComment2",
+                        "",
                         "admin@.com",
                         "admin",
                         "testFirstName",
@@ -56,6 +58,7 @@ public class LocalTestOne {
         List<String>    userComments    = Arrays.asList(userCommentsString.split("\n"));
         List<String>    receivedURLs;
         List<String>    receivedComments;
+        int             id;
 
         WebDriver driver = new FirefoxDriver();
         driver.get("http://localhost:8090");
@@ -73,22 +76,36 @@ public class LocalTestOne {
         } catch (Exception e) {
         }
         adminPage.logIn(adminEmail, adminPassword);
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+        }
         Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problemTitle));
         adminPage.approveProblem(problemTitle);
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
-        }        adminPage.logOut();
+        }
+        /*
+        adminPage.logOut();
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
-        problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
+        */
+        driver.navigate().refresh();
+        id = problemPage.getProblemId(latitude, longitude);
+        /*
+        problemPage.openProblemById(id);
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+        }
         Assert.assertEquals(problemPage.getProblemTitle(), problemTitle);
         Assert.assertEquals(problemPage.getProblemType(), problemType);
         Assert.assertEquals(problemPage.getProblemDescription(), problemDescription);
         Assert.assertEquals(problemPage.getProblemPropose(), problemSolution);
-        receivedURLs = problemPage.getImageURLs();
+        receivedURLs = problemPage.getAllImagesURLs();
         for(int i = 0; i < receivedURLs.size(); i++) {
             Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(receivedURLs.get(i), imageURLs.get(i)));
         }
@@ -100,21 +117,28 @@ public class LocalTestOne {
             Thread.sleep(2000);
         } catch (Exception e) {
         }
-        problemPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
-        //problemPage.logIn(newUserEmail, newUserPassword);
+        //problemPage.register(newUserFirstName, newUserLastName, newUserEmail, newUserPassword);
+        problemPage.logIn(newUserEmail, newUserPassword);
         try {
             Thread.sleep(2000);
         } catch (Exception e) {
         }
         problemPage.addComments(latitude, longitude, userComments);
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+        }
         problemPage.logOut();
 
         adminPage.logIn(adminEmail, adminPassword);
+        */
         try {
             Thread.sleep(2000);
         } catch (Exception e) {
         }
-        problemPage.deleteComments(latitude, longitude);
+        //problemPage.deleteComments(latitude, longitude);
+        problemPage.openProblemById(id);
+        adminPage.pressDeleteProblemButton();
         adminPage.logOut();
 
         driver.quit();

@@ -85,7 +85,7 @@ public class LocalTestThree {
         Assert.assertEquals(problemPage.getProblemType(), problemType);
         Assert.assertEquals(problemPage.getProblemDescription(), problemDescription);
         Assert.assertEquals(problemPage.getProblemPropose(), problemSolution);
-        receivedURLs = problemPage.getImageURLs();
+        receivedURLs = problemPage.getAllImagesURLs();
         for(int i = 0; i < receivedURLs.size(); i++) {
             Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(receivedURLs.get(i), imageURLs.get(i)));
         }

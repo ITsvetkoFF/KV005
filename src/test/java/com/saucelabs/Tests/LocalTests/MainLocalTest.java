@@ -73,7 +73,7 @@ public class MainLocalTest {
 
 
 
-        anyPage.addProblem(latitude, longitude, problemTitle, problemType, problemDescription,
+        anyPage.addProblemToVisibleCenter(latitude, longitude, problemTitle, problemType, problemDescription,
                 problemSolution, imageURLs, imageComments);
         anyPage.logIn(adminEmail, adminPassword);
 
@@ -89,7 +89,7 @@ public class MainLocalTest {
         Assert.assertTrue(problemPage.getProblemDescription().equals(problemDescription));
         Assert.assertTrue(problemPage.getProblemPropose().equals(problemSolution));
 
-        gettedURLs = problemPage.getImageURLs();
+        gettedURLs = problemPage.getAllImagesURLs();
         for(int i = 0; i < gettedURLs.size(); i++) {
             Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(gettedURLs.get(i), imageURLs.get(i)));
         }

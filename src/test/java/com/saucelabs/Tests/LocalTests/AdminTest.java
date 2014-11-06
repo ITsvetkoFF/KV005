@@ -51,11 +51,11 @@ public class AdminTest {
             js.executeScript("navigator.geolocation.getCurrentPosition = function(success) { success({coords: {latitude: 50.649460, longitude: 30.731506}}); }");
             AdminPage adminPage = new AdminPage(driver);
             adminPage.logIn("admin@.com", "admin");
-            problems = adminPage.getProblems();
+            problems = adminPage.getAllProblemsForModeration();
             for (WebElement problem: problems) {
                 problem.click();
                 Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problem.getText()));
-                Assert.assertTrue(problem.getText().equals(adminPage.getProblemTitle()));
+                Assert.assertEquals(problem.getText(), adminPage.getProblemTitle());
                 //adminPage.approveProblem(problem.getText());
             }
             adminPage.logOut();

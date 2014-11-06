@@ -63,7 +63,7 @@ public class FiltersTest {
         String imageURLsString = "";
         String imageCommentsString = "";
         anyPage.logIn("admin@.com","admin");
-        anyPage.addProblem(50.255, 30.255, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", Arrays.asList(imageURLsString.split("\n")), Arrays.asList(imageCommentsString.split("\n")));
+        anyPage.addProblemToVisibleCenter(50.255, 30.255, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", Arrays.asList(imageURLsString.split("\n")), Arrays.asList(imageCommentsString.split("\n")));
         anyPage.logOut();
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();

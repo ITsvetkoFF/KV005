@@ -84,13 +84,17 @@ public class ProblemPage extends AnyPage{
         return driver.findElements(PROBLEM_PROPOSE).get(1).getAttribute("textContent");
     }
 
+    public String getHostURL(){
+        String currentUrlHost = driver.getCurrentUrl().split("/")[2];
+        return "http://" + currentUrlHost + "/";
+    }
+
     public List<String> getAllImagesURLs(){
         int imagesAmount = driver.findElements(IMAGES_EXISTED).size();
         List<String> imageUrls = new ArrayList<>();
-        String currentUrlHost = driver.getCurrentUrl().split("/")[2];
+        String currentUrlHost = getHostURL();
         for(int i = 1; i <= imagesAmount; i++) {
-            imageUrls.add("http://" + currentUrlHost + "/"
-            + driver.findElement(getImageSRCByItsOrderNumber(i)).getAttribute("ng-src"));
+            imageUrls.add(currentUrlHost + driver.findElement(getImageSRCByItsOrderNumber(i)).getAttribute("ng-src"));
         }
         return imageUrls;
     }
@@ -119,6 +123,7 @@ public class ProblemPage extends AnyPage{
 
     public void addComments(double latitude, double longitude, List<String> comments) {
         clickAtProblemByCoordinateVisible(latitude, longitude);
+
         driver.findElement(COMMENTS_BUTTON).click();
         for(String comment : comments) {
             driver.findElement(ADD_COMMENT_TEXT_FIELD).sendKeys(comment);
@@ -128,7 +133,7 @@ public class ProblemPage extends AnyPage{
     }
 
     public void deleteComments(double latitude, double longitude) {
-//        clickAtProblemByCoordinateVisible(latitude, longitude);
+        clickAtProblemByCoordinateVisible(latitude, longitude);
         driver.findElement(COMMENTS_BUTTON).click();
         int commentsAmount = driver.findElements(ADDED_COMMENTS).size();
         for(int i = 0; i < commentsAmount; i++) {
@@ -145,25 +150,8 @@ public class ProblemPage extends AnyPage{
         }
         return comments;
     }
+
+    public void openProblemById(int id) {
+        driver.get(getHostURL() + "#/problem/showProblem/" + id);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
