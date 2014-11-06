@@ -7,8 +7,8 @@ import java.awt.event.KeyEvent;
 /**
  * Created by Tanya on 02.11.2014.
  */
-public class DropZoneUploadThread extends Thread {
-    public DropZoneUploadThread(String filePath) {
+public class ClipboardUploadThread extends Thread {
+    public ClipboardUploadThread(String filePath) {
         super(new Runner(filePath));
     }
 }
@@ -21,7 +21,7 @@ class Runner implements Runnable {
 
     public void run() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1500);
             Robot robot = new Robot();
             StringSelection stringSelection = new StringSelection(filePath);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);

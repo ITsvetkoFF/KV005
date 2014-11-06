@@ -40,7 +40,7 @@ public class LocalTestTwo {
         List<String>    receivedURLs;
         List<String>    receivedComments;
         String          afterDate       = "31 жовт. 2014";
-        String          beforeDate      = "01 лист. 2014";
+        String          beforeDate      = "05 лист. 2014";
 
 
         WebDriver driver = new FirefoxDriver();
@@ -52,7 +52,7 @@ public class LocalTestTwo {
         AdminPage adminPage   = new AdminPage(driver);
         ProblemPage problemPage = new ProblemPage(driver);
 
-        anyPage.addProblem(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
+        anyPage.addProblemToVisibleCenter(latitude, longitude, problemTitle, problemType, problemDescription, problemSolution,
                 imageURLs, imageComments);
         try {
             Thread.sleep(1000);
@@ -67,22 +67,22 @@ public class LocalTestTwo {
         }
         adminPage.logOut();
 
-        anyPage.clickZoomOut();
-        anyPage.openFiltersBoard();
-        anyPage.setAfterDate(afterDate);
-        anyPage.setBeforeDate(beforeDate);
-        anyPage.selectOnlyOneFilter(problemType);
-
+//        anyPage.clickZoomOut();
+//        anyPage.openFiltersBoard();
+//        anyPage.setAfterDate(afterDate);
+//        anyPage.setBeforeDate(beforeDate);
+//        anyPage.selectOnlyOneFilter(problemType);
+//
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
-        problemPage.clickAtProblemByCoordinate(latitude, longitude);
+        problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         Assert.assertEquals(problemPage.getProblemTitle(), problemTitle);
         Assert.assertEquals(problemPage.getProblemType(), problemType);
         Assert.assertEquals(problemPage.getProblemDescription(), problemDescription);
         Assert.assertEquals(problemPage.getProblemPropose(), problemSolution);
-        receivedURLs = problemPage.getImageURLs();
+        receivedURLs = problemPage.getAllImagesURLs();
         for(int i = 0; i < receivedURLs.size(); i++) {
             Assert.assertTrue(ImageDistanceCalculator.isImagesSimilar(receivedURLs.get(i), imageURLs.get(i)));
         }

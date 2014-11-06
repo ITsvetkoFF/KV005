@@ -12,7 +12,6 @@ public interface IMapPage {
     void setVisibleView(double latitude, double longitude, int zoom);
     void clickAtPagesCenter();
     void clickAtVisibleMapCenter(int offset);
-    void clickAtProblemByCoordinate(double latitude, double longitude);
     void clickAtProblemByCoordinateVisible (double latitude, double longitude);
 
     // for filters
@@ -20,6 +19,9 @@ public interface IMapPage {
     void clickZoomOut();
     void openFiltersBoard();
     void selectAllExceptOneFilter(int typeNumber) throws Exception;
+
+    void selectAllExceptOneFilter(String typeName);
+
     void selectOnlyOneFilter(int typeNumber);
     void selectOnlyOneFilter(String typeName);
     void setAfterDate(String afterDate);
