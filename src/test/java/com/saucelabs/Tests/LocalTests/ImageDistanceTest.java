@@ -2,7 +2,7 @@ package com.saucelabs.Tests.LocalTests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import com.saucelabs.utils.ImageDistanceCalculator;
+import utility.ImageDistanceCalculator;
 
 import java.io.IOException;
 

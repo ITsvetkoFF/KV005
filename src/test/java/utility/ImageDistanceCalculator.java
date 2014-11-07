@@ -1,4 +1,4 @@
-package com.saucelabs.utils;
+package utility;
 
 import javax.imageio.ImageIO;
 import javax.media.jai.iterator.RandomIter;
@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
