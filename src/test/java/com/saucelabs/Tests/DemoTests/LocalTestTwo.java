@@ -3,7 +3,7 @@ package com.saucelabs.Tests.DemoTests;
 import com.saucelabs.AdminPage;
 import com.saucelabs.AnyPage;
 import com.saucelabs.ProblemPage;
-import com.saucelabs.utils.ImageDistanceCalculator;
+import utility.ImageDistanceCalculator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;

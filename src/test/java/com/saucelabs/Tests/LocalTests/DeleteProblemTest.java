@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Yermek on 05.11.2014.
  */
 public class DeleteProblemTest {
+    //@BeforeClass
     @Test
     public void deleteProblemUI() {
         WebDriver driver = new FirefoxDriver();

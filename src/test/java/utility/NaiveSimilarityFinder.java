@@ -1,4 +1,4 @@
-package com.saucelabs.utils;
+package utility;
 
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -22,12 +22,9 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.image.renderable.ParameterBlock;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.media.jai.InterpolationNearest;
-import javax.media.jai.JAI;
 import javax.media.jai.iterator.RandomIter;
 import javax.media.jai.iterator.RandomIterFactory;
 import javax.swing.ImageIcon;
