@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import utility.Constant;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,10 +18,10 @@ public class DeleteProblemTest {
     public void deleteProblemUI() {
         WebDriver driver = new FirefoxDriver();
 
-        driver.get("http://localhost:8090");
+        driver.get(Constant.URLlocal);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         AdminPage adminPage = new AdminPage(driver);
-        adminPage.logIn("admin@.com", "admin");
+        adminPage.logIn(Constant.Username, Constant.Password);
 
         Assert.assertTrue(1 + 1 == 2);
         driver.quit();
