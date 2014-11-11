@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utility.Constant;
 import utility.ExcelUtils;
 
+import java.net.*;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -66,8 +67,6 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
         }
         //}
         //catch (Exception e) {};
-
-
         driver.findElement(RESOURCE_BUTTON).click();
         List<WebElement> resources2 = driver.findElements(LIST_RESOURCES);
         for (WebElement listElement : resources2){
@@ -162,4 +161,31 @@ public class ResourcesPage extends AnyPage implements IResourcesPage{
         }
     }
 
+    public void getCookieUsingCookieHandler() {
+        try {
+            // Instantiate CookieManager;
+            // make sure to set CookiePolicy
+            CookieManager manager = new CookieManager();
+            manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+            CookieHandler.setDefault(manager);
+
+            // get content from URLConnection;
+            // cookies are set by web site
+            URL url = new URL("http://localhost:8090/#/map");
+            URLConnection connection = url.openConnection();
+            connection.getContent();
+
+            // get cookies from underlying
+            // CookieStore
+            CookieStore cookieJar =  manager.getCookieStore();
+            List <HttpCookie> cookies =
+                    cookieJar.getCookies();
+            for (HttpCookie cookie: cookies) {
+                System.out.println("CookieHandler retrieved cookie: " + cookie);
+            }
+        } catch(Exception e) {
+            System.out.println("Unable to get cookie using CookieHandler");
+            e.printStackTrace();
+        }
+    }
 }
