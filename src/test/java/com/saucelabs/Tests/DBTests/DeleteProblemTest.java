@@ -8,6 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import utility.Constant;
+import utility.FileSystem;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -40,8 +41,14 @@ public class DeleteProblemTest {
 
     @Test
     public void getPhotosDB() throws SQLException, ClassNotFoundException {
+        FileSystem fs = new FileSystem(Constant.Path_ImagesLocalFolder);
         DeleteProblemDAO dao = new DeleteProblemDAO();
-        ArrayList<Map<String, String>> problemMap = dao.getPhotosByProblemId(191);
+        ArrayList<Map<String, String>> photos = dao.getPhotosByProblemId(191);
+
+        for (int i = 0; i < photos.size(); i++) {
+            System.out.println(photos.get(i).get("Link"));
+            System.out.println(fs.isImageFilePresentInFolder(photos.get(i).get("Link")));
+        }
     }
 }
 
