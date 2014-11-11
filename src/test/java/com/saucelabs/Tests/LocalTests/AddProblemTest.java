@@ -7,9 +7,11 @@ import org.json.JSONException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -34,12 +36,12 @@ public class AddProblemTest {
     public List<String> imagePath = Arrays.asList("C:\\Users\\Public\\Pictures\\Sample Pictures\\desert.jpg",
                                                   "C:\\Users\\Public\\Pictures\\Sample Pictures\\koala.jpg");
     public List<String> imageComments = Arrays.asList("imageComment1", "imageComment2");
-    public String problemComment = "problemComment1";
+    public List<String> problemComments = Arrays.asList("problemComment1");
 
 
     @BeforeSuite
     public void beforeTestSuite() {
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.get("http://localhost:8090/#/map");
         anyPage.logIn("admin@.com", "admin");
     }
@@ -56,8 +58,9 @@ public class AddProblemTest {
 
     @Test(dependsOnMethods = "addProblem")
     public void addProblemComment() {
-        problemPage.addProblemComment(latitude, longitude, problemComment);
-        Assert.assertEquals(problemComment, problemPage.getComments().get(0));  //TODO get(0)
+        problemPage.addComments(latitude, longitude, problemComments);
+        for (int i = 0; i < problemComments.size(); i++)
+            Assert.assertEquals(problemComments.get(i), problemPage.getComments().get(i)); //TODO maybe
     }
 
     @Test(dependsOnMethods = "addProblemComment")
@@ -69,5 +72,10 @@ public class AddProblemTest {
         for (int i = 0; i < commentsCount; i++) {
             Assert.assertEquals(commentsUI.get(i), commentsDB.get(i));
         }
+    }
+
+    @AfterSuite
+    public void afterTestSuite() {
+        driver.quit();
     }
 }

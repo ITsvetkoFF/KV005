@@ -30,9 +30,6 @@ public class ProblemPage extends AnyPage{
     private static final By ALL_ACTIVITIES = By.className("b-activity__comments-item");
     private static final By CHECKER_THAT_ACTIVITY_IS_A_COMMENT = By.xpath(".//i[@class='fa fa-weixin b-activity__comments-item-image']");
 
-    public static final By COMMENT_PROBLEM_TAB = By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[2]");
-    public static final By PROBLEM_COMMENT_FIELD = By.xpath("//textarea[@class='form-control ng-pristine ng-valid']");
-    public static final By ADD_PROBLEM_COMMENT_SUBMIT_BUTTON = By.xpath("//a[@class='btn btn-default']");
 
     private WebDriver driver;
 
@@ -157,13 +154,5 @@ public class ProblemPage extends AnyPage{
 
     public void openProblemById(int id) {
         driver.get(getHostURL() + "#/problem/showProblem/" + id);
-    }
-
-    public void addProblemComment(double latitude, double longitude, String problemComment) {
-
-        clickAtProblemByCoordinateVisible(latitude, longitude);
-        driver.findElement(COMMENT_PROBLEM_TAB).click();
-        driver.findElement(PROBLEM_COMMENT_FIELD).sendKeys(problemComment);
-        driver.findElement(ADD_PROBLEM_COMMENT_SUBMIT_BUTTON).click();
     }
 }
