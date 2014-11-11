@@ -13,13 +13,14 @@ public class BaseDAO {
     private String userName = "root";
     private String userPassword = "root";
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection getConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
         Connection connection = DriverManager.getConnection(url, userName, userPassword);
         return connection;
     }
 
-    public Connection getConnection(String url, String userName, String userPassword) throws ClassNotFoundException, SQLException {
+    public Connection getConnection(String url, String userName, String userPassword)
+            throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
         Connection connection = DriverManager.getConnection(url, userName, userPassword);
         return connection;

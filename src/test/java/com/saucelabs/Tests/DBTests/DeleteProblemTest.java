@@ -1,6 +1,7 @@
-package com.saucelabs.Tests.LocalTests;
+package com.saucelabs.Tests.DBTests;
 
 import com.saucelabs.AdminPage;
+import com.saucelabs.Tests.DAO.DeleteProblemDAO;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -8,6 +9,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import utility.Constant;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,4 +31,17 @@ public class DeleteProblemTest {
         Assert.assertTrue(1 + 1 == 2);
         driver.quit();
     }
+
+    @Test
+    public void getProblemDB() throws SQLException, ClassNotFoundException {
+        DeleteProblemDAO dao = new DeleteProblemDAO();
+        Map<String, String> problemMap = dao.getProblemById(1);
+    }
+
+    @Test
+    public void getPhotosDB() throws SQLException, ClassNotFoundException {
+        DeleteProblemDAO dao = new DeleteProblemDAO();
+        ArrayList<Map<String, String>> problemMap = dao.getPhotosByProblemId(191);
+    }
 }
+
