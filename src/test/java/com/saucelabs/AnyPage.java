@@ -39,9 +39,7 @@ public class AnyPage extends MapPage implements IAnyPage {
     public static final By PASSWORD_REPEAT_FIELD = By.name("password_second");
     public static final By REGISTRATION_SUBMIT_BUTTON = By.className("b-form__button");
     public static final By LOGGED_IN__USER_NAME = By.xpath("//i[contains(@class, 'fa-user')]/..");
-    public static final By COMMENT_PROBLEM_TAB = By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[2]");
-    public static final By PROBLEM_COMMENT_FIELD = By.xpath("//textarea[@class='form-control ng-pristine ng-valid']");
-    public static final By ADD_PROBLEM_COMMENT_SUBMIT_BUTTON = By.xpath("//a[@class='btn btn-default']");
+
 
     private WebDriver driver;
 
@@ -162,13 +160,5 @@ public class AnyPage extends MapPage implements IAnyPage {
                     .until(ExpectedConditions.presenceOfElementLocated(ALERT));
             alert.findElement(CLOSE_CROSS).click();
         }
-    }
-
-    public void addProblemComment(int latitude, int longitude) {
-
-        clickAtProblemByCoordinateVisible(latitude, longitude);
-        driver.findElement(COMMENT_PROBLEM_TAB).click();
-        driver.findElement(PROBLEM_COMMENT_FIELD).sendKeys("problemComment1");
-        driver.findElement(ADD_PROBLEM_COMMENT_SUBMIT_BUTTON).click();
     }
 }

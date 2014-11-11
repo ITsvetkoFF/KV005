@@ -4,13 +4,12 @@ import com.saucelabs.AnyPage;
 import com.saucelabs.ProblemPage;
 import com.saucelabs.Tests.DAO.AddProblemDAO;
 import org.json.JSONException;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -20,9 +19,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class AddProblemTest {
 
-    public static final By COMMENT_PROBLEM_TAB = By.xpath("//ul[@class='nav nav-tabs nav-justified']/li[2]");
-    public static final By PROBLEM_COMMENT_FIELD = By.xpath("//textarea[@class='form-control ng-pristine ng-valid']");
-    public static final By ADD_PROBLEM_COMMENT_SUBMIT_BUTTON = By.xpath("//a[@class='btn btn-default']");
+    static WebDriver driver = new FirefoxDriver();
+    static AnyPage anyPage = new AnyPage(driver);
+    static ProblemPage problemPage = new ProblemPage(driver);
+    static AddProblemDAO addProblemDAO = new AddProblemDAO();
+
     public double latitude = 50.1;
     public double longitude = 30.1;
     public String problemNameTest = "problem1";
@@ -33,49 +34,34 @@ public class AddProblemTest {
     public List<String> imagePath = Arrays.asList("C:\\Users\\Public\\Pictures\\Sample Pictures\\desert.jpg",
                                                   "C:\\Users\\Public\\Pictures\\Sample Pictures\\koala.jpg");
     public List<String> imageComments = Arrays.asList("imageComment1", "imageComment2");
+    public String problemComment = "problemComment1";
 
-    //@Test
-    public void addProblem() throws SQLException, ClassNotFoundException {
 
-        WebDriver driver = new FirefoxDriver();
-        AnyPage anyPage = new AnyPage(driver);
-        ProblemPage problemPage = new ProblemPage(driver);
-
+    @BeforeSuite
+    public void beforeTestSuite() {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get("http://localhost:8090/#/map");
         anyPage.logIn("admin@.com", "admin");
+    }
+
+    @Test
+    public void addProblem() throws SQLException, ClassNotFoundException {
+
         anyPage.addProblemToVisibleCenter(latitude, longitude, problemNameTest, problemTypeTest,
                                           problemDescriptionTest, problemProposeTest, imagePath, imageComments);
         driver.navigate().refresh();
         anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         Assert.assertEquals(problemPage.getProblemTitle(), problemNameTest);
-        driver.quit();
     }
 
+    @Test(dependsOnMethods = "addProblem")
     public void addProblemComment() {
-
-        WebDriver driver = new FirefoxDriver();
-        AnyPage anyPage = new AnyPage(driver);
-
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("http://localhost:8090/#/map");
-        anyPage.logIn("admin@.com", "admin");
-        anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
-        driver.findElement(COMMENT_PROBLEM_TAB).click();
-        driver.findElement(PROBLEM_COMMENT_FIELD).sendKeys("problemComment1");
-        driver.findElement(ADD_PROBLEM_COMMENT_SUBMIT_BUTTON).click();
+        problemPage.addProblemComment(latitude, longitude, problemComment);
+        Assert.assertEquals(problemComment, problemPage.getComments().get(0));  //TODO get(0)
     }
 
-    @Test   //use only with previous test
+    @Test(dependsOnMethods = "addProblemComment")
     public void commentUIEqualsDB() throws SQLException, ClassNotFoundException, JSONException {
-
-        WebDriver driver = new FirefoxDriver();
-        AnyPage anyPage = new AnyPage(driver);
-        ProblemPage problemPage = new ProblemPage(driver);
-        AddProblemDAO addProblemDAO = new AddProblemDAO();
-
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.get("http://localhost:8090/#/map");
         anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         List<String> commentsUI = problemPage.getComments();
         List<String> commentsDB = addProblemDAO.getCommentsFromDB(problemPage.getProblemId(latitude, longitude));
