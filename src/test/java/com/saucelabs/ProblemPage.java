@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,8 +28,8 @@ public class ProblemPage extends AnyPage{
     private static final By ADDED_COMMENTS = By.xpath("//div[contains(@class,'b-activity__comments-item')]/i[contains(@class,'fa-weixin')]");
     private static final By ADD_COMMENT_BUTTON = By.xpath("//div[@class='form-group']/a[contains(@class,'btn')]");
     private static final By DELETE_COMMENT_BUTTON = By.xpath(".//div[2]/span[2]/i");
-    private static final By ALL_ACTIVITIES = By.className("b-activity__comments-item");
-    private static final By CHECKER_THAT_ACTIVITY_IS_A_COMMENT = By.xpath(".//i[@class='fa fa-weixin b-activity__comments-item-image']");
+    //private static final By ALL_ACTIVITIES = By.className("b-activity__comments-item");
+    //private static final By CHECKER_THAT_ACTIVITY_IS_A_COMMENT = By.xpath(".//i[@class='fa fa-weixin b-activity__comments-item-image']");
 
 
     private WebDriver driver;
@@ -69,8 +70,10 @@ public class ProblemPage extends AnyPage{
     }
 
     public int getProblemId(double latitude, double longitude) {
+        List<String> url;
         clickAtProblemByCoordinateVisible(latitude, longitude);
-        return Integer.parseInt(driver.getCurrentUrl().split("/")[6]);
+        url = Arrays.asList(driver.getCurrentUrl().split("/"));
+        return Integer.parseInt(url.get(url.size() - 1));
     }
 
     public String getProblemTitle() {
