@@ -59,6 +59,7 @@ public class DeleteProblemTest {
 
     @BeforeGroups(groups = {"delete"})
     public void SetUp() {
+        System.out.println("BeforeGroups delete.");
         driver = new FirefoxDriver();
 
         driver.get(Constant.URLlocal);
@@ -70,34 +71,51 @@ public class DeleteProblemTest {
 
     @AfterGroups(groups = {"delete"})
     public void TearDown() {
+        System.out.println("AfterGroups delete.");
         AdminPage adminPage = new AdminPage(driver);
         adminPage.logOut();
         driver.quit();
     }
 
     @Test(groups = {"delete"})
-    public void addProblem() throws IOException {
-
+    public void addProblemUI() throws IOException {
+        System.out.print("Groups delete, Test addProblemUI. ");
         AnyPage anyPage     = new AnyPage(driver);
         ProblemPage problemPage = new ProblemPage(driver);
 
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+        }
         anyPage.addProblemToVisibleCenter(latitude, longitude,
                 problemTitle, problemType, problemDescription, problemSolution,
                 imageURLs, imageComments);
+        System.out.print("Problem added. ");
         try {
             Thread.sleep(1000);
         } catch (Exception e) {
         }
         driver.navigate().refresh();
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+        }
         problemPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         problemId = problemPage.getProblemId(latitude, longitude);
+        System.out.println("Problem ID stored. ");
         Assert.assertTrue(1 + 1 == 2);
     }
 
     @Test(groups = {"delete"})
     public void deleteProblemUI() {
+        System.out.print("Groups delete, Test deleteProblemUI. ");
         AdminPage adminPage   = new AdminPage(driver);
+        try {
+            Thread.sleep(1000);
+        } catch (Exception e) {
+        }
         adminPage.pressDeleteProblemButton();
+        System.out.println("Problem deleted. ");
         Assert.assertTrue(1 + 1 == 2);
     }
 
@@ -119,4 +137,3 @@ public class DeleteProblemTest {
         }
     }
 }
-

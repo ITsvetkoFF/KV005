@@ -13,10 +13,7 @@ public class DeleteProblemTestFactory {
     public Object[] createInstances(String latitudeString, String longitudeString, String problemTitle,
                                     String problemType, String problemDescription, String problemSolution,
                                     String imageURLsString, String imageCommentsString,
-                                    String adminEmail, String adminPassword,
-                                    String newUserFirstName, String newUserLastName,
-                                    String newUserEmail, String newUserPassword,
-                                    String userCommentsString) {
+                                    String adminEmail, String adminPassword) {
         return new Object[] {new DeleteProblemTest(latitudeString, longitudeString, problemTitle,
                 problemType, problemDescription, problemSolution, imageURLsString, imageCommentsString,
                 adminEmail, adminPassword)};
