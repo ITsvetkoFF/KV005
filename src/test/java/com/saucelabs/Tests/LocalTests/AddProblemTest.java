@@ -43,6 +43,7 @@ public class AddProblemTest {
     public void beforeTestSuite() {
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.get("http://localhost:8090/#/map");
+        //driver.get("http://176.36.11.25/#/map");
         anyPage.logIn("admin@.com", "admin");
     }
 
@@ -57,10 +58,11 @@ public class AddProblemTest {
     }
 
     @Test(dependsOnMethods = "addProblem")
-    public void addProblemComment() {
+    public void addProblemComment() throws SQLException, JSONException, ClassNotFoundException {
         problemPage.addComments(latitude, longitude, problemComments);
+        int problemId = problemPage.getProblemId(latitude, longitude);
         for (int i = 0; i < problemComments.size(); i++)
-            Assert.assertEquals(problemComments.get(i), problemPage.getComments().get(i)); //TODO maybe
+            Assert.assertEquals(problemComments.get(i), addProblemDAO.getCommentsFromDB(problemId)); //TODO
     }
 
     @Test(dependsOnMethods = "addProblemComment")

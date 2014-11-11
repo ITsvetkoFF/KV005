@@ -76,7 +76,7 @@ public class AddProblemDAO extends BaseDAO {
 
         Statement statement = getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery("select * from activities where Problems_Id = " +
-                problemsId + " and ActivityTypes_Id = 5");
+                                                      problemsId + " and ActivityTypes_Id = 5");
         List<String> comments = new ArrayList<>();
         while (resultSet.next()) {
             JSONObject jsonObject = new JSONObject(resultSet.getString("Content"));
