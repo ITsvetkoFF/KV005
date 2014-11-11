@@ -10,7 +10,7 @@ import java.util.List;
  * Created by nklimotc on 05.11.2014.
  */
 public class ResourcesDAO extends BaseDAO {
-    public List<String> getAllAbout() throws SQLException, ClassNotFoundException {
+    public List<String> getAllAliases() throws SQLException, ClassNotFoundException {
         Statement statement = getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery("select * from resources;");
         List<String> result = new ArrayList<>();
@@ -21,5 +21,13 @@ public class ResourcesDAO extends BaseDAO {
         }
         statement.close();
         return result;
+    }
+
+    public void addAllAliases() throws SQLException, ClassNotFoundException {
+        Statement statement1 = getConnection().createStatement();
+        ResultSet resultSet = statement1.executeQuery("insert into resources values;");
+
+        statement1.close();
+        return ;
     }
 }
