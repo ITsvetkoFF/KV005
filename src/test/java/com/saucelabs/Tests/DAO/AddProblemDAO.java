@@ -1,12 +1,11 @@
 package com.saucelabs.Tests.DAO;
 
-import org.testng.annotations.Test;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.*;
 
 /**
  * Created by rotiutc on 05.11.2014.
@@ -73,9 +72,16 @@ public class AddProblemDAO extends BaseDAO {
         return  photos;
     }
 
-    @Test
-    public void test() throws SQLException, ClassNotFoundException {
-        AddProblemDAO addProblemDAO = new AddProblemDAO();
-        addProblemDAO.getPhotosByProblemsId(16);
+    public List<String> getCommentsFromDB(int problemsId) throws SQLException, ClassNotFoundException, JSONException {
+
+        Statement statement = getConnection().createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from activities where Problems_Id = " +
+                problemsId + " and ActivityTypes_Id = 5");
+        List<String> comments = new ArrayList<>();
+        while (resultSet.next()) {
+            JSONObject jsonObject = new JSONObject(resultSet.getString("Content"));
+            comments.add(jsonObject.getString("Content"));
+        }
+        return  comments;
     }
 }
