@@ -158,4 +158,9 @@ public class ProblemPage extends AnyPage{
     public void openProblemById(int id) {
         driver.get(getHostURL() + "#/problem/showProblem/" + id);
     }
+
+    public void addVoteToProblemById(int id) {
+        driver.get(getHostURL() + "#/problem/showProblem/" + id);
+        driver.findElement(By.xpath("//button[@class='simple_like_img']")).click();
+    }
 }
