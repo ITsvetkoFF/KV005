@@ -51,7 +51,7 @@ public class ResourcesDAO extends BaseDAO {
 
         preparedStmt.setString  (1, title);
 
-        preparedStmt.executeUpdate();
+        preparedStmt.executeQuery();
 
         preparedStmt.close();
         return title;
@@ -64,7 +64,7 @@ public class ResourcesDAO extends BaseDAO {
 
         preparedStmt.setString  (1, title);
 
-        preparedStmt.executeUpdate();
+        preparedStmt.executeQuery();
 
         preparedStmt.close();
     }
