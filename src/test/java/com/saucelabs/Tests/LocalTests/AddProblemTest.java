@@ -11,9 +11,9 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,22 +58,19 @@ public class AddProblemTest {
     }
 
     @Test(dependsOnMethods = "addProblem")
-    public void addProblemComment() throws SQLException, JSONException, ClassNotFoundException {
+    public void commentsEqualsInDb() throws SQLException, JSONException, ClassNotFoundException {
         problemPage.addComments(latitude, longitude, problemComments);
         int problemId = problemPage.getProblemId(latitude, longitude);
-        for (int i = 0; i < problemComments.size(); i++)
-            Assert.assertEquals(problemComments.get(i), addProblemDAO.getCommentsFromDB(problemId)); //TODO
+        Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
     }
 
-    @Test(dependsOnMethods = "addProblemComment")
-    public void commentUIEqualsDB() throws SQLException, ClassNotFoundException, JSONException {
-        anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
-        List<String> commentsUI = problemPage.getComments();
-        List<String> commentsDB = addProblemDAO.getCommentsFromDB(problemPage.getProblemId(latitude, longitude));
-        int commentsCount = commentsUI.size();
-        for (int i = 0; i < commentsCount; i++) {
-            Assert.assertEquals(commentsUI.get(i), commentsDB.get(i));
-        }
+    @Test(dependsOnMethods = "addProblem")
+    public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
+        int problemId = problemPage.getProblemId(latitude, longitude);
+        problemPage.addVoteToProblemById(problemId);
+        String voteCount = problemPage.getVoteCountById(problemId);
+        String vote = addProblemDAO.getProblemsById(problemId).get("Votes");
+        Assert.assertEquals(vote, voteCount);
     }
 
     @AfterSuite
