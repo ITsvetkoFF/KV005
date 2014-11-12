@@ -11,7 +11,6 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,6 +61,14 @@ public class AddProblemTest {
         problemPage.addComments(latitude, longitude, problemComments);
         int problemId = problemPage.getProblemId(latitude, longitude);
         Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
+    }
+
+    @Test(dependsOnMethods = "addProblem")
+    public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
+        int problemId = problemPage.getProblemId(latitude, longitude);
+        problemPage.addVoteToProblemById(problemId);
+        String vote = addProblemDAO.getProblemsById(problemId).get("Votes");
+        Assert.assertEquals(vote, "1");
     }
 
     @AfterSuite
