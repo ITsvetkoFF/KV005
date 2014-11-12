@@ -116,7 +116,8 @@ public class ProblemPage extends AnyPage{
         }
         driver.findElement(THE_FIRST_ADDED_PHOTO).click();
         for(int i = 1; i <= commentsAmount; i++){
-            comments.add(driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li[" + i + "]/div")).getAttribute("textContent"));
+            comments.add(driver.findElement(By.xpath(".//div[@class='container slider']/div/ul/li[" + i + "]/div"))
+                    .getAttribute("textContent"));
             if (i < commentsAmount) {
                 driver.findElement(NEXT_PHOTO_CONTROL).click();
             }
@@ -159,14 +160,12 @@ public class ProblemPage extends AnyPage{
         driver.get(getHostURL() + "#/problem/showProblem/" + id);
     }
 
-    public String getVoteCountById(int id) {
-        driver.get(getHostURL() + "#/problem/showProblem/" + id);
-        String voteCount = driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-votes ng-binding']")).getText();
+    public String getVoteCount() {
+        String voteCount = driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-votes ng-binding']")).getText().substring(1).trim();
         return voteCount;
     }
 
-    public void addVoteToProblemById(int id) {
-        driver.get(getHostURL() + "#/problem/showProblem/" + id);
+    public void addVoteToProblem() {
         driver.findElement(By.xpath("//button[@class='simple_like_img']")).click();
     }
 }
