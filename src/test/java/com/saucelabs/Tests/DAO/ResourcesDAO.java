@@ -44,9 +44,9 @@ public class ResourcesDAO extends BaseDAO {
         preparedStmt.close();
         }
 
-    public void getResourceByTitle(String title) throws SQLException, ClassNotFoundException {
+    public String getResourceByTitle(String title) throws SQLException, ClassNotFoundException {
 
-        String query = "select Title = ? from resources;";
+        String query = "select * from resources where Title = ?;";
         PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
 
         preparedStmt.setString  (1, title);
@@ -54,11 +54,12 @@ public class ResourcesDAO extends BaseDAO {
         preparedStmt.executeUpdate();
 
         preparedStmt.close();
+        return title;
     }
 
     public void deleteResourceFromDB(String title) throws SQLException, ClassNotFoundException {
 
-        String query = "delete from resources where Title = ?)";
+        String query = "delete from resources where Title = ?;";
         PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
 
         preparedStmt.setString  (1, title);
