@@ -1,5 +1,9 @@
 package com.saucelabs.Tests.DAO;
 
+
+import com.mysql.jdbc.PreparedStatement;
+
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,8 +14,9 @@ import java.util.List;
  * Created by nklimotc on 05.11.2014.
  */
 public class ResourcesDAO extends BaseDAO {
+
     public List<String> getAllAliases() throws SQLException, ClassNotFoundException {
-        Statement statement = getConnection().createStatement();
+        Statement statement = getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").createStatement();
         ResultSet resultSet = statement.executeQuery("select * from resources;");
         List<String> result = new ArrayList<>();
 
@@ -23,11 +28,45 @@ public class ResourcesDAO extends BaseDAO {
         return result;
     }
 
-    public void addAllAliases() throws SQLException, ClassNotFoundException {
-        Statement statement1 = getConnection().createStatement();
-        ResultSet resultSet = statement1.executeQuery("insert into resources values;");
+    public void addResourceToDB(String alias, String title, String content, int isResource) throws SQLException, ClassNotFoundException {
 
-        statement1.close();
-        return ;
+        String query = "insert into resources (Alias, Title, Content, IsResource)"
+                + " values (?, ?, ?, ?)";
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
+
+        preparedStmt.setString  (1, alias);
+        preparedStmt.setString  (2, title);
+        preparedStmt.setString  (3, content);
+        preparedStmt.setInt     (4, isResource);
+
+        preparedStmt.executeUpdate();
+
+        preparedStmt.close();
+        }
+
+    public void editResourceInDB(String newAlias, String newTitle, String newContent, String existedAlias) throws SQLException, ClassNotFoundException {
+
+        String query = "update resources set Alias = ?, Title = ?, Content = ?)"
+                + " where (Alias = ?)";
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
+
+        preparedStmt.setString  (1, newAlias);
+        preparedStmt.setString  (2, newTitle);
+        preparedStmt.setString  (3, newContent);
+        preparedStmt.setString  (4, existedAlias);
+
+        preparedStmt.executeUpdate();
+
+        preparedStmt.close();
+    }
+
+    public void deleteResourceFromDB(String newTitle) throws SQLException, ClassNotFoundException {
+
+        String query = "delete from resources where Alias = newTitle)";
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
+
+        preparedStmt.executeUpdate();
+
+        preparedStmt.close();
     }
 }
