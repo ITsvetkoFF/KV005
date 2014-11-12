@@ -11,14 +11,16 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Olya on 11/8/14.
  */
 public class UserInfoDAO extends BaseDAO{
 
-    public String[] getInfo(String DB_login, String DB_password, String DB_URL, String Email) throws SQLException, ClassNotFoundException {
+    public Map getInfo(String DB_login, String DB_password, String DB_URL, String Email) throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");//эта строка загружает драйвер DB
 
         Connection connection = DriverManager.getConnection(DB_URL, DB_login, DB_password);
@@ -28,17 +30,15 @@ public class UserInfoDAO extends BaseDAO{
         }
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("select * from users where Email = \"" + Email + "\"");
-        String[] result = new String[4];
+        Map<String, String> Result = new HashMap<String,String>();
         while (resultSet.next()) {
-            //System.out.println(resultSet.getRow() + ". " + resultSet.getString("Name")
-            //+ "\t" + resultSet.getString("Surname") + "\t" + resultSet.getString("UserRoles_Id"));
-            result[0] = resultSet.getString("Name");
-            result[1] = resultSet.getString("Surname");
-            result[2] = resultSet.getString("Password");
-            result[3] = resultSet.getString("UserRoles_Id");
+            Result.put("Name", resultSet.getString("Name"));
+            Result.put("Surname", resultSet.getString("Surname"));
+            Result.put("Password",resultSet.getString("Password"));
+            Result.put("UserRoles_Id", resultSet.getString("UserRoles_Id"));
         }
         statement.close();
-        return result;
+        return Result;
 
     }
 

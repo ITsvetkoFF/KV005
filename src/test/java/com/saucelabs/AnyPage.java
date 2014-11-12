@@ -9,7 +9,9 @@ import utility.ClipboardUploadThread;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AnyPage extends MapPage implements IAnyPage {
 
@@ -41,6 +43,8 @@ public class AnyPage extends MapPage implements IAnyPage {
     public static final By PASSWORD_REPEAT_FIELD = By.name("password_second");
     public static final By REGISTRATION_SUBMIT_BUTTON = By.className("b-form__button");
     public static final By LOGGED_IN__USER_NAME = By.xpath("//i[contains(@class, 'fa-user')]/..");
+    public static final String USER_DROPDOWN = ".dropdown-toggle.b-menu__button.ng-binding";
+    public static final String NEWS_ICON = ".navbar-nav>li";
 
 
     private WebDriver driver;
@@ -165,15 +169,14 @@ public class AnyPage extends MapPage implements IAnyPage {
     }
 
     public String checkUsernameInRightCorner(){
-        WebElement alert = (new WebDriverWait(driver, 5))
-                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".dropdown-toggle.b-menu__button.ng-binding")));
-        String user_name = alert.findElement(By.cssSelector(".dropdown-toggle.b-menu__button.ng-binding")).getText();
+        explicitWaitForElement(5, USER_DROPDOWN);
+        String user_name =  driver.findElement(By.cssSelector(USER_DROPDOWN)).getText();
         return user_name;
     }
 
     public boolean checkNewsAvailability(){
         boolean newsExist = true;
-        List<WebElement> resources1 = driver.findElements(By.cssSelector(".navbar-nav>li"));
+        List<WebElement> resources1 = driver.findElements(By.cssSelector(NEWS_ICON));
         for (WebElement listElement : resources1){
             String searchText = listElement.getText();
             if (searchText.equals("НОВИНИ")){
@@ -186,21 +189,15 @@ public class AnyPage extends MapPage implements IAnyPage {
         return newsExist;
     }
 
-    public String getCookieName(String value) throws UnsupportedEncodingException {
-        /*Cookie cookie_name = driver.manage().getCookieNamed("userName");
-        Cookie cookie_surname = driver.manage().getCookieNamed("userSurname");
-        Cookie cookie_role = driver.manage().getCookieNamed("userRole");
-        Cookie cookie_email = driver.manage().getCookieNamed("userEmail");*/
+    public Map getCookiesName() throws UnsupportedEncodingException {
+
         String cookie_value = null;
-        if (value.equals("userEmail")){
-            Cookie cookie = driver.manage().getCookieNamed(value);
-            cookie_value = URLDecoder.decode(cookie.getValue(), "UTF-8");
-        }
-        else{
-            Cookie cookie = driver.manage().getCookieNamed(value);
-            cookie_value = cookie.getValue();
-        }
-        return cookie_value;
+        Map<String, String> Result = new HashMap<String,String>();
+        Result.put("Name", driver.manage().getCookieNamed("userName").getValue());
+        Result.put("Surname", driver.manage().getCookieNamed("userSurname").getValue());
+        Result.put("Email", URLDecoder.decode(driver.manage().getCookieNamed("userEmail").getValue(), "UTF-8"));
+        Result.put("UserRole", driver.manage().getCookieNamed("userRole").getValue());
+        return Result;
     }
 
     public void explicitWaitForButton(int time, String cssValue){
@@ -211,6 +208,14 @@ public class AnyPage extends MapPage implements IAnyPage {
     public void explicitWaitForElement(int time, String cssValue){
         WebDriverWait wait1  = new WebDriverWait(driver, time);
         wait1.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssValue)));
+    }
+
+    public void changePassword(String currentPassword, String newPassword){
+        driver.findElement(By.cssSelector(USER_DROPDOWN)).click();
+        driver.findElement(By.linkText("ЗМІНИТИ ПАРОЛЬ")).click();
+        driver.findElement(By.cssSelector("#old_password")).sendKeys(currentPassword);
+        driver.findElement(By.cssSelector("#new_password")).sendKeys(newPassword);
+        driver.findElement(By.cssSelector("#new_password_second")).sendKeys(newPassword);
     }
 
 }
