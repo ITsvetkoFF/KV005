@@ -7,9 +7,7 @@ import com.saucelabs.Tests.DAO.DeleteProblemDAO;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterGroups;
-import org.testng.annotations.BeforeGroups;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import utility.Constant;
 import utility.FileSystem;
 import utility.ImageDistanceCalculator;
@@ -56,7 +54,7 @@ public class DeleteProblemTest {
         this.adminPassword      = adminPassword;
     }
 
-    @BeforeGroups(groups = {"delete"})
+    @BeforeClass(groups = {"delete"})
     public void SetUp() {
         System.out.println("BeforeGroups delete.");
         driver = new FirefoxDriver();
@@ -68,7 +66,7 @@ public class DeleteProblemTest {
         adminPage.logIn(Constant.Username, Constant.Password);
     }
 
-    @AfterGroups(groups = {"delete"})
+    @AfterClass(groups = {"delete"})
     public void TearDown() {
         System.out.println("AfterGroups delete.");
         AdminPage adminPage = new AdminPage(driver);

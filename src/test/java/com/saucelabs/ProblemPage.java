@@ -158,4 +158,15 @@ public class ProblemPage extends AnyPage{
     public void openProblemById(int id) {
         driver.get(getHostURL() + "#/problem/showProblem/" + id);
     }
+
+    public String getVoteCountById(int id) {
+        driver.get(getHostURL() + "#/problem/showProblem/" + id);
+        String voteCount = driver.findElement(By.xpath("//div[@class='b-problem-deatiled-info-votes ng-binding']")).getText();
+        return voteCount;
+    }
+
+    public void addVoteToProblemById(int id) {
+        driver.get(getHostURL() + "#/problem/showProblem/" + id);
+        driver.findElement(By.xpath("//button[@class='simple_like_img']")).click();
+    }
 }
