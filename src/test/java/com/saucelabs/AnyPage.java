@@ -1,12 +1,14 @@
 package com.saucelabs;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import utility.ClipboardUploadThread;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 public class AnyPage extends MapPage implements IAnyPage {
@@ -160,4 +162,54 @@ public class AnyPage extends MapPage implements IAnyPage {
             alert.findElement(CLOSE_CROSS).click();
         }
     }
+
+    public String checkUsernameInRightCorner(){
+        WebElement alert = (new WebDriverWait(driver, 5))
+                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".dropdown-toggle.b-menu__button.ng-binding")));
+        String user_name = alert.findElement(By.cssSelector(".dropdown-toggle.b-menu__button.ng-binding")).getText();
+        return user_name;
+    }
+
+    public boolean checkNewsAvailability(){
+        boolean newsExist = true;
+        List<WebElement> resources1 = driver.findElements(By.cssSelector(".navbar-nav>li"));
+        for (WebElement listElement : resources1){
+            String searchText = listElement.getText();
+            if (searchText.equals("НОВИНИ")){
+                System.out.println("Simple user sees News menu");
+            }
+            else {
+                newsExist = false;
+            }
+        }
+        return newsExist;
+    }
+
+    public String getCookieName(String value) throws UnsupportedEncodingException {
+        /*Cookie cookie_name = driver.manage().getCookieNamed("userName");
+        Cookie cookie_surname = driver.manage().getCookieNamed("userSurname");
+        Cookie cookie_role = driver.manage().getCookieNamed("userRole");
+        Cookie cookie_email = driver.manage().getCookieNamed("userEmail");*/
+        String cookie_value = null;
+        if (value.equals("userEmail")){
+            Cookie cookie = driver.manage().getCookieNamed(value);
+            cookie_value = URLDecoder.decode(cookie.getValue(), "UTF-8");
+        }
+        else{
+            Cookie cookie = driver.manage().getCookieNamed(value);
+            cookie_value = cookie.getValue();
+        }
+        return cookie_value;
+    }
+
+    public void explicitWaitForButton(int time, String cssValue){
+        WebDriverWait wait1  = new WebDriverWait(driver, time);
+        wait1.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssValue)));
+    }
+
+    public void explicitWaitForElement(int time, String cssValue){
+        WebDriverWait wait1  = new WebDriverWait(driver, time);
+        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssValue)));
+    }
+
 }

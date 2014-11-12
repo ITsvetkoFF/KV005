@@ -3,7 +3,7 @@ package com.saucelabs.Tests.DAO;
 import java.sql.*;
 
 /**
- * Created by Volodja on 11/8/14.
+ * Created by Olya on 11/8/14.
  */
 public class CreateNewUserDAO extends BaseDAO {
     static UserInfoDAO userInfoDB = new UserInfoDAO();

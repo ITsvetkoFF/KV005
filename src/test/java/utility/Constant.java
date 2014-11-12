@@ -15,4 +15,5 @@ public class Constant {
     public static final String File_LocalTestData = "LocalTestData.xlsx";
     public static final String Path_RemoteTestData = ".\\resources\\";
     public static final String File_RemoteTestData = "RemoteTestData.xlsx";
+    public static final String HashKey = "qawvAsgn2GRtPww066ShB6cX79ZUAV7KTzXXvNIzkr0IlLnJ";
 }

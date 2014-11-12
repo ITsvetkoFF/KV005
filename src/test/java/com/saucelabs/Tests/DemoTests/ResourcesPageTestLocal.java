@@ -31,12 +31,9 @@ import static java.sql.DriverManager.getConnection;
 /**
  * Created by Olya on 10/31/14.
  */
-public class ResourcesPageTestLocal extends BaseDAO {
+public class ResourcesPageTestLocal{
     static WebDriver driver = new FirefoxDriver();
     static ResourcesPage resourcesPage = new ResourcesPage(driver);
-    private String url = "jdbc:mysql://localhost:3306/enviromap";
-    private String userName = "root";
-    private String userPassword = "";
 
     @BeforeSuite
     public static void beforeTest() throws Exception{
@@ -70,7 +67,7 @@ public class ResourcesPageTestLocal extends BaseDAO {
 
         resourcesPage.createResource(ResourceTitle, ResourceAlias, ResourceBody, PlaceToSave);
         Assert.assertEquals(resourcesPage.existResource(ResourceTitle), PlaceToSave);
-        }
+    }
 
     @Test(dataProvider = "testData", dependsOnMethods = {"createResource"})
     public void editResource(String UserName, String Password, String ResourceTitle, String ResourceAlias, String ResourceBody, String PlaceToSave, String TextToAdd) throws Exception{
