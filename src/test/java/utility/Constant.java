@@ -15,4 +15,7 @@ public class Constant {
     public static final String File_LocalTestData = "LocalTestData.xlsx";
     public static final String Path_RemoteTestData = ".\\resources\\";
     public static final String File_RemoteTestData = "RemoteTestData.xlsx";
+    public static final String Path_DeleteProblemTestData = ".\\resources\\";
+    public static final String File_DeleteProblemTestData = "DeleteProblemTestData.xlsx";
+    public static final String Path_ImagesLocalFolder = "C:\\Users\\yermek\\KV004\\frontend\\dist\\photos\\large";
 }

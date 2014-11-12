@@ -16,7 +16,7 @@ public class AdminPage extends AnyPage implements IAdminPage {
     public static final By LIST_OF_PROBLEMS_UNDER_MODERATION = By.className("b-new-items__item");
     public static final By PROBLEM_UNDER_MODERATION_TITLE = By.xpath("//editproblemtitle/span");
     public static final By APPROVE_PROBLEM_TICK_MARK = By.xpath("..//ul/li");
-    public static final By DELETE_PROBLEM_BUTTON = By.className("btn-danger");
+    public static final By DELETE_PROBLEM_BUTTON = By.xpath("//button[contains(@ng-click,'deleteProblemFromDb()')]");
     public static final By APPROVE_DELETE_PROBLEM_BUTTON = By.className("btn-warning");
     private WebDriver driver;
 
@@ -69,7 +69,7 @@ public class AdminPage extends AnyPage implements IAdminPage {
 
     public void pressDeleteProblemButton() {
         WebDriverWait wait = new WebDriverWait(driver, 300);
-        driver.findElements(DELETE_PROBLEM_BUTTON).get(2).click();
+        driver.findElement(DELETE_PROBLEM_BUTTON).click();
         WebElement approve = wait.until(ExpectedConditions.visibilityOfElementLocated(APPROVE_DELETE_PROBLEM_BUTTON));
         approve.click();
     }

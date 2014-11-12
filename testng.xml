@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="LocalSuite" verbose="1">
+<test name="DeleteProblemsTest">
+    <classes>
+        <class name="com.saucelabs.Tests.DBTests.DeleteProblemTestFactory"></class>
+    </classes>
+</test>
+</suite>

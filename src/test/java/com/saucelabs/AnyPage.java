@@ -40,6 +40,7 @@ public class AnyPage extends MapPage implements IAnyPage {
     public static final By REGISTRATION_SUBMIT_BUTTON = By.className("b-form__button");
     public static final By LOGGED_IN__USER_NAME = By.xpath("//i[contains(@class, 'fa-user')]/..");
 
+
     private WebDriver driver;
 
     public AnyPage(WebDriver driver) {
