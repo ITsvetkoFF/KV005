@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,7 +58,7 @@ public class AddProblemTest {
     }
 
     @Test(dependsOnMethods = "addProblem")
-    public void addProblemComment() throws SQLException, JSONException, ClassNotFoundException {
+    public void commentsEqualsInDb() throws SQLException, JSONException, ClassNotFoundException {
         problemPage.addComments(latitude, longitude, problemComments);
         int problemId = problemPage.getProblemId(latitude, longitude);
         Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
@@ -67,12 +68,24 @@ public class AddProblemTest {
     public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
         int problemId = problemPage.getProblemId(latitude, longitude);
         problemPage.addVoteToProblemById(problemId);
+        String voteCount = problemPage.getVoteCountById(problemId);
         String vote = addProblemDAO.getProblemsById(problemId).get("Votes");
-        Assert.assertEquals(vote, "1");
+        Assert.assertEquals(vote, voteCount);
+    }
+
+    //@Test(dependsOnMethods = "addProblem")    //TODO
+    public void checkProblemValuesInDB() {
+
     }
 
     @AfterSuite
     public void afterTestSuite() {
         driver.quit();
+    }
+
+    public List<String> getProblemValues(double latitude, double longitude) {   //TODO
+        int problemId = problemPage.getProblemId(latitude, longitude);
+        List<String> problemValues = Arrays.asList(Integer.toString(problemId));
+        return problemValues;
     }
 }
