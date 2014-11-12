@@ -67,8 +67,8 @@ public class AddProblemTest {
     @Test(dependsOnMethods = "addProblem")
     public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
         int problemId = problemPage.getProblemId(latitude, longitude);
-        problemPage.addVoteToProblemById(problemId);
-        String voteCount = problemPage.getVoteCountById(problemId);
+        problemPage.addVoteToProblem();
+        String voteCount = problemPage.getVoteCount();
         String vote = addProblemDAO.getProblemsById(problemId).get("Votes");
         Assert.assertEquals(vote, voteCount);
     }
