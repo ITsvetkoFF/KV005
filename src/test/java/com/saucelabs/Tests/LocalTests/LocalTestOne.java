@@ -27,10 +27,10 @@ public class LocalTestOne {
                         "Загрози біорізноманіттю",
                         "problemDescription",
                         "problemSolution",
-                        //"http://i.imgur.com/HHXCVbs.jpg" + "\n" + "http://i.imgur.com/1K6AdCH.jpg",
-                        "",
-                        //"imageComment1" + "\n" + "imageComment2",
-                        "",
+                        "http://i.imgur.com/HHXCVbs.jpg" + "\n" + "http://i.imgur.com/1K6AdCH.jpg",
+                        //"",
+                        "imageComment1" + "\n" + "imageComment2",
+                        //"",
                         "admin@.com",
                         "admin",
                         "testFirstName",
@@ -76,7 +76,7 @@ public class LocalTestOne {
         }
         adminPage.logIn(adminEmail, adminPassword);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (Exception e) {
         }
         Assert.assertTrue(adminPage.checkProblemIsUnderModeration(problemTitle));
@@ -137,7 +137,7 @@ public class LocalTestOne {
         }
         //problemPage.deleteComments(latitude, longitude);
         problemPage.openProblemById(id);
-        adminPage.pressDeleteProblemButton();
+        //adminPage.pressDeleteProblemButton();
         adminPage.logOut();
 
         driver.quit();
