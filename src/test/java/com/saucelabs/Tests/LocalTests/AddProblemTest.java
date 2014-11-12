@@ -73,19 +73,8 @@ public class AddProblemTest {
         Assert.assertEquals(vote, voteCount);
     }
 
-    //@Test(dependsOnMethods = "addProblem")    //TODO
-    public void checkProblemValuesInDB() {
-
-    }
-
     @AfterSuite
     public void afterTestSuite() {
         driver.quit();
-    }
-
-    public List<String> getProblemValues(double latitude, double longitude) {   //TODO
-        int problemId = problemPage.getProblemId(latitude, longitude);
-        List<String> problemValues = Arrays.asList(Integer.toString(problemId));
-        return problemValues;
     }
 }
