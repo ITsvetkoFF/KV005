@@ -61,19 +61,7 @@ public class AddProblemTest {
     public void addProblemComment() throws SQLException, JSONException, ClassNotFoundException {
         problemPage.addComments(latitude, longitude, problemComments);
         int problemId = problemPage.getProblemId(latitude, longitude);
-        for (int i = 0; i < problemComments.size(); i++)
-            Assert.assertEquals(problemComments.get(i), addProblemDAO.getCommentsFromDB(problemId)); //TODO
-    }
-
-    @Test(dependsOnMethods = "addProblemComment")
-    public void commentUIEqualsDB() throws SQLException, ClassNotFoundException, JSONException {
-        anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
-        List<String> commentsUI = problemPage.getComments();
-        List<String> commentsDB = addProblemDAO.getCommentsFromDB(problemPage.getProblemId(latitude, longitude));
-        int commentsCount = commentsUI.size();
-        for (int i = 0; i < commentsCount; i++) {
-            Assert.assertEquals(commentsUI.get(i), commentsDB.get(i));
-        }
+        Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
     }
 
     @AfterSuite
