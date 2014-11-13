@@ -2,9 +2,7 @@ package com.saucelabs.Tests.DAO;
 
 
 import com.mysql.jdbc.PreparedStatement;
-import org.apache.commons.lang.ObjectUtils;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,8 +14,12 @@ import java.util.List;
  */
 public class ResourcesDAO extends BaseDAO {
 
+    public static final String DB_URL_WITH_UTF_8 = "jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8";
+    public static final String USER_NAME = "root";
+    public static final String USER_PASSWORD = "";
+
     public List<String> getAllAliases() throws SQLException, ClassNotFoundException {
-        Statement statement = getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").createStatement();
+        Statement statement = getConnection(DB_URL_WITH_UTF_8, USER_NAME, USER_PASSWORD).createStatement();
         ResultSet resultSet = statement.executeQuery("select * from resources;");
         List<String> result = new ArrayList<>();
 
@@ -33,7 +35,7 @@ public class ResourcesDAO extends BaseDAO {
 
         String query = "insert into resources (Alias, Title, Content, IsResource)"
                 + " values (?, ?, ?, ?)";
-        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection(DB_URL_WITH_UTF_8, USER_NAME, USER_PASSWORD).prepareStatement(query);
 
         preparedStmt.setString  (1, alias);
         preparedStmt.setString  (2, title);
@@ -45,24 +47,11 @@ public class ResourcesDAO extends BaseDAO {
         preparedStmt.close();
         }
 
-/*    public String getResourceByTitle(String title) throws SQLException, ClassNotFoundException {
-
-        String query = "select * from resources where Title = ?;";
-        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
-
-        preparedStmt.setString  (1, title);
-
-        preparedStmt.executeQuery();
-
-        preparedStmt.close();
-        return title;
-    }*/
-
     public String getResourceIdByTitle(String title) throws SQLException, ClassNotFoundException {
 
         String query = "select Id from resources where Title = ?;";
-        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
-        String id = "";
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection(DB_URL_WITH_UTF_8, USER_NAME, USER_PASSWORD).prepareStatement(query);
+        String id = USER_PASSWORD;
         preparedStmt.setString  (1, title);
 
         ResultSet setWithId = preparedStmt.executeQuery();
@@ -77,8 +66,8 @@ public class ResourcesDAO extends BaseDAO {
     public String getResourceTitleById(String id) throws SQLException, ClassNotFoundException {
 
         String query = "select Title from resources where Id = ?;";
-        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
-        String title = "";
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection(DB_URL_WITH_UTF_8, USER_NAME, USER_PASSWORD).prepareStatement(query);
+        String title = USER_PASSWORD;
         preparedStmt.setString  (1, id);
 
         ResultSet setWithId = preparedStmt.executeQuery();
@@ -90,12 +79,10 @@ public class ResourcesDAO extends BaseDAO {
         return title;
     }
 
-
-
     public List <String> deleteResourceFromDB(String title) throws SQLException, ClassNotFoundException {
 
         String query = "delete from resources where Title = ?;";
-        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection(DB_URL_WITH_UTF_8, USER_NAME, USER_PASSWORD).prepareStatement(query);
         List <String> result = new ArrayList<>();
         preparedStmt.setString  (1, title);
 
