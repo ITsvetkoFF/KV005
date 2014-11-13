@@ -8,9 +8,8 @@ import org.json.JSONException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
+
 import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +39,7 @@ public class AddProblemTest {
     public List<String> problemComments = Arrays.asList("problemComment1");
 
 
-    @BeforeSuite
+    @BeforeClass
     public void beforeTestSuite() {
 
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -118,7 +117,7 @@ public class AddProblemTest {
         Assert.assertEquals(vote, voteDB);
     }
 
-    @AfterSuite
+    @AfterClass
     public void afterTestSuite() {
         driver.quit();
     }
