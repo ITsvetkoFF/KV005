@@ -168,4 +168,8 @@ public class ProblemPage extends AnyPage{
     public void addVoteToProblem() {
         driver.findElement(By.xpath("//button[@class='simple_like_img']")).click();
     }
+
+    public void closeProblem() {
+        driver.findElement(By.xpath("//a[@class='close']")).click();
+    }
 }

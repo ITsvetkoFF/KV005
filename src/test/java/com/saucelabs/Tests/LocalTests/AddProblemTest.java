@@ -55,8 +55,10 @@ public class AddProblemTest {
                                           problemDescriptionTest, problemProposeTest, imagePath, imageComments);
         driver.navigate().refresh();
         anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
+        String problemTitle = problemPage.getProblemTitle();
+        problemPage.closeProblem();
 
-        Assert.assertEquals(problemPage.getProblemTitle(), problemNameTest);
+        Assert.assertEquals(problemTitle, problemNameTest);
     }
 
     @Test(dependsOnMethods = "addProblem")
@@ -64,6 +66,7 @@ public class AddProblemTest {
 
         problemPage.addComments(latitude, longitude, problemComments);
         int problemId = problemPage.getProblemId(latitude, longitude);
+        problemPage.closeProblem();
 
         Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
     }
@@ -79,6 +82,7 @@ public class AddProblemTest {
         System.out.println("UI vote => " + vote);
         String voteDB = addProblemDAO.getProblemsById(problemId).get("Votes");
         System.out.println("DB vote => " + voteDB);
+        problemPage.closeProblem();
 
         Assert.assertEquals(vote, voteDB);
     }
