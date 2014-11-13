@@ -45,6 +45,12 @@ public class AnyPage extends MapPage implements IAnyPage {
     public static final By LOGGED_IN__USER_NAME = By.xpath("//i[contains(@class, 'fa-user')]/..");
     public static final String USER_DROPDOWN = ".dropdown-toggle.b-menu__button.ng-binding";
     public static final String NEWS_ICON = ".navbar-nav>li";
+    public static final String CHANGE_ITEM = "ЗМІНИТИ ПАРОЛЬ";
+    public static final String OLD_PASSWORD = "#old_password";
+    public static final String NEW_PASSWORD = "#new_password";
+    public static final String NEW_PASSWORD_SECOND = "#new_password_second";
+    public static final String CHANGE_BUTTON = ".b-form__button";
+    public static final String CLOSE = ".close";
 
 
     private WebDriver driver;
@@ -212,10 +218,12 @@ public class AnyPage extends MapPage implements IAnyPage {
 
     public void changePassword(String currentPassword, String newPassword){
         driver.findElement(By.cssSelector(USER_DROPDOWN)).click();
-        driver.findElement(By.linkText("ЗМІНИТИ ПАРОЛЬ")).click();
-        driver.findElement(By.cssSelector("#old_password")).sendKeys(currentPassword);
-        driver.findElement(By.cssSelector("#new_password")).sendKeys(newPassword);
-        driver.findElement(By.cssSelector("#new_password_second")).sendKeys(newPassword);
+        driver.findElement(By.linkText(CHANGE_ITEM)).click();
+        driver.findElement(By.cssSelector(OLD_PASSWORD)).sendKeys(currentPassword);
+        driver.findElement(By.cssSelector(NEW_PASSWORD)).sendKeys(newPassword);
+        driver.findElement(By.cssSelector(NEW_PASSWORD_SECOND)).sendKeys(newPassword);
+        driver.findElement(By.cssSelector(CHANGE_BUTTON)).click();
+        driver.findElement(By.cssSelector(CLOSE)).click();
     }
 
 }

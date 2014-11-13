@@ -109,10 +109,24 @@ public class CreateAdminTest {
         boolean delete_title = driver.findElement(By.cssSelector(".b-problems .btn.btn-danger.btn-sm")).isDisplayed();
 
         Assert.assertTrue(delete_title);
-        anyPage.logOut();
     }
 
     @Test(dataProvider = "AdminUser", dependsOnMethods = {"deleteProblemAvailability"})
+    public void changePassword(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+
+        anyPage.changePassword(UserPassword,"testpassword");
+        Map result = userInfoDB.getInfo("root", "","jdbc:mysql://localhost:3306/enviromap",UserEmail);
+        Map<String, String> ExpectedUserData = new HashMap<String, String>();
+        ExpectedUserData.put("Name", UserName);
+        ExpectedUserData.put("Surname", UserSurname);
+        ExpectedUserData.put("Password", userInfoDB.hmacSha1("testpassword",Constant.HashKey));
+        ExpectedUserData.put("UserRoles_Id", UserRoleId);
+
+        Assert.assertEquals(result, ExpectedUserData);
+        anyPage.logOut();
+    }
+
+    @Test(dataProvider = "AdminUser", dependsOnMethods = {"changePassword"})
     public void deleteUser(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         deleteUserDAO.deleteUser(UserEmail);

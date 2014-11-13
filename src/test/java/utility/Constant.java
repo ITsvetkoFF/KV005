@@ -23,5 +23,5 @@ public class Constant {
     public static final String File_SimpleUserCreateData = "SimpleUser.xlsx";
     public static final String Path_AdminUserCreateData = ".\\resources\\";
     public static final String File_AdminUserCreateData = "AdminUser.xlsx";
-    public static final String Path_ImagesLocalFolder = "C:\\Users\\ykadytc\\KV004\\frontend\\photos\\large";
+    //public static final String Path_ImagesLocalFolder = "C:\\Users\\ykadytc\\KV004\\frontend\\photos\\large";
 }

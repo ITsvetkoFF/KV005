@@ -112,8 +112,6 @@ public class CreateUserTest {
         ExpectedUserData.put("UserRoles_Id", UserRoleId);
 
         Assert.assertEquals(result, ExpectedUserData);
-
-        //Assert.assertTrue(result.isEmpty());
         anyPage.logOut();
     }
 
