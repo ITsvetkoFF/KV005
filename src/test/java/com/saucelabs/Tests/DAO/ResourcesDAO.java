@@ -2,6 +2,7 @@ package com.saucelabs.Tests.DAO;
 
 
 import com.mysql.jdbc.PreparedStatement;
+import org.apache.commons.lang.ObjectUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -44,7 +45,7 @@ public class ResourcesDAO extends BaseDAO {
         preparedStmt.close();
         }
 
-    public String getResourceByTitle(String title) throws SQLException, ClassNotFoundException {
+/*    public String getResourceByTitle(String title) throws SQLException, ClassNotFoundException {
 
         String query = "select * from resources where Title = ?;";
         PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
@@ -55,17 +56,52 @@ public class ResourcesDAO extends BaseDAO {
 
         preparedStmt.close();
         return title;
+    }*/
+
+    public String getResourceIdByTitle(String title) throws SQLException, ClassNotFoundException {
+
+        String query = "select Id from resources where Title = ?;";
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
+        String id = "";
+        preparedStmt.setString  (1, title);
+
+        ResultSet setWithId = preparedStmt.executeQuery();
+        while (setWithId.next()) {
+            id = setWithId.getString("Id");
+        }
+
+        preparedStmt.close();
+        return id;
     }
 
-    public void deleteResourceFromDB(String title) throws SQLException, ClassNotFoundException {
+    public String getResourceTitleById(String id) throws SQLException, ClassNotFoundException {
+
+        String query = "select Title from resources where Id = ?;";
+        PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
+        String title = "";
+        preparedStmt.setString  (1, id);
+
+        ResultSet setWithId = preparedStmt.executeQuery();
+        while (setWithId.next()) {
+            title = setWithId.getString("Title");
+        }
+
+        preparedStmt.close();
+        return title;
+    }
+
+
+
+    public List <String> deleteResourceFromDB(String title) throws SQLException, ClassNotFoundException {
 
         String query = "delete from resources where Title = ?;";
         PreparedStatement preparedStmt = (PreparedStatement) getConnection("jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8","root", "").prepareStatement(query);
-
+        List <String> result = new ArrayList<>();
         preparedStmt.setString  (1, title);
 
-        preparedStmt.executeQuery();
+        preparedStmt.executeUpdate();
 
         preparedStmt.close();
+        return result;
     }
 }

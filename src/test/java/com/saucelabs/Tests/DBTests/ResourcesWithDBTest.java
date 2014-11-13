@@ -51,14 +51,14 @@ public class ResourcesWithDBTest {
         return ExcelUtils.getTableArray(Path_TestData + File_TestDataForResourceAddingToDB, "Sheet1");
     }
 
-    @Test (dataProvider = "TestDataForResourceAddingToDB")
+    @Test (dataProvider = "TestDataForResourceAddingToDB", singleThreaded = true)
     public void addResourceToDB(String alias, String title, String content, String isResource, String addTextToTitle, String addTextToContent) throws Exception {
         ResourcesDAO dao = new ResourcesDAO();
         List<String> Aliases = new ArrayList<>();
         //Aliases = dao.getAllAliases();
         int resourceInDB = Integer.parseInt(isResource);
         dao.addResourceToDB(alias, title, content, resourceInDB);
-
+        driver.navigate().refresh();
         if (resourceInDB == 0) {
             resourcePlace = value0; //"У верхньому меню";
         }
@@ -68,22 +68,25 @@ public class ResourcesWithDBTest {
             Assert.assertEquals(resourcesPage.existResource(title), resourcePlace);
         }
 
-    @Test (dataProvider = "TestDataForResourceAddingToDB", dependsOnMethods = {"addResourceToDB"}) //dependsOnMethods = {"addResourceToDB"}
+    @Test (dataProvider = "TestDataForResourceAddingToDB", singleThreaded = true, dependsOnMethods = {"addResourceToDB"}) //dependsOnMethods = {"addResourceToDB"}
     public void editResource(String alias, String title, String content, String isResource, String addTextToTitle, String addTextToContent) throws Exception {
+        ResourcesDAO dao = new ResourcesDAO();
+
+        String id = dao.getResourceIdByTitle(title);
+
         resourcesPage.editResource(title, addTextToTitle);
 
-        ResourcesDAO dao = new ResourcesDAO();
-       // dao.getResourceByTitle(title+addTextToTitle);
 
-        Assert.assertEquals(resourcesPage.existResource(title+addTextToTitle), dao.getResourceByTitle(title+addTextToTitle));
+        driver.navigate().refresh();
+        Assert.assertEquals(title+addTextToTitle, dao.getResourceTitleById(id));
     }
 
-    @Test (dataProvider = "TestDataForResourceAddingToDB", dependsOnMethods = {"editResource"})
+    @Test (dataProvider = "TestDataForResourceAddingToDB", singleThreaded = true, dependsOnMethods = {"editResource"})
     public void deleteResourceFromDB(String alias, String title, String content, String isResource, String addTextToTitle, String addTextToContent) throws Exception {
         ResourcesDAO dao = new ResourcesDAO();
 
-        dao.deleteResourceFromDB(title);
-
+        dao.deleteResourceFromDB(title+addTextToTitle);
+        driver.navigate().refresh();
         Assert.assertEquals(resourcesPage.existResource(title+addTextToTitle), null);
         }
 
