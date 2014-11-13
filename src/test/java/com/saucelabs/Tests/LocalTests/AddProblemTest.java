@@ -62,7 +62,38 @@ public class AddProblemTest {
     }
 
     @Test(dependsOnMethods = "addProblem")
-    public void commentsEqualsInDb() throws SQLException, JSONException, ClassNotFoundException {
+    public void checkSelectedProblemsValuesInDB() throws SQLException, ClassNotFoundException {
+
+        String problemId = Integer.toString(problemPage.getProblemId(latitude, longitude));
+        String problemTitle = problemNameTest;
+        String problemContent = problemDescriptionTest;
+        String problemTypes_Id = "5";
+        String problemProposal = problemProposeTest;
+        String problemImageComment1 = imageComments.get(0);
+        String problemImageComment2 = imageComments.get(1);
+        List<String> values = Arrays.asList(problemId, problemTitle, problemContent, problemTypes_Id,
+                                            problemProposal, problemImageComment1, problemImageComment2);
+
+        Map<String, String> problems = addProblemDAO.getProblemsById(Integer.parseInt(problemId));
+
+        String problemIdInDB = problems.get("Id");
+        String problemTitleDB = problems.get("Title");
+        String problemContentDB = problems.get("Content");
+        String problemTypes_IdDB = problems.get("ProblemTypes_Id");
+        String problemProposalDB = problems.get("Proposal");
+
+        List<Map<String, String>> photos = addProblemDAO.getPhotosByProblemsId(Integer.parseInt(problemId));
+
+        String problemImageComment1DB = photos.get(0).get("Description");
+        String problemImageComment2DB = photos.get(1).get("Description");
+        List<String> valuesDB = Arrays.asList(problemIdInDB, problemTitleDB, problemContentDB, problemContentDB,
+                problemTypes_IdDB, problemProposalDB, problemImageComment2DB, problemImageComment2DB);
+
+        Assert.assertEquals(values, valuesDB);
+    }
+
+    //@Test(dependsOnMethods = "addProblem")
+    public void commentsEqualsInDB() throws SQLException, JSONException, ClassNotFoundException {
 
         problemPage.addComments(latitude, longitude, problemComments);
         int problemId = problemPage.getProblemId(latitude, longitude);
@@ -71,7 +102,7 @@ public class AddProblemTest {
         Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
     }
 
-    @Test(dependsOnMethods = "addProblem")
+    //@Test(dependsOnMethods = "addProblem")
     public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
 
         int problemId = problemPage.getProblemId(latitude, longitude);
