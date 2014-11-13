@@ -86,13 +86,13 @@ public class AddProblemTest {
 
         String problemImageComment1DB = photos.get(0).get("Description");
         String problemImageComment2DB = photos.get(1).get("Description");
-        List<String> valuesDB = Arrays.asList(problemIdInDB, problemTitleDB, problemContentDB, problemContentDB,
-                problemTypes_IdDB, problemProposalDB, problemImageComment2DB, problemImageComment2DB);
+        List<String> valuesDB = Arrays.asList(problemIdInDB, problemTitleDB, problemContentDB,
+                problemTypes_IdDB, problemProposalDB, problemImageComment1DB, problemImageComment2DB);
 
         Assert.assertEquals(values, valuesDB);
     }
 
-    //@Test(dependsOnMethods = "addProblem")
+    @Test(dependsOnMethods = "addProblem")
     public void commentsEqualsInDB() throws SQLException, JSONException, ClassNotFoundException {
 
         problemPage.addComments(latitude, longitude, problemComments);
@@ -102,7 +102,7 @@ public class AddProblemTest {
         Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
     }
 
-    //@Test(dependsOnMethods = "addProblem")
+    @Test(dependsOnMethods = "addProblem")
     public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
 
         int problemId = problemPage.getProblemId(latitude, longitude);
