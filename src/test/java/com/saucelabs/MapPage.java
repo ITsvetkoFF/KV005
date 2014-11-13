@@ -63,15 +63,23 @@ public class MapPage implements IMapPage {
         JavascriptExecutor script = null;
         if (driver instanceof JavascriptExecutor)
             script = (JavascriptExecutor) driver;
-        script.executeScript("var map = document.getElementById(\"map-content\");" +
-                "angular.element(map).scope().$parent.$parent.$parent.geoJson._map.setView(["
-                + latitude + "," + longitude + "]" + "," + zoom + ");");
+        script.executeScript(
+                "var map = document.getElementById(\"map-content\");" +
+
+                "var view = function() {" +
+                        "angular.element(map).scope().$parent.$parent.$parent.geoJson" +
+                        "._map.setView([" + latitude + "," + longitude + "]" + "," + zoom + ");" +
+                        "};" +
+
+                "window.setTimeout(view, 0);"
+        );
 
         WebElement map              = driver.findElement(MAP);
         int navBarHeight            = driver.findElement(NAV_BAR).getSize().getHeight();
         List<WebElement> addProblem = driver.findElements(ADD_PROBLEM_MENU);
         mapWidth = map.getSize().getWidth();
         mapHeight = map.getSize().getHeight();
+
         if (addProblem.size() > 0) {
             addProblemWidth  = addProblem.get(0).getSize().getWidth();
             addProblemHeight = addProblem.get(0).getSize().getHeight();
