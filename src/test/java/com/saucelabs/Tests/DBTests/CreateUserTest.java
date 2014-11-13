@@ -58,7 +58,7 @@ public class CreateUserTest {
 
         anyPage.register(UserName, UserSurname, UserEmail, UserPassword);
 
-        Map result = userInfoDB.getInfo("root", "","jdbc:mysql://localhost:3306/enviromap",UserEmail);
+        Map result = userInfoDB.getInfo("root", "root","jdbc:mysql://localhost:3306/enviromap",UserEmail);
         Map<String, String> ExpectedUserData = new HashMap<String, String>();
         ExpectedUserData.put("Name", UserName);
         ExpectedUserData.put("Surname", UserSurname);
@@ -104,7 +104,7 @@ public class CreateUserTest {
     public void changePassword(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         anyPage.changePassword(UserPassword,"testpassword");
-        Map result = userInfoDB.getInfo("root", "","jdbc:mysql://localhost:3306/enviromap",UserEmail);
+        Map result = userInfoDB.getInfo("root", "root","jdbc:mysql://localhost:3306/enviromap",UserEmail);
         Map<String, String> ExpectedUserData = new HashMap<String, String>();
         ExpectedUserData.put("Name", UserName);
         ExpectedUserData.put("Surname", UserSurname);
@@ -119,7 +119,7 @@ public class CreateUserTest {
     public void deleteUser(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         deleteUserDAO.deleteUser(UserEmail);
-        Map result = userInfoDB.getInfo("root", "","jdbc:mysql://localhost:3306/enviromap",UserEmail);
+        Map result = userInfoDB.getInfo("root", "root","jdbc:mysql://localhost:3306/enviromap",UserEmail);
 
         Assert.assertTrue(result.isEmpty());
     }

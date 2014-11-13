@@ -43,14 +43,14 @@ public class AnyPage extends MapPage implements IAnyPage {
     public static final By PASSWORD_REPEAT_FIELD = By.name("password_second");
     public static final By REGISTRATION_SUBMIT_BUTTON = By.className("b-form__button");
     public static final By LOGGED_IN__USER_NAME = By.xpath("//i[contains(@class, 'fa-user')]/..");
-    public static final String USER_DROPDOWN = ".dropdown-toggle.b-menu__button.ng-binding";
-    public static final String NEWS_ICON = ".navbar-nav>li";
-    public static final String CHANGE_ITEM = "ЗМІНИТИ ПАРОЛЬ";
-    public static final String OLD_PASSWORD = "#old_password";
-    public static final String NEW_PASSWORD = "#new_password";
-    public static final String NEW_PASSWORD_SECOND = "#new_password_second";
-    public static final String CHANGE_BUTTON = ".b-form__button";
-    public static final String CLOSE = ".close";
+    public static final By USER_DROPDOWN = By.cssSelector(".dropdown-toggle.b-menu__button.ng-binding");
+    public static final By NEWS_ICON = By.cssSelector(".navbar-nav>li");
+    public static final By CHANGE_ITEM = By.linkText("ЗМІНИТИ ПАРОЛЬ");
+    public static final By OLD_PASSWORD = By.cssSelector("#old_password");
+    public static final By NEW_PASSWORD = By.cssSelector("#new_password");
+    public static final By NEW_PASSWORD_SECOND = By.cssSelector("#new_password_second");
+    public static final By CHANGE_BUTTON = By.cssSelector(".b-form__button");
+    public static final By CLOSE = By.cssSelector(".close");
 
 
     private WebDriver driver;
@@ -90,6 +90,7 @@ public class AnyPage extends MapPage implements IAnyPage {
 
     @Override
     public void logOut() {
+        explicitWaitForElement(3,USER_PICTOGRAM);
         driver.findElement(USER_PICTOGRAM).click();
         driver.findElement(LOGOUT_LINK).click();
     }
@@ -175,14 +176,14 @@ public class AnyPage extends MapPage implements IAnyPage {
     }
 
     public String checkUsernameInRightCorner(){
-        explicitWaitForElement(5, USER_DROPDOWN);
-        String user_name =  driver.findElement(By.cssSelector(USER_DROPDOWN)).getText();
+        explicitWaitForElement(5,USER_DROPDOWN);
+        String user_name =  driver.findElement(USER_DROPDOWN).getText();
         return user_name;
     }
 
     public boolean checkNewsAvailability(){
         boolean newsExist = true;
-        List<WebElement> resources1 = driver.findElements(By.cssSelector(NEWS_ICON));
+        List<WebElement> resources1 = driver.findElements(NEWS_ICON);
         for (WebElement listElement : resources1){
             String searchText = listElement.getText();
             if (searchText.equals("НОВИНИ")){
@@ -206,24 +207,24 @@ public class AnyPage extends MapPage implements IAnyPage {
         return Result;
     }
 
-    public void explicitWaitForButton(int time, String cssValue){
+    public void explicitWaitForButton(int time, By byValue){
         WebDriverWait wait1  = new WebDriverWait(driver, time);
-        wait1.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssValue)));
+        wait1.until(ExpectedConditions.elementToBeClickable(byValue));
     }
 
-    public void explicitWaitForElement(int time, String cssValue){
+    public void explicitWaitForElement(int time, By byValue){
         WebDriverWait wait1  = new WebDriverWait(driver, time);
-        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssValue)));
+        wait1.until(ExpectedConditions.visibilityOfElementLocated(byValue));
     }
 
     public void changePassword(String currentPassword, String newPassword){
-        driver.findElement(By.cssSelector(USER_DROPDOWN)).click();
-        driver.findElement(By.linkText(CHANGE_ITEM)).click();
-        driver.findElement(By.cssSelector(OLD_PASSWORD)).sendKeys(currentPassword);
-        driver.findElement(By.cssSelector(NEW_PASSWORD)).sendKeys(newPassword);
-        driver.findElement(By.cssSelector(NEW_PASSWORD_SECOND)).sendKeys(newPassword);
-        driver.findElement(By.cssSelector(CHANGE_BUTTON)).click();
-        driver.findElement(By.cssSelector(CLOSE)).click();
+        driver.findElement(USER_DROPDOWN).click();
+        driver.findElement(CHANGE_ITEM).click();
+        driver.findElement(OLD_PASSWORD).sendKeys(currentPassword);
+        driver.findElement(NEW_PASSWORD).sendKeys(newPassword);
+        driver.findElement(NEW_PASSWORD_SECOND).sendKeys(newPassword);
+        driver.findElement(CHANGE_BUTTON).click();
+        driver.findElement(CLOSE).click();
     }
 
 }
