@@ -24,8 +24,8 @@ public class FiltersTest {
     MapPage mapPage;
     ProblemPage problemPage;
 
-    public String afterDate = "31 жовт. 2014";
-    public String beforeDate = "01 лист. 2014";
+    public String afterDate = "13 лист. 2014";
+    public String beforeDate = "14 лист. 2014";
     public static int typeNumber = 1;
     public static double latitude = 50.255;
     public static double longitude = 30.255;
@@ -47,7 +47,7 @@ public class FiltersTest {
         this.driver.quit();
     }
 
-   @Test
+   //@Test
    public void checkFiltersNegative() throws Exception {
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
@@ -74,7 +74,7 @@ public class FiltersTest {
         Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
     }
 
-    @Test
+    //@Test
     public void datePickersButtons(){
 
     }
