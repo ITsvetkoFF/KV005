@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class DeleteUserDAO extends BaseDAO{
     static UserInfoDAO userInfoDB = new UserInfoDAO();
     public void deleteUser(String Email) throws SQLException, ClassNotFoundException {
-        Statement statement = getConnection("jdbc:mysql://localhost:3306/enviromap","root", "").createStatement();
+        Statement statement = getConnection("jdbc:mysql://localhost:3306/enviromap","root", "root").createStatement();
         statement.executeUpdate("delete from users where Email = \"" + Email + "\"");
         statement.close();
     }

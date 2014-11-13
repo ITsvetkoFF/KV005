@@ -50,7 +50,7 @@ public class CreateAdminTest {
 
         createNewUserDAO.createUser(UserName, UserSurname, UserEmail, UserPassword, UserRoleId);
 
-        Map result = userInfoDB.getInfo("root", "","jdbc:mysql://localhost:3306/enviromap",UserEmail);
+        Map result = userInfoDB.getInfo("root", "root","jdbc:mysql://localhost:3306/enviromap",UserEmail);
         Map<String, String> ExpectedUserData = new HashMap<String, String>();
         ExpectedUserData.put("Name", UserName);
         ExpectedUserData.put("Surname", UserSurname);
@@ -95,7 +95,7 @@ public class CreateAdminTest {
     public void newsAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         driver.findElement(By.cssSelector(".fa.fa-weixin")).click();
-        anyPage.explicitWaitForElement(5,".b-chat__currentNews>h3");
+        anyPage.explicitWaitForElement(5,By.cssSelector(".b-chat__currentNews>h3"));
         String news_title = driver.findElement(By.cssSelector(".b-chat__currentNews>h3")).getText();
 
         Assert.assertEquals("Новини що відображаються зараз на сайті:",news_title);
@@ -105,7 +105,7 @@ public class CreateAdminTest {
     public void deleteProblemAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         problemPage.openProblemById(1);
-        anyPage.explicitWaitForButton(5,".b-problems .btn.btn-danger.btn-sm");
+        anyPage.explicitWaitForButton(5,By.cssSelector(".b-problems .btn.btn-danger.btn-sm"));
         boolean delete_title = driver.findElement(By.cssSelector(".b-problems .btn.btn-danger.btn-sm")).isDisplayed();
 
         Assert.assertTrue(delete_title);
@@ -115,7 +115,7 @@ public class CreateAdminTest {
     public void changePassword(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         anyPage.changePassword(UserPassword,"testpassword");
-        Map result = userInfoDB.getInfo("root", "","jdbc:mysql://localhost:3306/enviromap",UserEmail);
+        Map result = userInfoDB.getInfo("root", "root","jdbc:mysql://localhost:3306/enviromap",UserEmail);
         Map<String, String> ExpectedUserData = new HashMap<String, String>();
         ExpectedUserData.put("Name", UserName);
         ExpectedUserData.put("Surname", UserSurname);
@@ -130,7 +130,7 @@ public class CreateAdminTest {
     public void deleteUser(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         deleteUserDAO.deleteUser(UserEmail);
-        Map result = userInfoDB.getInfo("root", "","jdbc:mysql://localhost:3306/enviromap",UserEmail);
+        Map result = userInfoDB.getInfo("root", "root","jdbc:mysql://localhost:3306/enviromap",UserEmail);
 
         Assert.assertTrue(result.isEmpty());
     }
