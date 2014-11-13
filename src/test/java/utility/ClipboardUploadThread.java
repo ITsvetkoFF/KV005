@@ -31,6 +31,12 @@ class Runner implements Runnable {
             robot.keyRelease(KeyEvent.VK_CONTROL);
             robot.keyPress(KeyEvent.VK_ENTER);
             robot.keyRelease(KeyEvent.VK_ENTER);
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
         }
         catch (Exception e) {
             throw new RuntimeException(e);

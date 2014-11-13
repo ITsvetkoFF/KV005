@@ -1,13 +1,17 @@
 package com.saucelabs;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import utility.ClipboardUploadThread;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AnyPage extends MapPage implements IAnyPage {
 
@@ -39,6 +43,14 @@ public class AnyPage extends MapPage implements IAnyPage {
     public static final By PASSWORD_REPEAT_FIELD = By.name("password_second");
     public static final By REGISTRATION_SUBMIT_BUTTON = By.className("b-form__button");
     public static final By LOGGED_IN__USER_NAME = By.xpath("//i[contains(@class, 'fa-user')]/..");
+    public static final By USER_DROPDOWN = By.cssSelector(".dropdown-toggle.b-menu__button.ng-binding");
+    public static final By NEWS_ICON = By.cssSelector(".navbar-nav>li");
+    public static final By CHANGE_ITEM = By.linkText("ЗМІНИТИ ПАРОЛЬ");
+    public static final By OLD_PASSWORD = By.cssSelector("#old_password");
+    public static final By NEW_PASSWORD = By.cssSelector("#new_password");
+    public static final By NEW_PASSWORD_SECOND = By.cssSelector("#new_password_second");
+    public static final By CHANGE_BUTTON = By.cssSelector(".b-form__button");
+    public static final By CLOSE = By.cssSelector(".close");
 
 
     private WebDriver driver;
@@ -78,6 +90,7 @@ public class AnyPage extends MapPage implements IAnyPage {
 
     @Override
     public void logOut() {
+        explicitWaitForElement(3,USER_PICTOGRAM);
         driver.findElement(USER_PICTOGRAM).click();
         driver.findElement(LOGOUT_LINK).click();
     }
@@ -161,4 +174,57 @@ public class AnyPage extends MapPage implements IAnyPage {
             alert.findElement(CLOSE_CROSS).click();
         }
     }
+
+    public String checkUsernameInRightCorner(){
+        explicitWaitForElement(5,USER_DROPDOWN);
+        String user_name =  driver.findElement(USER_DROPDOWN).getText();
+        return user_name;
+    }
+
+    public boolean checkNewsAvailability(){
+        boolean newsExist = true;
+        List<WebElement> resources1 = driver.findElements(NEWS_ICON);
+        for (WebElement listElement : resources1){
+            String searchText = listElement.getText();
+            if (searchText.equals("НОВИНИ")){
+                System.out.println("Simple user sees News menu");
+            }
+            else {
+                newsExist = false;
+            }
+        }
+        return newsExist;
+    }
+
+    public Map getCookiesName() throws UnsupportedEncodingException {
+
+        String cookie_value = null;
+        Map<String, String> Result = new HashMap<String,String>();
+        Result.put("Name", driver.manage().getCookieNamed("userName").getValue());
+        Result.put("Surname", driver.manage().getCookieNamed("userSurname").getValue());
+        Result.put("Email", URLDecoder.decode(driver.manage().getCookieNamed("userEmail").getValue(), "UTF-8"));
+        Result.put("UserRole", driver.manage().getCookieNamed("userRole").getValue());
+        return Result;
+    }
+
+    public void explicitWaitForButton(int time, By byValue){
+        WebDriverWait wait1  = new WebDriverWait(driver, time);
+        wait1.until(ExpectedConditions.elementToBeClickable(byValue));
+    }
+
+    public void explicitWaitForElement(int time, By byValue){
+        WebDriverWait wait1  = new WebDriverWait(driver, time);
+        wait1.until(ExpectedConditions.visibilityOfElementLocated(byValue));
+    }
+
+    public void changePassword(String currentPassword, String newPassword){
+        driver.findElement(USER_DROPDOWN).click();
+        driver.findElement(CHANGE_ITEM).click();
+        driver.findElement(OLD_PASSWORD).sendKeys(currentPassword);
+        driver.findElement(NEW_PASSWORD).sendKeys(newPassword);
+        driver.findElement(NEW_PASSWORD_SECOND).sendKeys(newPassword);
+        driver.findElement(CHANGE_BUTTON).click();
+        driver.findElement(CLOSE).click();
+    }
+
 }
