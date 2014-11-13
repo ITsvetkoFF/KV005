@@ -1,6 +1,7 @@
 package com.saucelabs.Tests.LocalTests;
 
 import com.saucelabs.AnyPage;
+import com.saucelabs.MapPage;
 import com.saucelabs.ProblemPage;
 import com.saucelabs.Tests.DAO.AddProblemDAO;
 import org.json.JSONException;
@@ -41,9 +42,9 @@ public class AddProblemTest {
 
     @BeforeSuite
     public void beforeTestSuite() {
+
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.get("http://localhost:8090/#/map");
-        //driver.get("http://176.36.11.25/#/map");
         anyPage.logIn("admin@.com", "admin");
     }
 
@@ -54,23 +55,36 @@ public class AddProblemTest {
                                           problemDescriptionTest, problemProposeTest, imagePath, imageComments);
         driver.navigate().refresh();
         anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
-        Assert.assertEquals(problemPage.getProblemTitle(), problemNameTest);
+        String problemTitle = problemPage.getProblemTitle();
+        problemPage.closeProblem();
+
+        Assert.assertEquals(problemTitle, problemNameTest);
     }
 
     @Test(dependsOnMethods = "addProblem")
     public void commentsEqualsInDb() throws SQLException, JSONException, ClassNotFoundException {
+
         problemPage.addComments(latitude, longitude, problemComments);
         int problemId = problemPage.getProblemId(latitude, longitude);
+        problemPage.closeProblem();
+
         Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
     }
 
     @Test(dependsOnMethods = "addProblem")
     public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
+
         int problemId = problemPage.getProblemId(latitude, longitude);
         problemPage.addVoteToProblem();
-        String voteCount = problemPage.getVoteCount();
-        String vote = addProblemDAO.getProblemsById(problemId).get("Votes");
-        Assert.assertEquals(vote, voteCount);
+        driver.navigate().refresh();
+
+        String vote = problemPage.getVote();
+        System.out.println("UI vote => " + vote);
+        String voteDB = addProblemDAO.getProblemsById(problemId).get("Votes");
+        System.out.println("DB vote => " + voteDB);
+        problemPage.closeProblem();
+
+        Assert.assertEquals(vote, voteDB);
     }
 
     @AfterSuite
