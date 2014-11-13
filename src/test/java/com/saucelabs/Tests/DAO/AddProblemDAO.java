@@ -23,7 +23,7 @@ public class AddProblemDAO extends BaseDAO {
         while (resultSet.next()) {
             for (int i = 0; i < columnCount; i++) {
                 problems.put(resultSetMetaData.getColumnName(i + 1), resultSet.getString(i + 1));
-                System.out.println(resultSetMetaData.getColumnName(i + 1) + " => " + resultSet.getString(i + 1));
+                //System.out.println(resultSetMetaData.getColumnName(i + 1) + " => " + resultSet.getString(i + 1));
             }
         }
         statement.close();
