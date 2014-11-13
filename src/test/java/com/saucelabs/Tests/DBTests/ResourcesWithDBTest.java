@@ -68,23 +68,23 @@ public class ResourcesWithDBTest {
             Assert.assertEquals(resourcesPage.existResource(title), resourcePlace);
         }
 
-    //@Test (dataProvider = "TestDataForResourceAddingToDB", dependsOnMethods = {"addResourceToDB"})
+    @Test (dataProvider = "TestDataForResourceAddingToDB", dependsOnMethods = {"addResourceToDB"}) //dependsOnMethods = {"addResourceToDB"}
     public void editResource(String alias, String title, String content, String isResource, String addTextToTitle, String addTextToContent) throws Exception {
         resourcesPage.editResource(title, addTextToTitle);
 
         ResourcesDAO dao = new ResourcesDAO();
-        dao.getResourceByTitle(title);
+       // dao.getResourceByTitle(title+addTextToTitle);
 
-        Assert.assertEquals(resourcesPage.existResource(title), title);
+        Assert.assertEquals(resourcesPage.existResource(title+addTextToTitle), dao.getResourceByTitle(title+addTextToTitle));
     }
 
-    @Test (dataProvider = "TestDataForResourceAddingToDB")
+    @Test (dataProvider = "TestDataForResourceAddingToDB", dependsOnMethods = {"editResource"})
     public void deleteResourceFromDB(String alias, String title, String content, String isResource, String addTextToTitle, String addTextToContent) throws Exception {
         ResourcesDAO dao = new ResourcesDAO();
 
         dao.deleteResourceFromDB(title);
 
-        Assert.assertEquals(resourcesPage.existResource(title), null);
+        Assert.assertEquals(resourcesPage.existResource(title+addTextToTitle), null);
         }
 
 }
