@@ -1,6 +1,5 @@
 package com.saucelabs.Tests.DBTests;
 
-import com.google.common.base.Utf8;
 import com.saucelabs.AnyPage;
 import com.saucelabs.MapPage;
 import com.saucelabs.ProblemPage;
@@ -11,10 +10,7 @@ import com.saucelabs.Tests.DAO.UserInfoDAO;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -23,24 +19,20 @@ import org.testng.annotations.Test;
 import utility.Constant;
 import utility.ExcelUtils;
 
-import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-
 /**
- * Created by Olya on 11/3/14.
+ * Created by Olya on 11/12/14.
  */
-public class CreateUserTest {
-
+public class CreateAdminTest {
     static WebDriver driver = new FirefoxDriver();
-    static ResourcesPage resourcesPage = new ResourcesPage(driver);
     static AnyPage anyPage = new AnyPage(driver);
     static UserInfoDAO userInfoDB = new UserInfoDAO();
+    static CreateNewUserDAO createNewUserDAO = new CreateNewUserDAO();
     static DeleteUserDAO deleteUserDAO = new DeleteUserDAO();
+    static ProblemPage problemPage = new ProblemPage(driver);
 
     @BeforeSuite
     public static void beforeTest() throws Exception{
@@ -48,15 +40,15 @@ public class CreateUserTest {
         driver.get(Constant.URLlocal);
     }
 
-    @DataProvider(name = "SimpleUser", parallel = false)
+    @DataProvider(name = "AdminUser", parallel = false)
     public static Object[][] data() throws Exception{
-        return ExcelUtils.getTableArray(Constant.Path_SimpleUserCreateData + Constant.File_SimpleUserCreateData, "Sheet1");
+        return ExcelUtils.getTableArray(Constant.Path_AdminUserCreateData + Constant.File_AdminUserCreateData, "Sheet1");
     }
 
-    @Test(dataProvider = "SimpleUser")
-    public void userRegistrationDBCheck(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+    @Test(dataProvider = "AdminUser")
+    public void adminUserCreationDBCheck(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
-        anyPage.register(UserName, UserSurname, UserEmail, UserPassword);
+        createNewUserDAO.createUser(UserName, UserSurname, UserEmail, UserPassword, UserRoleId);
 
         Map result = userInfoDB.getInfo("root", "","jdbc:mysql://localhost:3306/enviromap",UserEmail);
         Map<String, String> ExpectedUserData = new HashMap<String, String>();
@@ -68,8 +60,10 @@ public class CreateUserTest {
         Assert.assertEquals(result, ExpectedUserData);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userRegistrationDBCheck"})
-    public void userCookiesCheck(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+    @Test(dataProvider = "AdminUser", dependsOnMethods = {"adminUserCreationDBCheck"})
+    public void adminUserCookiesCheck(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+        // login as new user
+        anyPage.logIn("admin1@gmail.com", "admin");
 
         Map<String, String> ExpectedUserData = new HashMap<String, String>();
         ExpectedUserData.put("Name", UserName);
@@ -81,26 +75,43 @@ public class CreateUserTest {
         Assert.assertEquals(result,ExpectedUserData);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userCookiesCheck"})
-    public void userNameCheckAfterLogin(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+    @Test(dataProvider = "AdminUser", dependsOnMethods = {"adminUserCookiesCheck"})
+    public void adminNameCheckAfterLogin(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         String name = anyPage.checkUsernameInRightCorner();
         Assert.assertEquals((UserName + " " + UserSurname).toUpperCase(), name);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userNameCheckAfterLogin"})
-    public void userAddNewResourceAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+    @Test(dataProvider = "AdminUser", dependsOnMethods = {"adminNameCheckAfterLogin"})
+    public void addNewResourceAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
-        Assert.assertEquals(resourcesPage.existResource("ДОДАТИ НОВИЙ РЕСУРС"), null);
+        driver.findElement(By.linkText("РЕСУРСИ")).click();
+        String add_resource = driver.findElement(By.linkText("ДОДАТИ НОВИЙ РЕСУРС")).getText();
+
+        Assert.assertEquals("ДОДАТИ НОВИЙ РЕСУРС",add_resource);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userAddNewResourceAvailability"})
-    public void userNewsAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+    @Test(dataProvider = "AdminUser", dependsOnMethods = {"addNewResourceAvailability"})
+    public void newsAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
-        Assert.assertEquals(anyPage.checkNewsAvailability(),false);
+        driver.findElement(By.cssSelector(".fa.fa-weixin")).click();
+        anyPage.explicitWaitForElement(5,".b-chat__currentNews>h3");
+        String news_title = driver.findElement(By.cssSelector(".b-chat__currentNews>h3")).getText();
+
+        Assert.assertEquals("Новини що відображаються зараз на сайті:",news_title);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userNewsAvailability"})
+    @Test(dataProvider = "AdminUser", dependsOnMethods = {"newsAvailability"})
+    public void deleteProblemAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+
+        problemPage.openProblemById(1);
+        anyPage.explicitWaitForButton(5,".b-problems .btn.btn-danger.btn-sm");
+        boolean delete_title = driver.findElement(By.cssSelector(".b-problems .btn.btn-danger.btn-sm")).isDisplayed();
+
+        Assert.assertTrue(delete_title);
+    }
+
+    @Test(dataProvider = "AdminUser", dependsOnMethods = {"deleteProblemAvailability"})
     public void changePassword(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         anyPage.changePassword(UserPassword,"testpassword");
@@ -115,7 +126,7 @@ public class CreateUserTest {
         anyPage.logOut();
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"changePassword"})
+    @Test(dataProvider = "AdminUser", dependsOnMethods = {"changePassword"})
     public void deleteUser(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         deleteUserDAO.deleteUser(UserEmail);
@@ -128,5 +139,5 @@ public class CreateUserTest {
     public static void afterTest() throws Exception{
         driver.quit();
     }
-}
 
+}

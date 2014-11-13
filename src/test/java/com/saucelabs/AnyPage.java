@@ -1,13 +1,17 @@
 package com.saucelabs;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import utility.ClipboardUploadThread;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AnyPage extends MapPage implements IAnyPage {
 
@@ -39,6 +43,14 @@ public class AnyPage extends MapPage implements IAnyPage {
     public static final By PASSWORD_REPEAT_FIELD = By.name("password_second");
     public static final By REGISTRATION_SUBMIT_BUTTON = By.className("b-form__button");
     public static final By LOGGED_IN__USER_NAME = By.xpath("//i[contains(@class, 'fa-user')]/..");
+    public static final String USER_DROPDOWN = ".dropdown-toggle.b-menu__button.ng-binding";
+    public static final String NEWS_ICON = ".navbar-nav>li";
+    public static final String CHANGE_ITEM = "ЗМІНИТИ ПАРОЛЬ";
+    public static final String OLD_PASSWORD = "#old_password";
+    public static final String NEW_PASSWORD = "#new_password";
+    public static final String NEW_PASSWORD_SECOND = "#new_password_second";
+    public static final String CHANGE_BUTTON = ".b-form__button";
+    public static final String CLOSE = ".close";
 
 
     private WebDriver driver;
@@ -161,4 +173,57 @@ public class AnyPage extends MapPage implements IAnyPage {
             alert.findElement(CLOSE_CROSS).click();
         }
     }
+
+    public String checkUsernameInRightCorner(){
+        explicitWaitForElement(5, USER_DROPDOWN);
+        String user_name =  driver.findElement(By.cssSelector(USER_DROPDOWN)).getText();
+        return user_name;
+    }
+
+    public boolean checkNewsAvailability(){
+        boolean newsExist = true;
+        List<WebElement> resources1 = driver.findElements(By.cssSelector(NEWS_ICON));
+        for (WebElement listElement : resources1){
+            String searchText = listElement.getText();
+            if (searchText.equals("НОВИНИ")){
+                System.out.println("Simple user sees News menu");
+            }
+            else {
+                newsExist = false;
+            }
+        }
+        return newsExist;
+    }
+
+    public Map getCookiesName() throws UnsupportedEncodingException {
+
+        String cookie_value = null;
+        Map<String, String> Result = new HashMap<String,String>();
+        Result.put("Name", driver.manage().getCookieNamed("userName").getValue());
+        Result.put("Surname", driver.manage().getCookieNamed("userSurname").getValue());
+        Result.put("Email", URLDecoder.decode(driver.manage().getCookieNamed("userEmail").getValue(), "UTF-8"));
+        Result.put("UserRole", driver.manage().getCookieNamed("userRole").getValue());
+        return Result;
+    }
+
+    public void explicitWaitForButton(int time, String cssValue){
+        WebDriverWait wait1  = new WebDriverWait(driver, time);
+        wait1.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssValue)));
+    }
+
+    public void explicitWaitForElement(int time, String cssValue){
+        WebDriverWait wait1  = new WebDriverWait(driver, time);
+        wait1.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssValue)));
+    }
+
+    public void changePassword(String currentPassword, String newPassword){
+        driver.findElement(By.cssSelector(USER_DROPDOWN)).click();
+        driver.findElement(By.linkText(CHANGE_ITEM)).click();
+        driver.findElement(By.cssSelector(OLD_PASSWORD)).sendKeys(currentPassword);
+        driver.findElement(By.cssSelector(NEW_PASSWORD)).sendKeys(newPassword);
+        driver.findElement(By.cssSelector(NEW_PASSWORD_SECOND)).sendKeys(newPassword);
+        driver.findElement(By.cssSelector(CHANGE_BUTTON)).click();
+        driver.findElement(By.cssSelector(CLOSE)).click();
+    }
+
 }
