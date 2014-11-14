@@ -16,10 +16,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import utility.Constant;
 import utility.ExcelUtils;
 
@@ -42,7 +39,7 @@ public class CreateUserTest {
     static UserInfoDAO userInfoDB = new UserInfoDAO();
     static DeleteUserDAO deleteUserDAO = new DeleteUserDAO();
 
-    @BeforeSuite
+    @BeforeClass
     public static void beforeTest() throws Exception{
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.get(Constant.URLlocal);
@@ -124,7 +121,7 @@ public class CreateUserTest {
         Assert.assertTrue(result.isEmpty());
     }
 
-    @AfterSuite
+    @AfterClass
     public static void afterTest() throws Exception{
         driver.quit();
     }

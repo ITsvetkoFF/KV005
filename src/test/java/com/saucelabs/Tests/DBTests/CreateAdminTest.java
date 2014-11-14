@@ -12,10 +12,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import utility.Constant;
 import utility.ExcelUtils;
 
@@ -34,7 +31,7 @@ public class CreateAdminTest {
     static DeleteUserDAO deleteUserDAO = new DeleteUserDAO();
     static ProblemPage problemPage = new ProblemPage(driver);
 
-    @BeforeSuite
+    @BeforeClass
     public static void beforeTest() throws Exception{
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.get(Constant.URLlocal);
@@ -135,7 +132,7 @@ public class CreateAdminTest {
         Assert.assertTrue(result.isEmpty());
     }
 
-    @AfterSuite
+    @AfterClass
     public static void afterTest() throws Exception{
         driver.quit();
     }

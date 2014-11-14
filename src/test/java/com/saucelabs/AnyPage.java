@@ -12,6 +12,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class AnyPage extends MapPage implements IAnyPage {
 
@@ -168,11 +169,18 @@ public class AnyPage extends MapPage implements IAnyPage {
         }
 
         driver.findElement(ADD_PROBLEM_SUBMIT_BUTTON).click();
-        if (driver.findElements(LOGIN_LINK).size() > 0) {
-            WebElement alert = (new WebDriverWait(driver, 10))
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        System.out.println("Before Explicit Wait during problem add");
+        try {
+            WebElement login = (new WebDriverWait(driver, 1))
+                    .until(ExpectedConditions.presenceOfElementLocated(LOGIN_LINK));
+            WebElement alert = (new WebDriverWait(driver, 1))
                     .until(ExpectedConditions.presenceOfElementLocated(ALERT));
             alert.findElement(CLOSE_CROSS).click();
+        } catch (Exception e) {
         }
+        System.out.println("After Explicit Wait during problem add");
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
     }
 
     public String checkUsernameInRightCorner(){

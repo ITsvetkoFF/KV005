@@ -2,7 +2,11 @@ package com.saucelabs;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Roma on 23.10.2014.
@@ -76,14 +80,20 @@ public class MapPage implements IMapPage {
 
         WebElement map              = driver.findElement(MAP);
         int navBarHeight            = driver.findElement(NAV_BAR).getSize().getHeight();
-        List<WebElement> addProblem = driver.findElements(ADD_PROBLEM_MENU);
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        System.out.println("Before Explicit Wait during set view");
+        try {
+            WebElement addProblem = (new WebDriverWait(driver, 1))
+                    .until(ExpectedConditions.presenceOfElementLocated(ADD_PROBLEM_MENU));
+            addProblemWidth  = addProblem.getSize().getWidth();
+            addProblemHeight = addProblem.getSize().getHeight();
+        } catch (Exception e) {
+        }
+        System.out.println("After Explicit Wait during set view");
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         mapWidth = map.getSize().getWidth();
         mapHeight = map.getSize().getHeight();
 
-        if (addProblem.size() > 0) {
-            addProblemWidth  = addProblem.get(0).getSize().getWidth();
-            addProblemHeight = addProblem.get(0).getSize().getHeight();
-        }
         if (mapWidth != addProblemWidth) {              // wide screen, addProblem at the left side
             x = (mapWidth - addProblemWidth) / 2;
             y = mapHeight / 2;
@@ -134,13 +144,19 @@ public class MapPage implements IMapPage {
 
         WebElement map              = driver.findElement(MAP);
         int navBarHeight            = driver.findElement(NAV_BAR).getSize().getHeight();
-        List<WebElement> addProblem = driver.findElements(ADD_PROBLEM_MENU);
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        System.out.println("Before Explicit Wait during click");
+        try {
+            WebElement addProblem = (new WebDriverWait(driver, 1))
+                    .until(ExpectedConditions.presenceOfElementLocated(ADD_PROBLEM_MENU));
+            addProblemWidth  = addProblem.getSize().getWidth();
+            addProblemHeight = addProblem.getSize().getHeight();
+        } catch (Exception e) {
+        }
+        System.out.println("After Explicit Wait during click");
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         mapWidth         = map.getSize().getWidth();
         mapHeight        = map.getSize().getHeight();
-        if (addProblem.size() > 0) {
-            addProblemWidth  = addProblem.get(0).getSize().getWidth();
-            addProblemHeight = addProblem.get(0).getSize().getHeight();
-        }
         if (mapWidth != addProblemWidth) {              // wide screen, addProblem at the left side
             x = (mapWidth - addProblemWidth) / 2;
             y = mapHeight / 2;
