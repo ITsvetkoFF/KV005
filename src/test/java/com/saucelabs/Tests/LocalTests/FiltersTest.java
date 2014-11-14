@@ -5,6 +5,8 @@ import com.saucelabs.MapPage;
 import com.saucelabs.ProblemPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -24,11 +26,11 @@ public class FiltersTest {
     MapPage mapPage;
     ProblemPage problemPage;
 
-    public String afterDate = "13 лист. 2014";
-    public String beforeDate = "14 лист. 2014";
+    public String afterDate = "14 лист. 2014";
+    public String beforeDate = "15 лист. 2014";
     public static int typeNumber = 1;
-    public static double latitude = 50.255;
-    public static double longitude = 30.255;
+    public static double latitude = 50.29;
+    public static double longitude = 30.29;
 
     @BeforeSuite
     public void setUp() {
@@ -63,7 +65,7 @@ public class FiltersTest {
         String imageURLsString = "";
         String imageCommentsString = "";
         anyPage.logIn("admin@.com","admin");
-        anyPage.addProblemToVisibleCenter(50.255, 30.255, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", Arrays.asList(imageURLsString.split("\n")), Arrays.asList(imageCommentsString.split("\n")));
+        anyPage.addProblemToVisibleCenter(latitude, longitude, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", Arrays.asList(imageURLsString.split("\n")), Arrays.asList(imageCommentsString.split("\n")));
         anyPage.logOut();
         mapPage.clickZoomOut();
         mapPage.openFiltersBoard();
@@ -71,27 +73,8 @@ public class FiltersTest {
         mapPage.setBeforeDate(beforeDate);
         mapPage.selectOnlyOneFilter(typeNumber);
         mapPage.clickAtProblemByCoordinateVisible(latitude, longitude);
-        Assert.assertTrue(problemPage.getProblemType().equals(mapPage.getFilterTitle(typeNumber)));
+
+        Assert.assertEquals(mapPage.getFilterTitle(typeNumber), problemPage.getProblemType());
+    }
     }
 
-    //@Test
-    public void datePickersButtons(){
-
-    }
- }
-//        for dataProvider
-
-//        anyPage.addProblem(50.2, 30.2, "ProblemFor Проблеми лісів", "Проблеми лісів", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment1");
-
-//        anyPage.addProblem(50.3, 30.3, "ProblemFor Сміттєзвалища", "Сміттєзвалища", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment2");
-
-//        anyPage.addProblem(50.4, 30.4, "ProblemFor Незаконна забудова", "Незаконна забудова", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment3");
-//
-//        anyPage.addProblem(50.5, 30.5, "ProblemFor Проблеми водойм", "Проблеми водойм", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment4");
-//
-//        anyPage.addProblem(50.6, 30.6, "ProblemFor Загрози біорізноманіттю", "Загрози біорізноманіттю", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment5");
-//
-//        anyPage.addProblem(50.7, 30.7, "ProblemFor Браконьєрство", "Браконьєрство", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment6");
-//
-//        anyPage.addProblem(50.8, 30.8, "ProblemFor Інші проблеми", "Інші проблеми", "Decsription", "problemProposeTest", "C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg", "comment7");
-//

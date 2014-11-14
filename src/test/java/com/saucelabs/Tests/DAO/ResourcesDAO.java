@@ -51,7 +51,7 @@ public class ResourcesDAO extends BaseDAO {
 
         String query = "select Id from resources where Title = ?;";
         PreparedStatement preparedStmt = (PreparedStatement) getConnection(DB_URL_WITH_UTF_8, USER_NAME, USER_PASSWORD).prepareStatement(query);
-        String id = USER_PASSWORD;
+        String id = "";
         preparedStmt.setString  (1, title);
 
         ResultSet setWithId = preparedStmt.executeQuery();
@@ -67,7 +67,7 @@ public class ResourcesDAO extends BaseDAO {
 
         String query = "select Title from resources where Id = ?;";
         PreparedStatement preparedStmt = (PreparedStatement) getConnection(DB_URL_WITH_UTF_8, USER_NAME, USER_PASSWORD).prepareStatement(query);
-        String title = USER_PASSWORD;
+        String title = "";
         preparedStmt.setString  (1, id);
 
         ResultSet setWithId = preparedStmt.executeQuery();
