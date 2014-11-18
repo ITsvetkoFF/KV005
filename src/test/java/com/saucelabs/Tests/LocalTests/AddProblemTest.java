@@ -1,16 +1,16 @@
 package com.saucelabs.Tests.LocalTests;
 
 import com.saucelabs.AnyPage;
-import com.saucelabs.MapPage;
 import com.saucelabs.ProblemPage;
 import com.saucelabs.Tests.DAO.AddProblemDAO;
 import org.json.JSONException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -43,15 +43,16 @@ public class AddProblemTest {
     public void beforeTestSuite() {
 
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        driver.get("http://localhost:8090/#/map");
+        driver.get("http://www.ecomap.org/#/map");
+//        driver.get("http://localhost:8090/#/map");
         anyPage.logIn("admin@.com", "admin");
     }
 
     @Test
     public void addProblem() throws SQLException, ClassNotFoundException {
 
-        anyPage.addProblemToVisibleCenter(latitude, longitude, problemNameTest, problemTypeTest,
-                                          problemDescriptionTest, problemProposeTest, imagePath, imageComments);
+        anyPage.addProblemWithSikuliUploadImage(latitude, longitude, problemNameTest, problemTypeTest,
+                problemDescriptionTest, problemProposeTest, imagePath, imageComments);
         driver.navigate().refresh();
         anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
         String problemTitle = problemPage.getProblemTitle();
@@ -60,7 +61,7 @@ public class AddProblemTest {
         Assert.assertEquals(problemTitle, problemNameTest);
     }
 
-    @Test(dependsOnMethods = "addProblem")
+//    @Test(dependsOnMethods = "addProblem")
     public void checkSelectedProblemsValuesInDB() throws SQLException, ClassNotFoundException {
 
         String problemId = Integer.toString(problemPage.getProblemId(latitude, longitude));
@@ -91,7 +92,7 @@ public class AddProblemTest {
         Assert.assertEquals(values, valuesDB);
     }
 
-    @Test(dependsOnMethods = "addProblem")
+//    @Test(dependsOnMethods = "addProblem")
     public void commentsEqualsInDB() throws SQLException, JSONException, ClassNotFoundException {
 
         problemPage.addComments(latitude, longitude, problemComments);
@@ -101,7 +102,7 @@ public class AddProblemTest {
         Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
     }
 
-    @Test(dependsOnMethods = "addProblem")
+//    @Test(dependsOnMethods = "addProblem")
     public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
 
         int problemId = problemPage.getProblemId(latitude, longitude);
@@ -117,7 +118,7 @@ public class AddProblemTest {
         Assert.assertEquals(vote, voteDB);
     }
 
-    @AfterClass
+//    @AfterClass
     public void afterTestSuite() {
         driver.quit();
     }

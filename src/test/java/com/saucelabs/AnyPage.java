@@ -1,12 +1,24 @@
 package com.saucelabs;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
+
+import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.ImageTarget;
+import org.sikuli.api.ScreenRegion;
+import org.sikuli.api.robot.Keyboard;
+import org.sikuli.api.robot.Mouse;
+import org.sikuli.api.robot.desktop.DesktopKeyboard;
+import org.sikuli.api.robot.desktop.DesktopMouse;
+import org.sikuli.api.visual.Canvas;
+import org.sikuli.api.visual.DesktopCanvas;
 import utility.ClipboardUploadThread;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -235,4 +247,80 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(CLOSE).click();
     }
 
+    public void addProblemWithSikuliUploadImage(double latitude, double longitude,
+                                                String problemName, String problemType,
+                                                String problemDescription, String problemPropose,
+                                                List<String> imageUrls, List<String> imageComments) {
+
+        driver.manage().window().maximize();
+        driver.findElement(ADD_PROBLEM_BUTTON).click();
+        setVisibleView(latitude, longitude, 18);
+        clickAtVisibleMapCenter(0);
+        driver.findElement(ADD_PROBLEM_NEXT_TAB2_BUTTON).click();
+        driver.findElement(PROBLEM_NAME_TEXT_BOX).sendKeys(problemName);
+
+        List<WebElement> elements = driver.findElements(PROBLEM_TYPE_DROP_DOWN_LIST);
+        for (WebElement element: elements) {
+            if (problemType.equals(element.getText()))
+                element.click();
+        }
+
+        driver.findElement(PROBLEM_DESCRIPTION_FIELD).sendKeys(problemDescription);
+        driver.findElement(PROBLEM_PROPOSE_FIELD).sendKeys(problemPropose);
+        driver.findElement(BODY).sendKeys(Keys.chord(Keys.CONTROL, Keys.HOME));
+        driver.findElement(ADD_PROBLEM_TAB3_IMAGE).click();
+
+//        for (String url: imageUrls) {
+//            if (url.length() == 0) {
+//                continue;
+//            }
+//            driver.findElement(DROP_ZONE).click();
+//        }
+        driver.findElement(DROP_ZONE).click();
+
+        ImageTarget target1 = new ImageTarget(new File(".\\resources\\images\\ImagePathField.jpg"));
+        ImageTarget target2 = new ImageTarget(new File(".\\resources\\images\\OpenButton.jpg"));
+
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
+
+        }
+        ScreenRegion screenRegion1 = new DesktopScreenRegion().wait(target1, 5);
+        ScreenRegion screenRegion2 = new DesktopScreenRegion().wait(target2, 5);
+
+        Canvas canvas = new DesktopCanvas();
+        canvas.addBox(screenRegion1);
+        canvas.addBox(screenRegion2);
+        canvas.display(3);
+
+        Mouse mouse = new DesktopMouse();
+        Keyboard keyboard = new DesktopKeyboard();
+
+        mouse.click(screenRegion1.getCenter());
+        keyboard.paste("pam-pam");
+
+        mouse.click(screenRegion2.getCenter());
+
+        List<WebElement> commentElements = driver.findElements(IMAGE_COMMENT_TEXT_BOX);
+        int i = 0;
+        for (WebElement element: commentElements) {
+            element.sendKeys(imageComments.get(i));
+            i++;
+        }
+
+        driver.findElement(ADD_PROBLEM_SUBMIT_BUTTON).click();
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        System.out.println("Before Explicit Wait during problem add");
+        try {
+            WebElement login = (new WebDriverWait(driver, 1))
+                    .until(ExpectedConditions.presenceOfElementLocated(LOGIN_LINK));
+            WebElement alert = (new WebDriverWait(driver, 1))
+                    .until(ExpectedConditions.presenceOfElementLocated(ALERT));
+            alert.findElement(CLOSE_CROSS).click();
+        } catch (Exception e) {
+        }
+        System.out.println("After Explicit Wait during problem add");
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+    }
 }
