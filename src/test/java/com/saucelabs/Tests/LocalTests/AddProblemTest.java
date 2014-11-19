@@ -113,7 +113,7 @@ public class AddProblemTest {
         System.out.println("UI vote => " + vote);
         String voteDB = addProblemDAO.getProblemsById(problemId).get("Votes");
         System.out.println("DB vote => " + voteDB);
-        problemPage.closeProblem();
+        problemPage.deleteOpenedProblem();
 
         Assert.assertEquals(vote, voteDB);
     }
