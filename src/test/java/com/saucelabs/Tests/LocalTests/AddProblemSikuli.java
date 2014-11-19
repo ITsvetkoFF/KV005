@@ -2,10 +2,7 @@ package com.saucelabs.Tests.LocalTests;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.sikuli.api.DesktopScreenRegion;
-import org.sikuli.api.ImageTarget;
-import org.sikuli.api.ScreenRegion;
-import org.sikuli.api.Target;
+import org.sikuli.api.*;
 import org.sikuli.api.robot.Keyboard;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
@@ -50,31 +47,30 @@ public class AddProblemSikuli {
         additionalDriver.manage().window().setPosition(new Point(0, 0));
 
         additionalDriver.get("http://prntscr.com/57yeoo");
-        additionalDriver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 
-        Dimension koalaDimension = additionalDriver.findElement(By.id("screenshot-image")).getSize();
-        Point koalaPosition = additionalDriver.findElement(By.id("screenshot-image")).getLocation();
+//        additionalDriver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+//        Dimension koalaDimension = additionalDriver.findElement(By.id("screenshot-image")).getSize();
+//        Point koalaPosition = additionalDriver.findElement(By.id("screenshot-image")).getLocation();
 
         Target dropZone = new ImageTarget(new File(".\\resources\\images\\DropZone.jpg"));
-        Target koala = new ImageTarget(new URL("http://i.imgur.com/6HuxCqx.jpg"));
+        Target koala = new ImageTarget(new File(".\\resources\\images\\KoalaScreen.jpg"));
 
 //        BufferedImage bigKoala = ImageIO.read(new URL("http://i.imgur.com/6HuxCqx.jpg"));
 //        BufferedImage smallKoala = bigKoala.getSubimage(koalaPosition.getX(), koalaPosition.getY(),
 //                                                        koalaDimension.getWidth(), koalaDimension.getHeight());
 //        Target koala = new ImageTarget(smallKoala);
 
-        ScreenRegion koalaScreen = new DesktopScreenRegion().wait(koala, 20);
         ScreenRegion dropZoneScreen = new DesktopScreenRegion().wait(dropZone, 20);
+        ScreenRegion koalaScreen = new DesktopScreenRegion().wait(koala, 20);
 
         Canvas canvas = new DesktopCanvas();
         canvas.addLabel(koalaScreen, "We found Koala!!!");
         canvas.addLabel(dropZoneScreen, "We found DropZone!!!");
         canvas.display(3);
 
-//----------------------------------------------------------------------------------------------------------------------
-//        Mouse mouse = new DesktopMouse();
-//        mouse.drag((org.sikuli.api.ScreenLocation) koalaScreen);
-//        mouse.drop((org.sikuli.api.ScreenLocation) dropZoneScreen);
+        Mouse mouse = new DesktopMouse();
+        mouse.drag(koalaScreen.getCenter());
+        mouse.drop(dropZoneScreen.getCenter());
 //
 //        additionalDriver.navigate().to("http://prntscr.com/57yflf");
 //        ImageTarget desert = new ImageTarget(new URL("http://prntscr.com/57yflf"));
