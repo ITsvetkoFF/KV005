@@ -172,4 +172,9 @@ public class ProblemPage extends AnyPage{
     public void closeProblem() {
         driver.findElement(By.xpath("//a[@class='close']")).click();
     }
+
+    public void deleteProblemOpenedProblem() {
+        driver.findElement(By.xpath("//button[@class='btn btn-danger btn-sm']")).click();
+        driver.findElement(By.xpath("//button[@class='btn btn-warning ng-binding']")).click();
+    }
 }

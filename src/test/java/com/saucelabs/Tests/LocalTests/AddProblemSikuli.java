@@ -39,13 +39,6 @@ public class AddProblemSikuli {
         tabs.get(1).click();
         driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
 
-
-        try {
-            Thread.sleep(8000);
-        } catch (Exception e) {
-
-        }
-
         ImageTarget target1 = new ImageTarget(new File(".\\resources\\images\\ImagePathField.jpg"));
         ImageTarget target2 = new ImageTarget(new File(".\\resources\\images\\OpenButton.jpg"));
 

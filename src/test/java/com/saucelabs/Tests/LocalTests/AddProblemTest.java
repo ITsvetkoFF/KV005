@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -43,15 +44,14 @@ public class AddProblemTest {
     public void beforeTestSuite() {
 
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        driver.get("http://www.ecomap.org/#/map");
-//        driver.get("http://localhost:8090/#/map");
+        driver.get("http://localhost:8090/#/map");
         anyPage.logIn("admin@.com", "admin");
     }
 
     @Test
     public void addProblem() throws SQLException, ClassNotFoundException {
 
-        anyPage.addProblemWithSikuliUploadImage(latitude, longitude, problemNameTest, problemTypeTest,
+        anyPage.addProblemToVisibleCenter(latitude, longitude, problemNameTest, problemTypeTest,
                 problemDescriptionTest, problemProposeTest, imagePath, imageComments);
         driver.navigate().refresh();
         anyPage.clickAtProblemByCoordinateVisible(latitude, longitude);
@@ -61,7 +61,7 @@ public class AddProblemTest {
         Assert.assertEquals(problemTitle, problemNameTest);
     }
 
-//    @Test(dependsOnMethods = "addProblem")
+    @Test(dependsOnMethods = "addProblem")
     public void checkSelectedProblemsValuesInDB() throws SQLException, ClassNotFoundException {
 
         String problemId = Integer.toString(problemPage.getProblemId(latitude, longitude));
@@ -92,7 +92,7 @@ public class AddProblemTest {
         Assert.assertEquals(values, valuesDB);
     }
 
-//    @Test(dependsOnMethods = "addProblem")
+    @Test(dependsOnMethods = "addProblem")
     public void commentsEqualsInDB() throws SQLException, JSONException, ClassNotFoundException {
 
         problemPage.addComments(latitude, longitude, problemComments);
@@ -102,7 +102,7 @@ public class AddProblemTest {
         Assert.assertEquals(problemComments, addProblemDAO.getCommentsFromDB(problemId));
     }
 
-//    @Test(dependsOnMethods = "addProblem")
+    @Test(dependsOnMethods = "addProblem")
     public void voteEqualsInDB() throws SQLException, ClassNotFoundException {
 
         int problemId = problemPage.getProblemId(latitude, longitude);
@@ -118,7 +118,7 @@ public class AddProblemTest {
         Assert.assertEquals(vote, voteDB);
     }
 
-//    @AfterClass
+    @AfterClass
     public void afterTestSuite() {
         driver.quit();
     }
