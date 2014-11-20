@@ -4,10 +4,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.sikuli.api.DesktopScreenRegion;
+import org.sikuli.api.ImageTarget;
+import org.sikuli.api.ScreenRegion;
+import org.sikuli.api.Target;
+import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
+import org.sikuli.api.robot.desktop.DesktopMouse;
+import org.sikuli.api.visual.Canvas;
+import org.sikuli.api.visual.DesktopCanvas;
 import org.testng.annotations.Test;
 
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -19,70 +28,43 @@ public class AddProblemSikuli {
     @Test
     public void addProblemSikuli() {
 
-        WebDriver driver = new FirefoxDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get("http://www.ecomap.org/#/map");
+/*----------------------------------------Selenium code block---------------------------------------------------------*/
 
-        driver.findElement(By.xpath("//button[@class='navbar-brand b-menu__button']")).click();
-        List<WebElement> tabs = driver.findElements(By.xpath("//li[@class='ng-isolate-scope']/a/tab-heading/i"));
-        tabs.get(1).click();
-        tabs.get(1).click();
-//----------------------------------------------------------------------------------------------------------------------
-//        org.openqa.selenium.Dimension dimension = driver.manage().window().getSize();
-//        org.openqa.selenium.Dimension additionalDimension = new Dimension(dimension.height, dimension.width - 400);
+//        WebDriver driver = new FirefoxDriver();
+//        driver.manage().window().maximize();
+//        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+//        driver.get("http://www.ecomap.org/#/map");
 //
-//        WebDriver additionalDriver = new FirefoxDriver();
-//        additionalDriver.manage().window().setSize(additionalDimension);
-//        additionalDriver.manage().window().setPosition(new Point(0, 0));
-//
-//        additionalDriver.get("http://prntscr.com/57yeoo");
-//
-//        Target dropZone = new ImageTarget(new File(".\\resources\\images\\DropZone.jpg"));
-//        Target koala = new ImageTarget(new File(".\\resources\\images\\KoalaScreen.jpg"));
-//
-//        ScreenRegion dropZoneScreen = new DesktopScreenRegion().wait(dropZone, 20);
-//        ScreenRegion koalaScreen = new DesktopScreenRegion().wait(koala, 20);
-//
-//        Canvas canvas = new DesktopCanvas();
-//        canvas.addLabel(koalaScreen, "We found Koala!!!");
-//        canvas.addLabel(dropZoneScreen, "We found DropZone!!!");
-//        canvas.display(3);
-//
-//        Mouse mouse = new DesktopMouse();
-//        mouse.drag(koalaScreen.getCenter());
-//        mouse.drop(dropZoneScreen.getCenter());
+//        driver.findElement(By.xpath("//button[@class='navbar-brand b-menu__button']")).click();
+//        List<WebElement> tabs = driver.findElements(By.xpath("//li[@class='ng-isolate-scope']/a/tab-heading/i"));
+//        tabs.get(1).click();
+//        tabs.get(1).click();
+
+/*------------------------------------------Sikuli code block---------------------------------------------------------*/
 
         DesktopKeyboard keyboard = new DesktopKeyboard();
+        Mouse mouse = new DesktopMouse();
+        Canvas canvas = new DesktopCanvas();
+        ScreenRegion screenRegion = new DesktopScreenRegion();
+
         keyboard.keyDown(KeyEvent.VK_WINDOWS);
         keyboard.keyDown(KeyEvent.VK_E);
         keyboard.keyUp(KeyEvent.VK_E);
         keyboard.keyUp(KeyEvent.VK_WINDOWS);
 
-//
-//        additionalDriver.navigate().to("http://prntscr.com/57yflf");
-//        ImageTarget desert = new ImageTarget(new URL("http://prntscr.com/57yflf"));
-//        ScreenRegion desertScreen = new DesktopScreenRegion().wait(desert, 5);
+        Target pictures = new ImageTarget(new File(".\\resources\\images\\Pictures.jpg"));
+        Target samplePictures = new ImageTarget(new File(".\\resources\\images\\Sample Pictures.jpg"));
+        Target path = new ImageTarget(new File(".\\resources\\images\\Path.jpg"));
+        Target explorer = new ImageTarget(new File(".\\resources\\images\\Explorer.jpg"));
 
-//----------------------------------------------------------------------------------------------------------------------
-//        driver.findElement(By.xpath("//div[contains(@class,'dz-clickable')]/span")).click();
-//        ImageTarget target1 = new ImageTarget(new File(".\\resources\\images\\ImagePathField.jpg"));
-//        ImageTarget target2 = new ImageTarget(new File(".\\resources\\images\\OpenButton.jpg"));
+        explorer.setMinScore(0.7);
+        List<ScreenRegion> screenRegionList = screenRegion.findAll(explorer);
 
-//        ScreenRegion screenRegion1 = new DesktopScreenRegion().wait(target1, 5);
-//        ScreenRegion screenRegion2 = new DesktopScreenRegion().wait(target2, 5);
-//
-//        Canvas canvas = new DesktopCanvas();
-//        canvas.addBox(screenRegion1);
-//        canvas.addBox(screenRegion2);
-//        canvas.display(3);
-//
-//        Mouse mouse = new DesktopMouse();
-//        Keyboard keyboard = new DesktopKeyboard();
-//
-//        mouse.click(screenRegion1.getCenter());
-//        keyboard.paste("pam-pam");
-//
-//        mouse.click(screenRegion2.getCenter());
+        for(ScreenRegion screen : screenRegionList) {
+            canvas.addBox(screen);
+            canvas.addLabel(screen, "We found it!");
+        }
+
+        canvas.display(3);
     }
 }
