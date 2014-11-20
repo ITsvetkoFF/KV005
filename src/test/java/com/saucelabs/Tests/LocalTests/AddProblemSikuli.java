@@ -62,6 +62,9 @@ public class AddProblemSikuli {
         Target koala = new ImageTarget(new File(".\\resources\\images\\Koala.jpg"));
         koala.setMinScore(0.8);
 
+        Target desert = new ImageTarget(new File(".\\resources\\images\\Desert.jpg"));
+        desert.setMinScore(0.8);
+
         keyboard.keyDown(KeyEvent.VK_WINDOWS);
         keyboard.keyDown(KeyEvent.VK_E);
         keyboard.keyUp(KeyEvent.VK_E);
@@ -95,11 +98,15 @@ public class AddProblemSikuli {
 
         canvas.addImage(screenRegionList.get(0).getCenter(), smallKoala);
         canvas.addLabel(screenRegionList.get(0), "           We want choose this nice Koala!");
-        canvas.display(4);
+        canvas.display(3);
         canvas.clear();
 
         ScreenRegion koalaScreenRegion = new DesktopScreenRegion().wait(koala, 10);
         mouse.drag(koalaScreenRegion.getCenter());
+        mouse.drop(dropZoneScreenRegion.getCenter());
+
+        ScreenRegion desertScreenRegion = new DesktopScreenRegion().wait(desert, 10);
+        mouse.drag(desertScreenRegion.getCenter());
         mouse.drop(dropZoneScreenRegion.getCenter());
     }
 }
