@@ -56,12 +56,17 @@ public class AddProblemSikuli {
         }
 
         List<ScreenRegion> screenRegionList = screenRegion.findAll(target);
+//        for(ScreenRegion screen : screenRegionList) {
+//            canvas.addBox(screen);
+//            canvas.addLabel(screen, "We found it!");
+//        }
+        canvas.addBox(screenRegionList.get(0));
+        canvas.addLabel(screenRegionList.get(0), "We found it!");
+        canvas.display(1);
+        mouse.click(screenRegionList.get(0).getRelativeScreenLocation(20, 0));
 
-        for(ScreenRegion screen : screenRegionList) {
-            canvas.addBox(screen);
-            canvas.addLabel(screen, "We found it!");
-        }
-
-        canvas.display(3);
+        keyboard.paste("C:\\Users\\Public\\Pictures\\Sample Pictures");
+        keyboard.keyDown(KeyEvent.VK_ENTER);
+        keyboard.keyUp(KeyEvent.VK_ENTER);
     }
 }
