@@ -1,5 +1,9 @@
 package com.saucelabs.Tests.LocalTests;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
@@ -11,9 +15,13 @@ import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
 import org.testng.annotations.Test;
 
+import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Roma on 18.11.2014.
@@ -21,19 +29,19 @@ import java.util.List;
 public class AddProblemSikuli {
 
     @Test
-    public void addProblemSikuli() {
+    public void addProblemSikuli() throws IOException {
 
 /*----------------------------------------Selenium code block---------------------------------------------------------*/
 
-//        WebDriver driver = new FirefoxDriver();
-//        driver.manage().window().maximize();
-//        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-//        driver.get("http://www.ecomap.org/#/map");
-//
-//        driver.findElement(By.xpath("//button[@class='navbar-brand b-menu__button']")).click();
-//        List<WebElement> tabs = driver.findElements(By.xpath("//li[@class='ng-isolate-scope']/a/tab-heading/i"));
-//        tabs.get(1).click();
-//        tabs.get(1).click();
+        WebDriver driver = new FirefoxDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+        driver.get("http://www.ecomap.org/#/map");
+
+        driver.findElement(By.xpath("//button[@class='navbar-brand b-menu__button']")).click();
+        List<WebElement> tabs = driver.findElements(By.xpath("//li[@class='ng-isolate-scope']/a/tab-heading/i"));
+        tabs.get(1).click();
+        tabs.get(1).click();
 
 /*------------------------------------------Sikuli code block---------------------------------------------------------*/
 
@@ -42,31 +50,59 @@ public class AddProblemSikuli {
         Canvas canvas = new DesktopCanvas();
         ScreenRegion screenRegion = new DesktopScreenRegion();
 
+        Target triangle = new ImageTarget(new File(".\\resources\\images\\Drop List.jpg"));
+        triangle.setMinScore(0.8);
+
+        Target dropZone = new ImageTarget(new File(".\\resources\\images\\Drop Zone.jpg"));
+        dropZone.setMinScore(0.8);
+
+        BufferedImage bigKoala = ImageIO.read(new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg"));
+        BufferedImage smallKoala = bigKoala.getSubimage(0, 0, 40, 30);
+        Target koala = new ImageTarget(smallKoala);
+        koala.setMinScore(0.4);
+
         keyboard.keyDown(KeyEvent.VK_WINDOWS);
         keyboard.keyDown(KeyEvent.VK_E);
         keyboard.keyUp(KeyEvent.VK_E);
         keyboard.keyUp(KeyEvent.VK_WINDOWS);
 
-        Target target = new ImageTarget(new File(".\\resources\\images\\Drop List.jpg"));
-        target.setMinScore(0.8);
-
         try {
-            Thread.sleep(500);
+            Thread.sleep(700);
         } catch (Exception e) {
         }
 
-        List<ScreenRegion> screenRegionList = screenRegion.findAll(target);
-//        for(ScreenRegion screen : screenRegionList) {
-//            canvas.addBox(screen);
-//            canvas.addLabel(screen, "We found it!");
-//        }
-        canvas.addBox(screenRegionList.get(0));
-        canvas.addLabel(screenRegionList.get(0), "We found it!");
+        List<ScreenRegion> screenRegionList = screenRegion.findAll(triangle);
+        for(ScreenRegion screen : screenRegionList) {
+            canvas.addBox(screen);
+        }
         canvas.display(1);
+        canvas.clear();
+        canvas.addBox(screenRegionList.get(0));
+        canvas.addLabel(screenRegionList.get(0), "We get this!");
+        canvas.display(1);
+        canvas.clear();
         mouse.click(screenRegionList.get(0).getRelativeScreenLocation(20, 0));
-
         keyboard.paste("C:\\Users\\Public\\Pictures\\Sample Pictures");
         keyboard.keyDown(KeyEvent.VK_ENTER);
         keyboard.keyUp(KeyEvent.VK_ENTER);
+
+        ScreenRegion dropZoneScreenRegion = new DesktopScreenRegion().wait(dropZone, 10);
+        canvas.addBox(dropZoneScreenRegion);
+        canvas.addLabel(dropZoneScreenRegion, "We found Drop Zone!");
+        canvas.display(1);
+        canvas.clear();
+
+//        ScreenRegion koalaScreenRegion = new DesktopScreenRegion().wait(koala, 10);
+//        canvas.addBox(koalaScreenRegion);
+//        canvas.addLabel(koalaScreenRegion, "We found Koala!");
+//        canvas.display(1);
+//        canvas.clear();
+        screenRegionList.clear();
+        screenRegionList = screenRegion.findAll(koala);
+        for (ScreenRegion screen : screenRegionList) {
+            canvas.addBox(screen);
+        }
+        canvas.display(1);
+        //canvas.addImage(dropZoneScreenRegion.getCenter(), smallKoala);
     }
 }
