@@ -1,6 +1,8 @@
 package com.saucelabs.Tests.LocalTests;
 
+import com.saucelabs.AnyPage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -13,6 +15,7 @@ import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import javax.imageio.ImageIO;
@@ -20,16 +23,20 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Roma on 18.11.2014.
  */
-public class AddProblemSikuli {
+public class SikuliSample {
 
-    @Test
-    public void addProblemSikuli() throws IOException {
+    static WebDriver driver = new FirefoxDriver();
+    static AnyPage anyPage = new AnyPage(driver);
+
+    //    @Test
+    public void sikuliSample() throws IOException {
 
 /*----------------------------------------Selenium code block---------------------------------------------------------*/
 
@@ -108,5 +115,22 @@ public class AddProblemSikuli {
         ScreenRegion desertScreenRegion = new DesktopScreenRegion().wait(desert, 10);
         mouse.drag(desertScreenRegion.getCenter());
         mouse.drop(dropZoneScreenRegion.getCenter());
+    }
+
+    @BeforeTest
+    public void setting() {
+        driver.manage().window().setPosition(new Point(0, 0));
+        driver.manage().window().maximize();
+        driver.get("http://176.36.11.25/#/map");
+        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void addProblem() throws IOException {
+        anyPage.addProblemSymbiosis(50, 30,
+                "Коалам загрожує небезпека", "Загрози біорізноманіттю",
+                "Через вирубку лісів, місцевість перетворюється на пустелю, " +
+                "бідненьким коалам нічого їсти", "Заборонити вирубку лісів!",
+        Arrays.asList("Голодна коала", "Ось як вже подекуди виглядає ліс!"));
     }
 }
