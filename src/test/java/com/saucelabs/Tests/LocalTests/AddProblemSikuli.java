@@ -1,9 +1,5 @@
 package com.saucelabs.Tests.LocalTests;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
@@ -18,7 +14,6 @@ import org.testng.annotations.Test;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Roma on 18.11.2014.
@@ -52,13 +47,15 @@ public class AddProblemSikuli {
         keyboard.keyUp(KeyEvent.VK_E);
         keyboard.keyUp(KeyEvent.VK_WINDOWS);
 
-        Target pictures = new ImageTarget(new File(".\\resources\\images\\Pictures.jpg"));
-        Target samplePictures = new ImageTarget(new File(".\\resources\\images\\Sample Pictures.jpg"));
-        Target path = new ImageTarget(new File(".\\resources\\images\\Path.jpg"));
-        Target explorer = new ImageTarget(new File(".\\resources\\images\\Explorer.jpg"));
+        Target target = new ImageTarget(new File(".\\resources\\images\\Drop List.jpg"));
+        target.setMinScore(0.8);
 
-        explorer.setMinScore(0.7);
-        List<ScreenRegion> screenRegionList = screenRegion.findAll(explorer);
+        try {
+            Thread.sleep(500);
+        } catch (Exception e) {
+        }
+
+        List<ScreenRegion> screenRegionList = screenRegion.findAll(target);
 
         for(ScreenRegion screen : screenRegionList) {
             canvas.addBox(screen);
