@@ -36,7 +36,7 @@ public class AddProblemSikuli {
         WebDriver driver = new FirefoxDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get("http://www.ecomap.org/#/map");
+        driver.get("http://176.36.11.25/#/map");
 
         driver.findElement(By.xpath("//button[@class='navbar-brand b-menu__button']")).click();
         List<WebElement> tabs = driver.findElements(By.xpath("//li[@class='ng-isolate-scope']/a/tab-heading/i"));
@@ -57,9 +57,10 @@ public class AddProblemSikuli {
         dropZone.setMinScore(0.8);
 
         BufferedImage bigKoala = ImageIO.read(new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg"));
-        BufferedImage smallKoala = bigKoala.getSubimage(0, 0, 40, 30);
-        Target koala = new ImageTarget(smallKoala);
-        koala.setMinScore(0.4);
+        BufferedImage smallKoala = bigKoala.getSubimage(320, 120, 600, 600);
+
+        Target koala = new ImageTarget(new File(".\\resources\\images\\Koala.jpg"));
+        koala.setMinScore(0.8);
 
         keyboard.keyDown(KeyEvent.VK_WINDOWS);
         keyboard.keyDown(KeyEvent.VK_E);
@@ -92,17 +93,13 @@ public class AddProblemSikuli {
         canvas.display(1);
         canvas.clear();
 
-//        ScreenRegion koalaScreenRegion = new DesktopScreenRegion().wait(koala, 10);
-//        canvas.addBox(koalaScreenRegion);
-//        canvas.addLabel(koalaScreenRegion, "We found Koala!");
-//        canvas.display(1);
-//        canvas.clear();
-        screenRegionList.clear();
-        screenRegionList = screenRegion.findAll(koala);
-        for (ScreenRegion screen : screenRegionList) {
-            canvas.addBox(screen);
-        }
-        canvas.display(1);
-        //canvas.addImage(dropZoneScreenRegion.getCenter(), smallKoala);
+        canvas.addImage(screenRegionList.get(0).getCenter(), smallKoala);
+        canvas.addLabel(screenRegionList.get(0), "           We want choose this nice Koala!");
+        canvas.display(4);
+        canvas.clear();
+
+        ScreenRegion koalaScreenRegion = new DesktopScreenRegion().wait(koala, 10);
+        mouse.drag(koalaScreenRegion.getCenter());
+        mouse.drop(dropZoneScreenRegion.getCenter());
     }
 }
