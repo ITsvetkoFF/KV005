@@ -121,7 +121,8 @@ public class SikuliSample {
     public void setting() {
         driver.manage().window().setPosition(new Point(0, 0));
         driver.manage().window().maximize();
-        driver.get("http://176.36.11.25/#/map");
+        driver.get("http://localhost:8090/#/map");
+        //driver.get("http://176.36.11.25/#/map");
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
     }
 

@@ -286,7 +286,7 @@ public class AnyPage extends MapPage implements IAnyPage {
         triangle.setMinScore(0.8);
 
         Target dropZone = new ImageTarget(new File(".\\resources\\images\\Drop Zone.jpg"));
-        dropZone.setMinScore(0.8);
+        dropZone.setMinScore(0.6);
 
         BufferedImage bigKoala = ImageIO.read(new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg"));
         BufferedImage smallKoala = bigKoala.getSubimage(320, 120, 600, 600);
@@ -301,9 +301,24 @@ public class AnyPage extends MapPage implements IAnyPage {
         keyboard.keyDown(KeyEvent.VK_E);
         keyboard.keyUp(KeyEvent.VK_E);
         keyboard.keyUp(KeyEvent.VK_WINDOWS);
-
         try {
             Thread.sleep(700);
+        } catch (Exception e) {
+        }
+        keyboard.keyDown(KeyEvent.VK_WINDOWS);
+        keyboard.keyDown(KeyEvent.VK_UP);
+        keyboard.keyUp(KeyEvent.VK_UP);
+        keyboard.keyUp(KeyEvent.VK_WINDOWS);
+        try {
+            Thread.sleep(150);
+        } catch (Exception e) {
+        }
+        keyboard.keyDown(KeyEvent.VK_WINDOWS);
+        keyboard.keyDown(KeyEvent.VK_LEFT);
+        keyboard.keyUp(KeyEvent.VK_LEFT);
+        keyboard.keyUp(KeyEvent.VK_WINDOWS);
+        try {
+            Thread.sleep(150);
         } catch (Exception e) {
         }
 
@@ -313,11 +328,11 @@ public class AnyPage extends MapPage implements IAnyPage {
         }
         canvas.display(1);
         canvas.clear();
-        canvas.addBox(screenRegionList.get(0));
-        canvas.addLabel(screenRegionList.get(0), "We get this!");
+        canvas.addBox(screenRegionList.get(1));
+        canvas.addLabel(screenRegionList.get(1), "We get this!");
         canvas.display(1);
         canvas.clear();
-        mouse.click(screenRegionList.get(0).getRelativeScreenLocation(20, 0));
+        mouse.click(screenRegionList.get(1).getRelativeScreenLocation(100, 0));
         keyboard.paste("C:\\Users\\Public\\Pictures\\Sample Pictures");
         keyboard.keyDown(KeyEvent.VK_ENTER);
         keyboard.keyUp(KeyEvent.VK_ENTER);
@@ -328,8 +343,8 @@ public class AnyPage extends MapPage implements IAnyPage {
         canvas.display(1);
         canvas.clear();
 
-        canvas.addImage(screenRegionList.get(0).getCenter(), smallKoala);
-        canvas.addLabel(screenRegionList.get(0), "           We want choose this nice Koala!");
+        canvas.addImage(screenRegionList.get(1).getCenter(), smallKoala);
+        canvas.addLabel(screenRegionList.get(1), "           We want choose this nice Koala!");
         canvas.display(3);
         canvas.clear();
 
