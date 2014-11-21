@@ -253,14 +253,14 @@ public class AnyPage extends MapPage implements IAnyPage {
 
     /*--------------------Selenium 2.0 Web-driver and Sikuli-api integration------------------------------------------*/
 
-    public void addProblemSymbiosis(double latitude, double longitude,
+    public void addProblemSymbiosis(double latitude, double longitude, int zoom,
                                     String problemName, String problemType,
                                     String problemDescription, String problemPropose,
                                     List<String> imageComments) throws IOException {
 
         driver.manage().window().maximize();
         driver.findElement(ADD_PROBLEM_BUTTON).click();
-        setVisibleView(latitude, longitude, 18);
+        setVisibleView(latitude, longitude, zoom);
         clickAtVisibleMapCenter(0);
         driver.findElement(ADD_PROBLEM_NEXT_TAB2_BUTTON).click();
         driver.findElement(PROBLEM_NAME_TEXT_BOX).sendKeys(problemName);

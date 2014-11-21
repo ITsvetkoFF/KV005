@@ -179,7 +179,7 @@ public class SikuliSample {
 
     @Test
     public void addProblem() throws IOException {
-        anyPage.addProblemSymbiosis(50, 30,
+        anyPage.addProblemSymbiosis(50, 30, 18,
                 "Коалам загрожує небезпека", "Загрози біорізноманіттю",
                 "Через вирубку лісів, місцевість перетворюється на пустелю, " +
                 "бідненьким коалам нічого їсти", "Заборонити вирубку лісів!",
