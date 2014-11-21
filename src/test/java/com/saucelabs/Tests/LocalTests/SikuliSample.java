@@ -1,29 +1,15 @@
 package com.saucelabs.Tests.LocalTests;
 
 import com.saucelabs.AnyPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.sikuli.api.*;
-import org.sikuli.api.robot.Mouse;
-import org.sikuli.api.robot.desktop.DesktopKeyboard;
-import org.sikuli.api.robot.desktop.DesktopMouse;
-import org.sikuli.api.robot.desktop.DesktopScreen;
-import org.sikuli.api.visual.Canvas;
-import org.sikuli.api.visual.DesktopCanvas;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -172,8 +158,8 @@ public class SikuliSample {
     public void setting() {
         driver.manage().window().setPosition(new Point(0, 0));
         driver.manage().window().maximize();
-        driver.get("http://localhost:8090/#/map");
-        //driver.get("http://176.36.11.25/#/map");
+        //driver.get("http://localhost:8090/#/map");
+        driver.get("http://176.36.11.25/#/map");
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
     }
 
@@ -183,6 +169,13 @@ public class SikuliSample {
                 "Коалам загрожує небезпека", "Загрози біорізноманіттю",
                 "Через вирубку лісів, місцевість перетворюється на пустелю, " +
                 "бідненьким коалам нічого їсти", "Заборонити вирубку лісів!",
+        Arrays.asList("C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg",
+                      "C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg"),
         Arrays.asList("Голодна коала", "Ось як вже подекуди виглядає ліс!"));
+    }
+
+    @AfterTest
+    public void shutdown() {
+        driver.quit();
     }
 }

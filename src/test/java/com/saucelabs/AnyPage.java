@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -256,7 +257,7 @@ public class AnyPage extends MapPage implements IAnyPage {
     public void addProblemSymbiosis(double latitude, double longitude, int zoom,
                                     String problemName, String problemType,
                                     String problemDescription, String problemPropose,
-                                    List<String> imageComments) throws IOException {
+                                    List<String> imagesPath, List<String> imagesComment) throws IOException {
 
         driver.manage().window().maximize();
         driver.findElement(ADD_PROBLEM_BUTTON).click();
@@ -284,25 +285,31 @@ public class AnyPage extends MapPage implements IAnyPage {
         ScreenRegion screenRegion = new DesktopScreenRegion();
 
         Target triangle = new ImageTarget(new File(".\\resources\\images\\Triangle.jpg"));
-        triangle.setMinScore(0.8);
-
         Target dropZone = new ImageTarget(new File(".\\resources\\images\\Drop Zone.jpg"));
-        dropZone.setMinScore(0.6);
-
-        BufferedImage bigKoala = ImageIO.read(new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg"));
-        BufferedImage smallKoala = bigKoala.getSubimage(320, 120, 600, 600);
-
-        BufferedImage resizeBigKoala = resize(bigKoala, 85, 64);
-        Target resizeBigKoalaTarget = new ImageTarget(resizeBigKoala);
-        resizeBigKoalaTarget.setMinScore(0.7);
-
-        BufferedImage bigDesert = ImageIO.read(new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg"));
-        BufferedImage resizeBigDesert = resize(bigDesert, 85, 64);
-        Target resizeBigDesertTarget = new ImageTarget(resizeBigDesert);
-        resizeBigDesertTarget.setMinScore(0.7);
-
         Target cross = new ImageTarget(new File(".\\resources\\images\\Cross.jpg"));
+
+        triangle.setMinScore(0.8);
+        dropZone.setMinScore(0.6);
         cross.setMinScore(0.8);
+
+        List<BufferedImage> resizeBufferedImageList = new ArrayList<>();    //list of images with new size
+        BufferedImage bufferedImage;
+        BufferedImage resizeBufferedImage;
+        for (String path : imagesPath) {
+            if (path.equals("")) {
+                continue;
+            }
+            else {
+                bufferedImage = ImageIO.read(new File(path));
+                resizeBufferedImage = resize(bufferedImage, 85, 64);
+                resizeBufferedImageList.add(resizeBufferedImage);
+            }
+        }
+
+        List<Target> uploadImageList = new ArrayList<>();                   //list of targets with new image size
+        for (BufferedImage image : resizeBufferedImageList) {
+            uploadImageList.add(new ImageTarget(image));
+        }
 
         keyboard.keyDown(KeyEvent.VK_WINDOWS);
         keyboard.keyDown(KeyEvent.VK_E);
@@ -354,6 +361,7 @@ public class AnyPage extends MapPage implements IAnyPage {
         canvas.addLabel(screenRegion.getCenter(), "We get this!");
         canvas.display(1);
         canvas.clear();
+
         mouse.click(screenRegion.getCenter().getRelativeScreenLocation(100, 0));
         keyboard.paste("C:\\Users\\Public\\Pictures\\Sample Pictures");
         keyboard.keyDown(KeyEvent.VK_ENTER);
@@ -365,18 +373,11 @@ public class AnyPage extends MapPage implements IAnyPage {
         canvas.display(1);
         canvas.clear();
 
-        canvas.addImage(screenRegionList.get(0).getCenter(), smallKoala);
-        canvas.addLabel(screenRegionList.get(0), "           We want choose this nice Koala!");
-        canvas.display(1);
-        canvas.clear();
-
-        ScreenRegion koalaScreenRegion = new DesktopScreenRegion().wait(resizeBigKoalaTarget, 10);
-        mouse.drag(koalaScreenRegion.getCenter());
-        mouse.drop(dropZoneScreenRegion.getCenter());
-
-        ScreenRegion desertScreenRegion = new DesktopScreenRegion().wait(resizeBigDesertTarget, 10);
-        mouse.drag(desertScreenRegion.getCenter());
-        mouse.drop(dropZoneScreenRegion.getCenter());
+        for (Target target : uploadImageList) {
+            screenRegion = new DesktopScreenRegion().wait(target, 10);
+            mouse.drag(screenRegion.getCenter());
+            mouse.drop(dropZoneScreenRegion.getCenter());
+        }
 
         ScreenRegion crossScreenRegion = new DesktopScreenRegion().wait(cross, 10);
         mouse.click(crossScreenRegion.getCenter());
@@ -386,7 +387,7 @@ public class AnyPage extends MapPage implements IAnyPage {
         List<WebElement> commentElements = driver.findElements(IMAGE_COMMENT_TEXT_BOX);
         int i = 0;
         for (WebElement element: commentElements) {
-            element.sendKeys(imageComments.get(i));
+            element.sendKeys(imagesComment.get(i));
             i++;
         }
 
