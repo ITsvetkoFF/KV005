@@ -282,7 +282,7 @@ public class AnyPage extends MapPage implements IAnyPage {
         Canvas canvas = new DesktopCanvas();
         ScreenRegion screenRegion = new DesktopScreenRegion();
 
-        Target triangle = new ImageTarget(new File(".\\resources\\images\\Drop List.jpg"));
+        Target triangle = new ImageTarget(new File(".\\resources\\images\\Triangle.jpg"));
         triangle.setMinScore(0.8);
 
         Target dropZone = new ImageTarget(new File(".\\resources\\images\\Drop Zone.jpg"));

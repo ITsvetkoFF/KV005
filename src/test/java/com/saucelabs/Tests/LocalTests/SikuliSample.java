@@ -57,7 +57,7 @@ public class SikuliSample {
         Canvas canvas = new DesktopCanvas();
         ScreenRegion screenRegion = new DesktopScreenRegion();
 
-        Target triangle = new ImageTarget(new File(".\\resources\\images\\Drop List.jpg"));
+        Target triangle = new ImageTarget(new File(".\\resources\\images\\Triangle.jpg"));
         triangle.setMinScore(0.8);
 
         Target dropZone = new ImageTarget(new File(".\\resources\\images\\Drop Zone.jpg"));
@@ -66,11 +66,14 @@ public class SikuliSample {
         BufferedImage bigKoala = ImageIO.read(new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg"));
         BufferedImage smallKoala = bigKoala.getSubimage(320, 120, 600, 600);
 
-        Target koala = new ImageTarget(new File(".\\resources\\images\\Koala.jpg"));
-        koala.setMinScore(0.8);
+        BufferedImage resizeBigKoala = resize(bigKoala, 85, 64);
+        Target resizeBigKoalaTarget = new ImageTarget(resizeBigKoala);
+        resizeBigKoalaTarget.setMinScore(0.7);
 
-        Target desert = new ImageTarget(new File(".\\resources\\images\\Desert.jpg"));
-        desert.setMinScore(0.8);
+        BufferedImage bigDesert = ImageIO.read(new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\Desert.jpg"));
+        BufferedImage resizeBigDesert = resize(bigDesert, 85, 64);
+        Target resizeBigDesertTarget = new ImageTarget(resizeBigDesert);
+        resizeBigDesertTarget.setMinScore(0.7);
 
         Target cross = new ImageTarget(new File(".\\resources\\images\\Cross.jpg"));
         cross.setMinScore(0.8);
@@ -138,25 +141,15 @@ public class SikuliSample {
 
         canvas.addImage(screenRegionList.get(0).getCenter(), smallKoala);
         canvas.addLabel(screenRegionList.get(0), "           We want choose this nice Koala!");
-        canvas.display(3);
+        canvas.display(1);
         canvas.clear();
 
-        ScreenRegion koalaScreenRegion = new DesktopScreenRegion().wait(koala, 10);
+        ScreenRegion koalaScreenRegion = new DesktopScreenRegion().wait(resizeBigKoalaTarget, 10);
         mouse.drag(koalaScreenRegion.getCenter());
         mouse.drop(dropZoneScreenRegion.getCenter());
 
-        ScreenRegion desertScreenRegion = new DesktopScreenRegion().wait(desert, 10);
+        ScreenRegion desertScreenRegion = new DesktopScreenRegion().wait(resizeBigDesertTarget, 10);
         mouse.drag(desertScreenRegion.getCenter());
-        mouse.drop(dropZoneScreenRegion.getCenter());
-
-        BufferedImage resizeBigKoala = resize(bigKoala, 85, 64);
-        canvas.addImage(dropZoneScreenRegion.getCenter(), resizeBigKoala);
-        canvas.display(3);
-        canvas.clear();
-
-        Target resizeBigKoalaTarget = new ImageTarget(resizeBigKoala);
-        ScreenRegion resizeBigKoalaScreenRegion = new DesktopScreenRegion().wait(resizeBigKoalaTarget, 10);
-        mouse.drag(resizeBigKoalaScreenRegion.getCenter());
         mouse.drop(dropZoneScreenRegion.getCenter());
 
         ScreenRegion crossScreenRegion = new DesktopScreenRegion().wait(cross, 10);
