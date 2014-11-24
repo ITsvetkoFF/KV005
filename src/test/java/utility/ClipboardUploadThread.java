@@ -21,7 +21,7 @@ class Runner implements Runnable {
 
     public void run() {
         try {
-            Thread.sleep(1500);
+            Thread.sleep(2000);
             Robot robot = new Robot();
             StringSelection stringSelection = new StringSelection(filePath);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
@@ -31,10 +31,9 @@ class Runner implements Runnable {
             robot.keyRelease(KeyEvent.VK_CONTROL);
             robot.keyPress(KeyEvent.VK_ENTER);
             robot.keyRelease(KeyEvent.VK_ENTER);
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-            }
+            Thread.sleep(1000);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
             robot.keyPress(KeyEvent.VK_ENTER);
             robot.keyRelease(KeyEvent.VK_ENTER);
         }

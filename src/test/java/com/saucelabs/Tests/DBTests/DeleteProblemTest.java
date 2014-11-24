@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Yermek on 05.11.2014.
  */
-public class DeleteProblemTest {
+public class DeleteProblemTest extends SingleWebdriver{
     double                         latitude;
     double                         longitude;
     String                         problemTitle;
@@ -34,7 +34,6 @@ public class DeleteProblemTest {
     List<String>                   imageComments;
     String                         adminEmail;
     String                         adminPassword;
-    WebDriver                      driver;
     int                            problemId;
     ArrayList<Map<String, String>> photos;
 
@@ -54,28 +53,13 @@ public class DeleteProblemTest {
         this.adminPassword      = adminPassword;
     }
 
-    @BeforeClass(groups = {"delete"})
-    public void SetUp() {
-        System.out.println("BeforeGroups delete.");
-        driver = new FirefoxDriver();
-
+    @Test(sequential = true, groups = {"delete"}, singleThreaded = true)
+    public void addProblemUI() throws IOException {
+        checkDriver();
         driver.get(Constant.URLlocal);
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         AdminPage adminPage = new AdminPage(driver);
         adminPage.logIn(Constant.Username, Constant.Password);
-    }
-
-    @AfterClass(groups = {"delete"})
-    public void TearDown() {
-        System.out.println("AfterGroups delete.");
-        AdminPage adminPage = new AdminPage(driver);
-        adminPage.logOut();
-        driver.quit();
-    }
-
-    @Test(groups = {"delete"}, singleThreaded = true)
-    public void addProblemUI() throws IOException {
         System.out.println("Groups delete, Test addProblemUI. ");
         AnyPage anyPage     = new AnyPage(driver);
         ProblemPage problemPage = new ProblemPage(driver);
@@ -116,7 +100,7 @@ public class DeleteProblemTest {
         }
     }
 
-    @Test(groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"addProblemUI"})
+    @Test(sequential = true, groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"addProblemUI"})
     public void getPhotosDB() throws SQLException, ClassNotFoundException {
         System.out.println("Groups delete, Test getPhotosDB. ");
         FileSystem fs = new FileSystem(Constant.Path_ImagesLocalFolder);
@@ -134,7 +118,7 @@ public class DeleteProblemTest {
         Assert.assertEquals(j, imageURLs.size());
     }
 
-    @Test(groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"getPhotosDB"})
+    @Test(sequential = true, groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"getPhotosDB"})
     public void deleteProblemUI() {
         System.out.println("Groups delete, Test deleteProblemUI. ");
         AdminPage adminPage   = new AdminPage(driver);
@@ -164,7 +148,7 @@ public class DeleteProblemTest {
         }
     }
 
-    @Test(groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"deleteProblemUI"})
+    @Test(sequential = true, groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"deleteProblemUI"})
     public void checkProblemDB() throws SQLException, ClassNotFoundException {
         System.out.println("Groups delete, Test checkProblemDB. ");
         DeleteProblemDAO dao = new DeleteProblemDAO();
@@ -172,7 +156,7 @@ public class DeleteProblemTest {
         Assert.assertEquals(problem.size(), 0);
     }
 
-    @Test(groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"deleteProblemUI"})
+    @Test(sequential = true, groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"deleteProblemUI"})
     public void checkActivitiesDB() throws SQLException, ClassNotFoundException {
         System.out.println("Groups delete, Test checkActivitiesDB. ");
         DeleteProblemDAO dao = new DeleteProblemDAO();
@@ -180,7 +164,7 @@ public class DeleteProblemTest {
         Assert.assertEquals(activities.size(), 0);
     }
 
-    @Test(groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"deleteProblemUI"})
+    @Test(sequential = true, groups = {"delete"}, singleThreaded = true, dependsOnMethods = {"deleteProblemUI"})
     public void checkPhotosDB() throws SQLException, ClassNotFoundException {
         System.out.println("Groups delete, Test checkPhotosDB. ");
         FileSystem fs = new FileSystem(Constant.Path_ImagesLocalFolder);
@@ -195,6 +179,8 @@ public class DeleteProblemTest {
                 System.out.println(photos.get(i).get("Link"));
             }
         }
+        AdminPage adminPage = new AdminPage(driver);
+        adminPage.logOut();
         Assert.assertEquals(j, 0);
     }
 }

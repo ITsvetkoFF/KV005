@@ -16,7 +16,7 @@ public class ResourcesDAO extends BaseDAO {
 
     public static final String DB_URL_WITH_UTF_8 = "jdbc:mysql://localhost:3306/enviromap?useUnicode=true&characterEncoding=UTF-8";
     public static final String USER_NAME = "root";
-    public static final String USER_PASSWORD = "";
+    public static final String USER_PASSWORD = "root";
 
     public List<String> getAllAliases() throws SQLException, ClassNotFoundException {
         Statement statement = getConnection(DB_URL_WITH_UTF_8, USER_NAME, USER_PASSWORD).createStatement();

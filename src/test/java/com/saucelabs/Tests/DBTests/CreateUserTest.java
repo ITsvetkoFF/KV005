@@ -31,27 +31,25 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Olya on 11/3/14.
  */
-public class CreateUserTest {
-
-    static WebDriver driver = new FirefoxDriver();
-    static ResourcesPage resourcesPage = new ResourcesPage(driver);
-    static AnyPage anyPage = new AnyPage(driver);
-    static UserInfoDAO userInfoDB = new UserInfoDAO();
-    static DeleteUserDAO deleteUserDAO = new DeleteUserDAO();
-
-    @BeforeClass
-    public static void beforeTest() throws Exception{
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get(Constant.URLlocal);
-    }
+public class CreateUserTest extends SingleWebdriver{
+    ResourcesPage resourcesPage;
+    AnyPage anyPage;
+    UserInfoDAO userInfoDB;
+    DeleteUserDAO deleteUserDAO;
 
     @DataProvider(name = "SimpleUser", parallel = false)
     public static Object[][] data() throws Exception{
         return ExcelUtils.getTableArray(Constant.Path_SimpleUserCreateData + Constant.File_SimpleUserCreateData, "Sheet1");
     }
 
-    @Test(dataProvider = "SimpleUser")
+    @Test(sequential = true, dataProvider = "SimpleUser", groups = {"createUser"})
     public void userRegistrationDBCheck(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+        checkDriver();
+        driver.get(Constant.URLlocal);
+        resourcesPage = new ResourcesPage(driver);
+        anyPage = new AnyPage(driver);
+        userInfoDB = new UserInfoDAO();
+        deleteUserDAO = new DeleteUserDAO();
 
         anyPage.register(UserName, UserSurname, UserEmail, UserPassword);
 
@@ -65,7 +63,7 @@ public class CreateUserTest {
         Assert.assertEquals(result, ExpectedUserData);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userRegistrationDBCheck"})
+    @Test(sequential = true, dataProvider = "SimpleUser", dependsOnMethods = {"userRegistrationDBCheck"}, groups = {"createUser"})
     public void userCookiesCheck(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         Map<String, String> ExpectedUserData = new HashMap<String, String>();
@@ -78,26 +76,26 @@ public class CreateUserTest {
         Assert.assertEquals(result,ExpectedUserData);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userCookiesCheck"})
+    @Test(sequential = true, dataProvider = "SimpleUser", dependsOnMethods = {"userCookiesCheck"}, groups = {"createUser"})
     public void userNameCheckAfterLogin(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         String name = anyPage.checkUsernameInRightCorner();
         Assert.assertEquals((UserName + " " + UserSurname).toUpperCase(), name);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userNameCheckAfterLogin"})
+    @Test(sequential = true, dataProvider = "SimpleUser", dependsOnMethods = {"userNameCheckAfterLogin"}, groups = {"createUser"})
     public void userAddNewResourceAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         Assert.assertEquals(resourcesPage.existResource("ДОДАТИ НОВИЙ РЕСУРС"), null);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userAddNewResourceAvailability"})
+    @Test(sequential = true, dataProvider = "SimpleUser", dependsOnMethods = {"userAddNewResourceAvailability"}, groups = {"createUser"})
     public void userNewsAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         Assert.assertEquals(anyPage.checkNewsAvailability(),false);
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"userNewsAvailability"})
+    @Test(sequential = true, dataProvider = "SimpleUser", dependsOnMethods = {"userNewsAvailability"}, groups = {"createUser"})
     public void changePassword(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         anyPage.changePassword(UserPassword,"testpassword");
@@ -112,18 +110,13 @@ public class CreateUserTest {
         anyPage.logOut();
     }
 
-    @Test(dataProvider = "SimpleUser", dependsOnMethods = {"changePassword"})
+    @Test(sequential = true, dataProvider = "SimpleUser", dependsOnMethods = {"changePassword"}, groups = {"createUser"})
     public void deleteUser(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         deleteUserDAO.deleteUser(UserEmail);
         Map result = userInfoDB.getInfo("root", "root","jdbc:mysql://localhost:3306/enviromap",UserEmail);
 
         Assert.assertTrue(result.isEmpty());
-    }
-
-    @AfterClass
-    public static void afterTest() throws Exception{
-        driver.quit();
     }
 }
 

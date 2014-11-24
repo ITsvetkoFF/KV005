@@ -23,27 +23,27 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Olya on 11/12/14.
  */
-public class CreateAdminTest {
-    static WebDriver driver = new FirefoxDriver();
-    static AnyPage anyPage = new AnyPage(driver);
-    static UserInfoDAO userInfoDB = new UserInfoDAO();
-    static CreateNewUserDAO createNewUserDAO = new CreateNewUserDAO();
-    static DeleteUserDAO deleteUserDAO = new DeleteUserDAO();
-    static ProblemPage problemPage = new ProblemPage(driver);
-
-    @BeforeClass
-    public static void beforeTest() throws Exception{
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        driver.get(Constant.URLlocal);
-    }
+public class CreateAdminTest extends SingleWebdriver{
+    AnyPage anyPage;
+    UserInfoDAO userInfoDB;
+    CreateNewUserDAO createNewUserDAO;
+    DeleteUserDAO deleteUserDAO;
+    ProblemPage problemPage;
 
     @DataProvider(name = "AdminUser", parallel = false)
     public static Object[][] data() throws Exception{
         return ExcelUtils.getTableArray(Constant.Path_AdminUserCreateData + Constant.File_AdminUserCreateData, "Sheet1");
     }
 
-    @Test(dataProvider = "AdminUser")
+    @Test(sequential = true, dataProvider = "AdminUser", groups = {"createAdmin"})
     public void adminUserCreationDBCheck(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
+        checkDriver();
+        driver.get(Constant.URLlocal);
+        anyPage = new AnyPage(driver);
+        userInfoDB = new UserInfoDAO();
+        createNewUserDAO = new CreateNewUserDAO();
+        deleteUserDAO = new DeleteUserDAO();
+        problemPage = new ProblemPage(driver);
 
         createNewUserDAO.createUser(UserName, UserSurname, UserEmail, UserPassword, UserRoleId);
 
@@ -57,7 +57,7 @@ public class CreateAdminTest {
         Assert.assertEquals(result, ExpectedUserData);
     }
 
-    @Test(dataProvider = "AdminUser", dependsOnMethods = {"adminUserCreationDBCheck"})
+    @Test(sequential = true, dataProvider = "AdminUser", dependsOnMethods = {"adminUserCreationDBCheck"}, groups = {"createAdmin"})
     public void adminUserCookiesCheck(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
         // login as new user
         anyPage.logIn("admin1@gmail.com", "admin");
@@ -72,14 +72,14 @@ public class CreateAdminTest {
         Assert.assertEquals(result,ExpectedUserData);
     }
 
-    @Test(dataProvider = "AdminUser", dependsOnMethods = {"adminUserCookiesCheck"})
+    @Test(sequential = true, dataProvider = "AdminUser", dependsOnMethods = {"adminUserCookiesCheck"}, groups = {"createAdmin"})
     public void adminNameCheckAfterLogin(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         String name = anyPage.checkUsernameInRightCorner();
         Assert.assertEquals((UserName + " " + UserSurname).toUpperCase(), name);
     }
 
-    @Test(dataProvider = "AdminUser", dependsOnMethods = {"adminNameCheckAfterLogin"})
+    @Test(sequential = true, dataProvider = "AdminUser", dependsOnMethods = {"adminNameCheckAfterLogin"}, groups = {"createAdmin"})
     public void addNewResourceAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         driver.findElement(By.linkText("РЕСУРСИ")).click();
@@ -88,7 +88,7 @@ public class CreateAdminTest {
         Assert.assertEquals("ДОДАТИ НОВИЙ РЕСУРС",add_resource);
     }
 
-    @Test(dataProvider = "AdminUser", dependsOnMethods = {"addNewResourceAvailability"})
+    @Test(sequential = true, dataProvider = "AdminUser", dependsOnMethods = {"addNewResourceAvailability"}, groups = {"createAdmin"})
     public void newsAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         driver.findElement(By.cssSelector(".fa.fa-weixin")).click();
@@ -98,7 +98,7 @@ public class CreateAdminTest {
         Assert.assertEquals("Новини що відображаються зараз на сайті:",news_title);
     }
 
-    @Test(dataProvider = "AdminUser", dependsOnMethods = {"newsAvailability"})
+    @Test(sequential = true, dataProvider = "AdminUser", dependsOnMethods = {"newsAvailability"}, groups = {"createAdmin"})
     public void deleteProblemAvailability(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         problemPage.openProblemById(1);
@@ -108,7 +108,7 @@ public class CreateAdminTest {
         Assert.assertTrue(delete_title);
     }
 
-    @Test(dataProvider = "AdminUser", dependsOnMethods = {"deleteProblemAvailability"})
+    @Test(sequential = true, dataProvider = "AdminUser", dependsOnMethods = {"deleteProblemAvailability"}, groups = {"createAdmin"})
     public void changePassword(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         anyPage.changePassword(UserPassword,"testpassword");
@@ -123,7 +123,7 @@ public class CreateAdminTest {
         anyPage.logOut();
     }
 
-    @Test(dataProvider = "AdminUser", dependsOnMethods = {"changePassword"})
+    @Test(sequential = true, dataProvider = "AdminUser", dependsOnMethods = {"changePassword"}, groups = {"createAdmin"})
     public void deleteUser(String UserName, String UserSurname, String UserEmail, String UserPassword, String UserRoleId, String UserRole) throws Exception {
 
         deleteUserDAO.deleteUser(UserEmail);
@@ -131,10 +131,4 @@ public class CreateAdminTest {
 
         Assert.assertTrue(result.isEmpty());
     }
-
-    @AfterClass
-    public static void afterTest() throws Exception{
-        driver.quit();
-    }
-
 }

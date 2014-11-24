@@ -167,7 +167,7 @@ public class AnyPage extends MapPage implements IAnyPage {
             thread.start();
             driver.findElement(DROP_ZONE).click();
             try {
-                Thread.sleep(3000);
+                Thread.sleep(4000);
             } catch (Exception e) {
             }
             thread.interrupt();
@@ -284,7 +284,6 @@ public class AnyPage extends MapPage implements IAnyPage {
         try {
             Thread.sleep(3000);
         } catch (Exception e) {
-
         }
         ScreenRegion screenRegion1 = new DesktopScreenRegion().wait(target1, 5);
         ScreenRegion screenRegion2 = new DesktopScreenRegion().wait(target2, 5);

@@ -1,4 +1,4 @@
-package com.saucelabs.Tests.LocalTests;
+package com.saucelabs.Tests.DBTests;
 
 import com.saucelabs.AnyPage;
 import com.saucelabs.ProblemPage;
@@ -20,12 +20,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Roma on 21.10.2014.
  */
-public class AddProblemTest {
-
-    static WebDriver driver = new FirefoxDriver();
-    static AnyPage anyPage = new AnyPage(driver);
-    static ProblemPage problemPage = new ProblemPage(driver);
-    static AddProblemDAO addProblemDAO = new AddProblemDAO();
+public class AddProblemTest extends SingleWebdriver{
+    AnyPage anyPage;
+    ProblemPage problemPage;
+    AddProblemDAO addProblemDAO;
 
     public double latitude = 50.1;
     public double longitude = 30.1;
@@ -39,17 +37,14 @@ public class AddProblemTest {
     public List<String> imageComments = Arrays.asList("imageComment1", "imageComment2");
     public List<String> problemComments = Arrays.asList("problemComment1");
 
-
-    @BeforeClass
-    public void beforeTestSuite() {
-
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        driver.get("http://localhost:8090/#/map");
-        anyPage.logIn("admin@.com", "admin");
-    }
-
     @Test
     public void addProblem() throws SQLException, ClassNotFoundException {
+        checkDriver();
+        driver.get("http://localhost:8090/#/map");
+        anyPage = new AnyPage(driver);
+        problemPage = new ProblemPage(driver);
+        addProblemDAO = new AddProblemDAO();
+        anyPage.logIn("admin@.com", "admin");
 
         anyPage.addProblemToVisibleCenter(latitude, longitude, problemNameTest, problemTypeTest,
                 problemDescriptionTest, problemProposeTest, imagePath, imageComments);
@@ -116,10 +111,6 @@ public class AddProblemTest {
         problemPage.deleteOpenedProblem();
 
         Assert.assertEquals(vote, voteDB);
-    }
-
-    @AfterClass
-    public void afterTestSuite() {
-        driver.quit();
+        problemPage.logOut();
     }
 }
