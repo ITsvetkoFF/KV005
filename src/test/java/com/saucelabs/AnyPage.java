@@ -6,11 +6,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import org.sikuli.api.DesktopScreenRegion;
 import org.sikuli.api.ImageTarget;
 import org.sikuli.api.ScreenRegion;
-import org.sikuli.api.robot.Keyboard;
+import org.sikuli.api.Target;
 import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
@@ -18,9 +17,15 @@ import org.sikuli.api.visual.Canvas;
 import org.sikuli.api.visual.DesktopCanvas;
 import utility.ClipboardUploadThread;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -247,14 +252,16 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(CLOSE).click();
     }
 
-    public void addProblemWithSikuliUploadImage(double latitude, double longitude,
-                                                String problemName, String problemType,
-                                                String problemDescription, String problemPropose,
-                                                List<String> imageUrls, List<String> imageComments) {
+    /*--------------------Selenium 2.0 Web-driver and Sikuli-api integration------------------------------------------*/
+
+    public void addProblemSymbiosis(double latitude, double longitude, int zoom,
+                                    String problemName, String problemType,
+                                    String problemDescription, String problemPropose,
+                                    List<String> imagesPath, List<String> imagesComment) throws IOException {
 
         driver.manage().window().maximize();
         driver.findElement(ADD_PROBLEM_BUTTON).click();
-        setVisibleView(latitude, longitude, 18);
+        setVisibleView(latitude, longitude, zoom);
         clickAtVisibleMapCenter(0);
         driver.findElement(ADD_PROBLEM_NEXT_TAB2_BUTTON).click();
         driver.findElement(PROBLEM_NAME_TEXT_BOX).sendKeys(problemName);
@@ -270,47 +277,122 @@ public class AnyPage extends MapPage implements IAnyPage {
         driver.findElement(BODY).sendKeys(Keys.chord(Keys.CONTROL, Keys.HOME));
         driver.findElement(ADD_PROBLEM_TAB3_IMAGE).click();
 
-//        for (String url: imageUrls) {
-//            if (url.length() == 0) {
-//                continue;
-//            }
-//            driver.findElement(DROP_ZONE).click();
-//        }
-        driver.findElement(DROP_ZONE).click();
+        /*------------------------------------------Sikuli code block-------------------------------------------------*/
 
-        ImageTarget target1 = new ImageTarget(new File(".\\resources\\images\\ImagePathField.jpg"));
-        ImageTarget target2 = new ImageTarget(new File(".\\resources\\images\\OpenButton.jpg"));
+        DesktopKeyboard keyboard = new DesktopKeyboard();
+        Mouse mouse = new DesktopMouse();
+        Canvas canvas = new DesktopCanvas();
+        ScreenRegion screenRegion = new DesktopScreenRegion();
 
+        Target triangle = new ImageTarget(new File(".\\resources\\images\\Triangle.jpg"));
+        Target dropZone = new ImageTarget(new File(".\\resources\\images\\Drop Zone.jpg"));
+        Target cross = new ImageTarget(new File(".\\resources\\images\\Cross.jpg"));
+
+        triangle.setMinScore(0.8);
+        dropZone.setMinScore(0.6);
+        cross.setMinScore(0.8);
+
+        List<BufferedImage> resizeBufferedImageList = new ArrayList<>();    //list of images with new size
+        BufferedImage bufferedImage;
+        BufferedImage resizeBufferedImage;
+        for (String path : imagesPath) {
+            if (path.equals("")) {
+                continue;
+            }
+            else {
+                bufferedImage = ImageIO.read(new File(path));
+                resizeBufferedImage = resize(bufferedImage, 85, 64);
+                resizeBufferedImageList.add(resizeBufferedImage);
+            }
+        }
+
+        List<Target> uploadImageList = new ArrayList<>();                   //list of targets with new image size
+        for (BufferedImage image : resizeBufferedImageList) {
+            uploadImageList.add(new ImageTarget(image));
+        }
+
+        keyboard.keyDown(KeyEvent.VK_WINDOWS);
+        keyboard.keyDown(KeyEvent.VK_E);
+        keyboard.keyUp(KeyEvent.VK_E);
+        keyboard.keyUp(KeyEvent.VK_WINDOWS);
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (Exception e) {
         }
-        ScreenRegion screenRegion1 = new DesktopScreenRegion().wait(target1, 5);
-        ScreenRegion screenRegion2 = new DesktopScreenRegion().wait(target2, 5);
+        keyboard.keyDown(KeyEvent.VK_WINDOWS);
+        keyboard.keyDown(KeyEvent.VK_UP);
+        keyboard.keyUp(KeyEvent.VK_UP);
+        keyboard.keyUp(KeyEvent.VK_WINDOWS);
+        try {
+            Thread.sleep(250);
+        } catch (Exception e) {
+        }
+        keyboard.keyDown(KeyEvent.VK_WINDOWS);
+        keyboard.keyDown(KeyEvent.VK_LEFT);
+        keyboard.keyUp(KeyEvent.VK_LEFT);
+        keyboard.keyUp(KeyEvent.VK_WINDOWS);
+        try {
+            Thread.sleep(250);
+        } catch (Exception e) {
+        }
 
-        Canvas canvas = new DesktopCanvas();
-        canvas.addBox(screenRegion1);
-        canvas.addBox(screenRegion2);
-        canvas.display(3);
+        List<ScreenRegion> screenRegionList = screenRegion.findAll(triangle);
+//        for(ScreenRegion screen : screenRegionList) {
+//            canvas.addBox(screen);
+//        }
+//        canvas.display(1);
+//        canvas.clear();
 
-        Mouse mouse = new DesktopMouse();
-        Keyboard keyboard = new DesktopKeyboard();
+        int x = 0;
+        int y = 0;
+        int width = 0;
+        int height = 0;
+        for (ScreenRegion screen : screenRegionList) {
+            if (screen.getCenter().getX() > x) {
+                x = screen.getCenter().getX();
+                y = screen.getCenter().getY();
+                width = screen.getBounds().width;
+                height = screen.getBounds().height;
+            }
+        }
+        screenRegion = new DesktopScreenRegion(x, y, width, height);
 
-        mouse.click(screenRegion1.getCenter());
-        keyboard.paste("pam-pam");
+//        canvas.addCircle(screenRegion.getCenter());
+//        canvas.addLabel(screenRegion.getCenter(), "We get this!");
+//        canvas.display(1);
+//        canvas.clear();
 
-        mouse.click(screenRegion2.getCenter());
+        mouse.click(screenRegion.getCenter().getRelativeScreenLocation(100, 0));
+        keyboard.paste("C:\\Users\\Public\\Pictures\\Sample Pictures");
+        keyboard.keyDown(KeyEvent.VK_ENTER);
+        keyboard.keyUp(KeyEvent.VK_ENTER);
+
+        ScreenRegion dropZoneScreenRegion = new DesktopScreenRegion().wait(dropZone, 10);
+//        canvas.addBox(dropZoneScreenRegion);
+//        canvas.addLabel(dropZoneScreenRegion, "We found Drop Zone!");
+//        canvas.display(1);
+//        canvas.clear();
+
+        for (Target target : uploadImageList) {
+            screenRegion = new DesktopScreenRegion().wait(target, 10);
+            mouse.drag(screenRegion.getCenter());
+            mouse.drop(dropZoneScreenRegion.getCenter());
+        }
+
+        ScreenRegion crossScreenRegion = new DesktopScreenRegion().wait(cross, 10);
+        mouse.click(crossScreenRegion.getCenter());
+
+        /*------------------------------------------------------------------------------------------------------------*/
 
         List<WebElement> commentElements = driver.findElements(IMAGE_COMMENT_TEXT_BOX);
         int i = 0;
         for (WebElement element: commentElements) {
-            element.sendKeys(imageComments.get(i));
+            element.sendKeys(imagesComment.get(i));
             i++;
         }
 
         driver.findElement(ADD_PROBLEM_SUBMIT_BUTTON).click();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        System.out.println("Before Explicit Wait during problem add");
         try {
             WebElement login = (new WebDriverWait(driver, 1))
                     .until(ExpectedConditions.presenceOfElementLocated(LOGIN_LINK));
@@ -319,7 +401,18 @@ public class AnyPage extends MapPage implements IAnyPage {
             alert.findElement(CLOSE_CROSS).click();
         } catch (Exception e) {
         }
-        System.out.println("After Explicit Wait during problem add");
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+    }
+
+    private BufferedImage resize(BufferedImage img, int newW, int newH) {
+        int w = img.getWidth();
+        int h = img.getHeight();
+        BufferedImage dImg = new BufferedImage(newW, newH, img.getType());
+        Graphics2D g = dImg.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
+        g.dispose();
+        return dImg;
     }
 }
