@@ -3,7 +3,7 @@
 <tsung loglevel="info">
 <clients>
   <client host="slave" maxusers="500" />
-  <client host="localhost" maxusers="500" />
+  <client host="master" maxusers="500" />
 </clients>
 
 <servers>
