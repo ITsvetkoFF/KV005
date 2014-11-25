@@ -2,7 +2,7 @@
 <!DOCTYPE tsung SYSTEM "/usr/share/tsung/tsung-1.0.dtd" [] >
 <tsung loglevel="info">
 <clients>
-  <client host="localhost" maxusers="10000" />
+  <client host="slave" maxusers="500" />
   <!--<client host="aws1" maxusers="1000" />-->
 </clients>
 
@@ -11,7 +11,7 @@
 </servers>
 
 <load>
-  <arrivalphase phase="1" duration="100" unit="second">
+  <arrivalphase phase="1" duration="10" unit="second">
     <users arrivalrate="100" unit="second"></users>
   </arrivalphase>
 </load>
