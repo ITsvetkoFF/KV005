@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE tsung SYSTEM "/usr/share/tsung/tsung-1.0.dtd" [] >
+<tsung loglevel="info">
+<clients>
+  <client host="localhost" maxusers="10000" />
+  <!--<client host="aws1" maxusers="1000" />-->
+</clients>
+
+<servers>
+  <server host="176.36.11.25" port="80" type="tcp"></server>
+</servers>
+
+<load>
+  <arrivalphase phase="1" duration="100" unit="second">
+    <users arrivalrate="100" unit="second"></users>
+  </arrivalphase>
+</load>
+
+<sessions>
+  <session name="foo" probability="100" type="ts_http">
+		<for from="1" to="30" incr="1" var="counter">
+			<request subst="true">
+			<http url="/api/problems/%%_counter%%" method="GET">
+			</http>
+			</request>
+		</for>
+  </session>
+</sessions>
+
+</tsung>
+</xml>
