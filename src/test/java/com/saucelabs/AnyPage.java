@@ -337,11 +337,11 @@ public class AnyPage extends MapPage implements IAnyPage {
         }
 
         List<ScreenRegion> screenRegionList = screenRegion.findAll(triangle);
-//        for(ScreenRegion screen : screenRegionList) {
-//            canvas.addBox(screen);
-//        }
-//        canvas.display(1);
-//        canvas.clear();
+        for(ScreenRegion screen : screenRegionList) {
+            canvas.addBox(screen);
+        }
+        canvas.display(1);
+        canvas.clear();
 
         int x = 0;
         int y = 0;
@@ -357,10 +357,10 @@ public class AnyPage extends MapPage implements IAnyPage {
         }
         screenRegion = new DesktopScreenRegion(x, y, width, height);
 
-//        canvas.addCircle(screenRegion.getCenter());
-//        canvas.addLabel(screenRegion.getCenter(), "We get this!");
-//        canvas.display(1);
-//        canvas.clear();
+        canvas.addCircle(screenRegion.getCenter());
+        canvas.addLabel(screenRegion.getCenter(), "We get this!");
+        canvas.display(1);
+        canvas.clear();
 
         mouse.click(screenRegion.getCenter().getRelativeScreenLocation(100, 0));
         keyboard.paste("C:\\Users\\Public\\Pictures\\Sample Pictures");
@@ -368,10 +368,10 @@ public class AnyPage extends MapPage implements IAnyPage {
         keyboard.keyUp(KeyEvent.VK_ENTER);
 
         ScreenRegion dropZoneScreenRegion = new DesktopScreenRegion().wait(dropZone, 10);
-//        canvas.addBox(dropZoneScreenRegion);
-//        canvas.addLabel(dropZoneScreenRegion, "We found Drop Zone!");
-//        canvas.display(1);
-//        canvas.clear();
+        canvas.addBox(dropZoneScreenRegion);
+        canvas.addLabel(dropZoneScreenRegion, "We found Drop Zone!");
+        canvas.display(1);
+        canvas.clear();
 
         for (Target target : uploadImageList) {
             screenRegion = new DesktopScreenRegion().wait(target, 10);
